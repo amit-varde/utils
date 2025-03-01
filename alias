@@ -1,0 +1,51 @@
+#My Aliases
+
+
+# Directories#
+export DOWNLOADS='~/Downloads'
+export WORK='~/work'
+#Going to the dirs
+alias w='cd ~/work'
+alias dxl='cd ~/work/drexel'
+alias docs='cd ~/Documents'
+alias dl='cd ~/Downloads'
+
+
+
+# Virtualpy
+alias venv-recreate='rm -rf ~/.venv; python3 -m venv .venv'
+alias va='echo "Activating Python .venv";source ~/.venv/bin/activate'
+alias vd='echo "Dectivating .venv";deactivate'
+alias pip-up='/Users/amit/.venv/bin/python3 -m pip install --upgrade pip'
+
+## changing file permissions
+alias lock='chmod -R 700'
+alias unlock='chmod -R 755'
+alias mkexe='chmod -R 755'
+
+
+# ls
+alias lr='ls -lrt'
+alias la='ls -a'
+alias l1='ls -1'
+alias rd='rm -rf'
+alias rz='rm *~'
+alias rx='rm #*#'
+alias up 'cd ..'
+
+alias x='exit'
+alias c='clear'
+alias m='more'
+alias h='head -20'
+alias t='tail -20'
+alias g='grep -i'
+
+# Python env checks
+alias pyver='which python; python --version'
+alias pipver='which pip; pip --version'
+
+
+# Let this always be the last line
+# I always want my prompt to look like this
+PROMPT="%n@%m:%~> "
+echo "Loaded amit's Alias file"
