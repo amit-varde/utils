@@ -35,7 +35,8 @@ eval "$(pyenv virtualenv-init -)"
 ################################################################################
 # Let this always be the last line
 alias so='source ~/.zshrc;echo "ZSH aliases sourced."'
-if [ -f "$HOME/alias" ]; then
-  source "$HOME/alias"
+UTILS="/Users/amit/work/utils"
+if [ -f "$UTILS/alias" ]; then
+  source "$UTILS/alias"
 fi
 ################################################################################

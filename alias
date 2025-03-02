@@ -44,6 +44,9 @@ alias g='grep -i'
 alias pyver='which python; python --version'
 alias pipver='which pip; pip --version'
 
+# Python Jyupternotebook 
+alias jptr='jupyter notebook --notebook-dir=$HOME/work/python-notebooks'
+
 
 # Let this always be the last line
 # I always want my prompt to look like this
