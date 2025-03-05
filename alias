@@ -62,7 +62,21 @@ dxl() {
         return 1
     fi
     case $project in
-        EDA-schema*)
+        EDA-schema)
+            export PATH="/usr/local/opt/graphviz/bin:$PATH"
+            export PYTHONPATH=$PYTHONPATH:~/work/drexel/EDA-schema
+            # shellcheck source=/Users/amit/.venv/bin/activate
+            source $HOME/work/utils/venvs/EDA-schema
+            cd "${DXL}/${project}"
+            ;;
+        EDA-schema-dev)
+            export PATH="/usr/local/opt/graphviz/bin:$PATH"
+            export PYTHONPATH=$PYTHONPATH:~/work/drexel/EDA-schema
+            # shellcheck source=/Users/amit/.venv/bin/activate
+            source $HOME/work/utils/venvs/EDA-schema
+            cd "${DXL}/${project}"
+            ;;
+        eda-schema-internal)
             export PATH="/usr/local/opt/graphviz/bin:$PATH"
             export PYTHONPATH=$PYTHONPATH:~/work/drexel/EDA-schema
             # shellcheck source=/Users/amit/.venv/bin/activate
