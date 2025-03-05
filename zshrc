@@ -28,8 +28,10 @@ export ZSH="$HOME/.oh-my-zsh"
 ################################################################################
 # Let this always be the last line
 alias so='source ~/.zshrc;echo "ZSH aliases sourced."'
-UTILS="/Users/amit/work/utils"
-if [ -f "$UTILS/alias" ]; then
-  source "$UTILS/alias"
+ALIAS_FILE="$HOME/work/utils/alias"
+if [ -f "$ALIAS_FILE" ]; then
+  source "$ALIAS_FILE"
+else
+  echo "Alias file $ALIAS_FILE not found"
 fi
 ################################################################################
