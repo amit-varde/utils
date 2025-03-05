@@ -6,23 +6,13 @@ export DOWNLOADS='~/Downloads'
 export WORK='~/work'
 #Going to the dirs
 alias w='cd ~/work'
-alias dxl='cd ~/work/drexel'
 alias docs='cd ~/Documents'
 alias dl='cd ~/Downloads'
-
-
-
-# Virtualpy
-alias venv-recreate='rm -rf ~/.venv; python3 -m venv .venv'
-alias va='echo "Activating Python .venv";source ~/.venv/bin/activate'
-alias vd='echo "Dectivating .venv";deactivate'
-alias pip-up='/Users/amit/.venv/bin/python3 -m pip install --upgrade pip'
 
 ## changing file permissions
 alias lock='chmod -R 700'
 alias unlock='chmod -R 755'
 alias mkexe='chmod -R 755'
-
 
 # ls
 alias lr='ls -lrt'
@@ -31,7 +21,7 @@ alias l1='ls -1'
 alias rd='rm -rf'
 alias rz='rm *~'
 alias rx='rm #*#'
-alias up 'cd ..'
+alias up='cd ..'
 
 alias x='exit'
 alias c='clear'
@@ -47,6 +37,32 @@ alias pipver='which pip; pip --version'
 # Python Jyupternotebook 
 alias jptr='jupyter notebook --notebook-dir=$HOME/work/python-notebooks'
 
+# Setup Drexel Environment for my use.
+dxl() {
+    local project
+    export DXL=~/work/drexel
+    cd $DXL || return 1
+    echo "Setting up Drexel environment; ${DXL}"
+    # Not making the project lowercase because some projects may not be lowercase
+    #project=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+    if [ ! -d "${DXL}/${project}" ]; then
+        echo "Project directory ~/work/$project does not exist."
+        return 1
+    fi
+    case $project in
+        eda-schema*)
+            export PATH="/usr/local/opt/graphviz/bin:$PATH"
+            export PYTHONPATH=$PYTHONPATH:~/work/drexel/EDA-schema
+            # shellcheck source=/Users/amit/.venv/bin/activate
+            source ~/.venv/bin/activate
+            ;;
+        *)
+            echo -n "No specific actions for project: $project "
+            echo "Available Drexel projects"
+            ls -1d * | sed 's/^/    /'
+            ;;
+    esac
+}
 
 # Let this always be the last line
 # I always want my prompt to look like this
