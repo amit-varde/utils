@@ -1,5 +1,6 @@
 Add the following lines in your ~/.zshrc
 
+```
 ################################################################################
 # Let this always be the last line
 alias so='source ~/.zshrc;echo "ZSH aliases sourced."'
@@ -10,3 +11,4 @@ else
   echo "Alias file $ALIAS_FILE not found"
 fi
 ################################################################################
+```
