@@ -4,10 +4,12 @@
 # Directories#
 export DOWNLOADS='~/Downloads'
 export WORK='~/work'
+export UTILS="$WORK/utils"
 #Going to the dirs
 alias w='cd ~/work'
 alias docs='cd ~/Documents'
 alias dl='cd ~/Downloads'
+alias utils='cd ~/work/utils'
 
 ## changing file permissions
 alias lock='chmod -R 700'
@@ -33,6 +35,7 @@ alias g='grep -i'
 # Python env checks
 alias pyver='which python; python --version'
 alias pipver='which pip; pip --version'
+alias deactivate='source deactivate'
 
 # Python Jyupternotebook 
 alias jptr='jupyter notebook --notebook-dir=$HOME/work/python-notebooks'
