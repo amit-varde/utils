@@ -32,11 +32,22 @@ alias h='head -20'
 alias t='tail -20'
 alias g='grep -i'
 
-# Python env checks
+################################################################################
+## PYENV
+# Install PYENV and .env both
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+################################################################################
+# Python related aliases
 alias pyver='which python; python --version'
 alias pipver='which pip; pip --version'
 alias deactivate='source deactivate'
 
+################################################################################
 # Python Jyupternotebook 
 alias jptr='jupyter notebook --notebook-dir=$HOME/work/python-notebooks'
 
@@ -69,4 +80,4 @@ dxl() {
 # Let this always be the last line
 # I always want my prompt to look like this
 PROMPT="%n@%m:%~> "
-echo "Loaded amit's Alias file"
+echo "Loaded amit's alias file"
