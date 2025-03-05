@@ -39,22 +39,21 @@ alias jptr='jupyter notebook --notebook-dir=$HOME/work/python-notebooks'
 
 # Setup Drexel Environment for my use.
 dxl() {
-    local project
+    local project="$1"
     export DXL=~/work/drexel
     cd $DXL || return 1
-    echo "Setting up Drexel environment; ${DXL}"
-    # Not making the project lowercase because some projects may not be lowercase
-    #project=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+    echo "Setting up Drexel environment; ${DXL}/${project}"
     if [ ! -d "${DXL}/${project}" ]; then
         echo "Project directory ~/work/$project does not exist."
         return 1
     fi
     case $project in
-        eda-schema*)
+        EDA-schema*)
             export PATH="/usr/local/opt/graphviz/bin:$PATH"
             export PYTHONPATH=$PYTHONPATH:~/work/drexel/EDA-schema
             # shellcheck source=/Users/amit/.venv/bin/activate
-            source ~/.venv/bin/activate
+            source $HOME/work/utils/venvs/EDA-schema
+            cd "${DXL}/${project}"
             ;;
         *)
             echo -n "No specific actions for project: $project "
