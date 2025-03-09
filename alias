@@ -49,7 +49,6 @@ eval "$(pyenv virtualenv-init -)"
 # Python related aliases
 alias pyver='which python; python --version'
 alias pipver='which pip; pip --version'
-alias deactivate='source deactivate'
 
 ################################################################################
 #
