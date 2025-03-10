@@ -2,14 +2,18 @@
 
 
 # Directories#
-export DOWNLOADS='~/Downloads'
+export DOCS='~/Documents'
+export DL='~/Downloads'
 export WORK='~/work'
 export UTILS="$WORK/utils"
+export JNBS="$WORK/jupyter-notebooks"
+
 #Going to the dirs
-alias w='cd ~/work'
-alias docs='cd ~/Documents'
-alias dl='cd ~/Downloads'
-alias utils='cd ~/work/utils'
+alias w='cd $WORK'
+alias docs='cd $DOCS'
+alias dl='cd $DL'
+alias utils='cd $UTLS'
+
 
 ## changing file permissions
 alias lock='chmod -R 700'
@@ -48,9 +52,23 @@ alias pipver='which pip; pip --version'
 alias deactivate='source deactivate'
 
 ################################################################################
-# Python Jyupternotebook 
-alias jptr='jupyter notebook --notebook-dir=$HOME/work/python-notebooks'
+#
+# Function to launch Jupyter Notebook
+jupyter_notebook() {
+    local notebook_dir="$JNBS"
+    if [ -z "$notebook_dir" ]; then
+        notebook_dir="."
+    fi
+    if [ ! -d "$notebook_dir" ]; then
+        echo "Directory $notebook_dir does not exist."
+        return 1
+    fi
+    cd "$notebook_dir" || return 1
+    echo "Launching Jupyter Notebook in directory: $notebook_dir"
+    jupyter notebook
+}
 
+################################################################################
 # Setup Drexel Environment for my use.
 dxl() {
     local project="$1"
