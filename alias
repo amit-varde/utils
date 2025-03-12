@@ -102,7 +102,7 @@ go_project() {
     mypy
     change_prompt
 }
-alias go_eda_schema_internal='go_project eda_schema_internal'
+alias go_eda_schema_internal='go_project eda-schema-internal'
 alias go_ohm='go_project ohm'
 alias go_utils='go_project utils'
 
