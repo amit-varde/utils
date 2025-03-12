@@ -46,7 +46,7 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 ################################################################################
 # Python related aliases
 # Function to pretty print Python version and location
-py_info() {
+mypy() {
     python_path=$(which python)
     python_version=$(python --version 2>&1)
     echo "Python executable: $python_path"
@@ -84,12 +84,12 @@ go_project() {
     cd "$WORK/$project_name" || return 1
     if [ -f venv/bin/activate ]; then
         source venv/bin/activate
-        py_info
+        mypy
         change_prompt
     fi
 }
-alias go_eda_schema_internal='goproject eda_schema_internal'
-alias go_ohm='goproject ohm'
+alias go_eda_schema_internal='go_project eda_schema_internal'
+alias go_ohm='go_project ohm'
 
 ################################################################################
 #
