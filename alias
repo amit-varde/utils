@@ -1,21 +1,43 @@
-#My Aliases
+# -----------------------------------------------------------------------------
+# File: alias
+# Author: Amit
+# Email: tercel04@gmail.com; amit@bazinga-labs.com
+# -----------------------------------------------------------------------------
+# Description:
+# This file contains aliases and functions that are useful for everyday tasks.
+# -----------------------------------------------------------------------------
+# File Version Info: 
+#
+# -----------------------------------------------------------------------------
+# Usage:
+# Add the following at the bottom of your ~/.zshrc
+# alias so='source ~/.zshrc;echo "ZSH aliases sourced."'
+# ALIAS_FILE="$HOME/work/utils/alias"
+# [ -f "$ALIAS_FILE" ] && source "$ALIAS_FILE" || echo "Alias file $ALIAS_FILE not found"
+# Save ~/.zshrc
+# source ~/.zshrc
+# Everytime there is a new alias file, run "so" on the terminal to source it
+#######################
+# Notes:
+# Naming conventions
+# Functions have _ : e.g., my_function
+# Aliases have - : e.g., my-alias
+# -----------------------------------------------------------------------------
 
-
-# Directories#
+# Directories
 export DOCS="$HOME/Documents"
 export DL="$HOME/Downloads"
 export WORK="$HOME/work"
 export UTILS="$WORK/utils"
 export JNBS="$WORK/jupyter-notebooks"
 
-#Going to the dirs
+# Going to the dirs
 alias w='cd $WORK'
 alias docs='cd $DOCS'
 alias dl='cd $DL'
-alias utils='cd $UTLS'
+alias utils='cd $UTILS'
 
-
-## changing file permissions
+# Changing file permissions
 alias lock='chmod -R 700'
 alias unlock='chmod -R 755'
 alias mkexe='chmod -R 755'
@@ -36,27 +58,82 @@ alias h='head -20'
 alias t='tail -20'
 alias g='grep -i'
 
-################################################################################
+alias check-path='echo "$PATH" | tr ":" "\n"'
+alias check-ld-library-path='echo "$LD_LIBRARY_PATH" | tr ":" "\n"'
+alias clean-temp-files='rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej'
+
+# -----------------------------------------------------------------------------
+# Git alias and functions
+git_file_info() {
+    local file="$1"
+    [ -z "$file" ] && { echo "Error: No file specified."; return 1; }
+    [ ! -f "$file" ] && { echo "Error: File '$file' does not exist."; return 1; }
+    echo "File Version Info: $file"
+    echo "Version: $(git log -n 1 --pretty=format:"%h" -- "$file")"
+    echo "Last Updated: $(git log -n 1 --pretty=format:"%ad" --date=short -- "$file")"
+    echo "Last Update Message: $(git log -n 1 --pretty=format:"%s" -- "$file")"
+    local git_sha=$(git log -n 1 --pretty=format:"%h" -- "$file")
+    local local_sha=$(shasum -a 256 "$file" | awk '{print $1}')
+    local git_file_content=$(git show "$git_sha:$file" 2>/dev/null | shasum -a 256 | awk '{print $1}')
+
+    echo "Tags: $(git tag --contains $git_sha | tr '\n' ' ')"
+    echo "SHA (Git): $git_file_content"
+
+        if [ "$local_sha" != "$git_file_content" ]; then
+            echo "Status: MODIFIED"
+            echo "SHA (Local): $local_sha (modified)"
+        else
+            echo "Status: UNCHANGED"
+            echo "SHA (Local): $local_sha"
+        fi
+}
+
+git_file_history() {
+    local file="$1"
+    [ -z "$file" ] && { echo "Error: No file specified."; return 1; }
+    [ ! -f "$file" ] && { echo "Error: File '$file' does not exist."; return 1; }
+    echo "Git history for file: $file"
+    git log --follow --pretty=format:"%h | %ad | %s" --date=short -- "$file" | tee /dev/stdout
+}
+
+# -----------------------------------------------------------------------------
 ## PYENV
 # Install PYENV and .env both
 # brew install pyenv
 
-
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init - zsh)"
+alias clean-pycache='find . -type d -name "__pycache__" -exec rm -rf {} +'
 
+# -----------------------------------------------------------------------------
+# Python-related aliases and functions
 
-check_path() { echo "$PATH" | tr ':' '\n'; }
+alias clean-pip-cache='pip cache purge'
+alias pip-list='pip list --format=columns'
+alias pip-list-outdated='pip list --outdated --format=columns'
 
-clean_pycache() {
-    find . -type d -name "__pycache__" -exec rm -rf {} +
+pip_save_requirements() {
+    local req_file="requirements.txt"
+    local backup_file="requirements.$(date +%Y%m%d%H%M%S).txt"
+
+    if [ -f "$req_file" ]; then
+        echo "File '$req_file' already exists."
+        read -p "Do you want to overwrite it? (y/n): " confirm
+        if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+            echo "Operation canceled."
+            return 1
+        fi
+        mv "$req_file" "$backup_file"
+        echo "Backup created: $backup_file"
+    fi
+
+    pip freeze > "$req_file"
+    echo "Requirements saved to '$req_file'."
 }
-################################################################################
-# Python related aliases
-# Function to pretty print Python version and location
-mypy() {
+alias pip-save-reqs='pip_save_requirements'
 
+mypy() {
     echo "Python should be managed by pyenv"
     
     pyenv_version=$(pyenv --version 2>&1)
@@ -79,40 +156,33 @@ mypy() {
     fi
 }
 
-# Function to change the prompt to %~>
 change_prompt() {
-    local current_dir=$(basename "$PWD")
-    export PROMPT="($current_dir) %~> "
+    #local current_dir=$(basename "$PWD")
+    prompt_prefix=${PROJECT_NAME:-"NONE"}
+    export PROMPT="($prompt_prefix) %~> "
 }
 
-# This script defines a function `go_project` that navigates to a specified project directory,
-# activates its virtual environment if available, sources an environment file if it exists,
-# runs `mypy` for type checking, and changes the shell prompt.
-#
-# Usage:
-#   go_project <project_name>
-#
-# Arguments:
-#   project_name: The name of the project to navigate to.
-#
-# The script also defines two aliases:
-#   go_eda_schema_internal: Navigates to the 'eda_schema_internal' project.
-#   go_ohm: Navigates to the 'ohm' project.
-#
-# Error Handling:
-#   - If no project name is provided, an error message is displayed.
-#   - If the specified project directory does not exist, an error message is displayed.
+
+# -----------------------------------------------------------------------------
+# Project-related functions and aliases
+
 go_project() {
     [ -z "$1" ] && { echo "Error: No project name provided."; return 1; }
     local project_name="$1"
     [ ! -d "$WORK/$project_name" ] && { echo "Error: Project '$project_name' does not exist under $WORK."; return 1; }
+    if [ -n "$PROJECT_NAME" ]; then
+        echo "Deactivating current project: $PROJECT_NAME"
+        deactivate 2>/dev/null || echo "No virtual environment to deactivate."
+        unset PROJECT_NAME
+    fi
     cd "$WORK/$project_name" || return 1
     [ -f venv/bin/activate ] && source venv/bin/activate
     [ -f "${project_name}.env" ] && source "${project_name}.env"
-    #show the env
     mypy
+    export PROJECT_NAME="$project_name"
     change_prompt
 }
+
 generate_project_aliases() {
     echo "Generating project aliases..."
     for dir in "$WORK"/*/; do
@@ -122,15 +192,21 @@ generate_project_aliases() {
         echo "  go-$project_name: $WORK/$project_name"
     done
 }
-
+redefine_so_alias() {
+    if alias so &>/dev/null; then
+        if [ -n "$PROJECT_NAME" ]; then
+            alias so='source ~/.zshrc; echo "ZSH aliases sourced. Current project: $PROJECT_NAME"'
+            echo "Alias 'so' redefined to include current project: $PROJECT_NAME"
+        fi
+    else
+        echo "Alias 'so' is not defined."
+    fi
+}
 generate_project_aliases
-#alias go-eda-schema-internal='go_project eda-schema-internal'
-#alias go-ohm='go_project ohm'
-#alias go-utils='go_project utils'
 
-################################################################################
-#
-# Function to launch Jupyter Notebook
+# -----------------------------------------------------------------------------
+# Jupyter Notebook
+
 jupyter_notebook() {
     local notebook_dir="$JNBS"
     if [ -z "$notebook_dir" ]; then
@@ -145,13 +221,16 @@ jupyter_notebook() {
     jupyter notebook
 }
 
-################################################################################
-# Setup Drexel Environment for my use.
-dxl() {
+# -----------------------------------------------------------------------------
+# Drexel Environment Setup
+
+setup_drexel_env() {
     [[ ":$PATH:" != *":/usr/local/opt/graphviz/bin:"* ]] && export PATH="/usr/local/opt/graphviz/bin:$PATH"
 }
 
-# Let this always be the last line
+# -----------------------------------------------------------------------------
+# Final setup
 [ -d "$WORK" ] && cd "$WORK" || cd "$HOME"
 PROMPT="%n@%m:%~> "
 echo "Loaded amit's alias file"
+# -----------------------------------------------------------------------------
