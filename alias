@@ -27,15 +27,19 @@
 # Directories
 export DOCS="$HOME/Documents"
 export DL="$HOME/Downloads"
+export iDL="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Downloads"
+export iDOCS="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Documents"
 export WORK="$HOME/work"
 export UTILS="$WORK/utils"
 export JNBS="$WORK/jupyter-notebooks"
 
-# Going to the dirs
 alias w='cd $WORK'
 alias docs='cd $DOCS'
 alias dl='cd $DL'
 alias utils='cd $UTILS'
+alias idl='cd $iDL'
+alias idoc='cd $iDOCS'
+
 
 # Changing file permissions
 alias lock='chmod -R 700'
@@ -53,6 +57,7 @@ alias up='cd ..'
 
 alias x='exit'
 alias c='clear'
+alias cls='clear'
 alias m='more'
 alias h='head -20'
 alias t='tail -20'
@@ -95,44 +100,80 @@ git_file_history() {
     echo "Git history for file: $file"
     git log --follow --pretty=format:"%h | %ad | %s" --date=short -- "$file" | tee /dev/stdout
 }
-
+git_diff_with_latest() {
+    local file="$1"
+    [ -z "$file" ] && { echo "Error: No file specified."; return 1; }
+    [ ! -f "$file" ] && { echo "Error: File '$file' does not exist."; return 1; }
+    echo "Diffing '$file' with the latest version on this branch..."
+    git fetch origin
+    git diff --color-words --diff-algorithm=patience -- "$(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD))" -- "$file" | diff-so-fancy
+}
 # -----------------------------------------------------------------------------
 ## PYENV
 # Install PYENV and .env both
 # brew install pyenv
-
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init - zsh)"
 alias clean-pycache='find . -type d -name "__pycache__" -exec rm -rf {} +'
-
 # -----------------------------------------------------------------------------
 # Python-related aliases and functions
 
-alias clean-pip-cache='pip cache purge'
-alias pip-list='pip list --format=columns'
-alias pip-list-outdated='pip list --outdated --format=columns'
-
-pip_save_requirements() {
-    local req_file="requirements.txt"
-    local backup_file="requirements.$(date +%Y%m%d%H%M%S).txt"
-
-    if [ -f "$req_file" ]; then
-        echo "File '$req_file' already exists."
-        read -p "Do you want to overwrite it? (y/n): " confirm
+init_venv() {
+    if [ -d "venv" ]; then
+        echo "Virtual environment already exists in the current directory."
+        read -p "Do you want to recreate it? (y/n): " confirm
         if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
             echo "Operation canceled."
             return 1
         fi
-        mv "$req_file" "$backup_file"
-        echo "Backup created: $backup_file"
+        rm -rf venv
+        echo "Existing virtual environment removed."
     fi
 
-    pip freeze > "$req_file"
-    echo "Requirements saved to '$req_file'."
+    python -m venv venv
+    if [ $? -eq 0 ]; then
+        echo "Virtual environment created successfully."
+        source venv/bin/activate
+        echo "Virtual environment activated."
+    else
+        echo "Failed to create virtual environment."
+        return 1
+    fi
 }
-alias pip-save-reqs='pip_save_requirements'
+alias clean-pip-cache='pip cache purge'
+alias pip-list='pip list --format=columns'
+alias pip-list-outdated='pip list --outdated --format=columns'
 
+pip_diff_requirements() {
+    local req_file="requirements.txt"
+    local temp_req_file="tmp_requirements.txt"
+    if [ ! -f "$req_file" ]; then
+        echo "Error: Requirements file '$req_file' does not exist."
+        return 1
+    fi
+    if [ -f "$temp_req_file" ]; then
+        echo "Error: Temporary requirements file '$temp_req_file' already exists."
+        return 1
+    fi
+    echo "Comparing '$temp_req_file' with '$req_file'..."
+    code --diff "$temp_req_file" "$req_file"
+}
+pip_overwrite_requirements_file() {
+    local req_file="requirements.txt"
+    local tmp_req_file="tmp_requirements.txt"
+    local backup_dir=".backup_requirements.txt"
+    local date=$(date +"%Y%m%d_%H%M%S")
+
+    [ ! -f "$req_file" ] && { echo "Error: Requirements file '$req_file' does not exist."; return 1; }
+    [ ! -f "$tmp_req_file" ] && { echo "Error: Temporary requirements file '$tmp_req_file' does not exist."; return 1; }
+    mkdir -p "$backup_dir"
+    my "$req_file" "$backup_dir/requirements_$date.txt"
+    [ $? -eq 0 ] && echo "Backup created at '$backup_dir/requirements_$date.txt'." || { echo "Failed to create backup."; return 1; }
+    echo "Overwriting '$req_file'..."
+    mv "$tmp_req_file" "$req_file"
+    [ $? -eq 0 ] && echo "'$req_file' has been overwritten successfully." || { echo "Failed to overwrite '$req_file'."; return 1; }
+}
 mypy() {
     echo "Python should be managed by pyenv"
     
