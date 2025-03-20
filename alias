@@ -63,9 +63,40 @@ alias h='head -20'
 alias t='tail -20'
 alias g='grep -i'
 
+# -----------------------------------------------------------------------------
+# Env Check aliases
 alias check-path='echo "$PATH" | tr ":" "\n"'
 alias check-ld-library-path='echo "$LD_LIBRARY_PATH" | tr ":" "\n"'
+# -----------------------------------------------------------------------------
+# Functions to specifically setup certain environment variables
+setup_graphviz_env() {
+    [[ ":$PATH:" != *":/usr/local/opt/graphviz/bin:"* ]] && export PATH="/usr/local/opt/graphviz/bin:$PATH"
+}
+# -----------------------------------------------------------------------------
+# Cleaning-related aliases and functions
 alias clean-temp-files='rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej'
+alias clean-pycache='find . -type d -name "__pycache__" -exec rm -rf {} +'
+alias clean-pip-cache='pip cache purge'
+clean_temp_files() {
+    echo "Cleaning temporary files..."
+    rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej
+    echo "Temporary files cleaned."
+}
+# -----------------------------------------------------------------------------
+# Related to running code
+run() {
+    local script="$1"
+    shift
+    [ -z "$script" ] && { echo "Error: No Python script specified."; return 1; }
+    [ ! -f "$script" ] && { echo "Error: Python script '$script' does not exist."; return 1; }
+    echo "Running Python script '$script' with arguments: $*"
+    python "$script" "$@" | tee pytest.out
+    [ $? -eq 0 ] && echo "Script executed successfully. Output redirected to 'pytest.out'." || echo "Script execution failed. Check 'pytest.out' for details."
+    code pytest.out
+}
+# -----------------------------------------------------------------------------
+
+
 
 # -----------------------------------------------------------------------------
 # Git alias and functions
@@ -115,7 +146,6 @@ git_diff_with_latest() {
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init - zsh)"
-alias clean-pycache='find . -type d -name "__pycache__" -exec rm -rf {} +'
 # -----------------------------------------------------------------------------
 # Python-related aliases and functions
 
@@ -141,10 +171,10 @@ init_venv() {
         return 1
     fi
 }
-alias clean-pip-cache='pip cache purge'
+# -----------------------------------------------------------------------------
+# pip-related aliases and functions
 alias pip-list='pip list --format=columns'
 alias pip-list-outdated='pip list --outdated --format=columns'
-
 pip_diff_requirements() {
     local req_file="requirements.txt"
     local temp_req_file="tmp_requirements.txt"
@@ -206,7 +236,6 @@ change_prompt() {
 
 # -----------------------------------------------------------------------------
 # Project-related functions and aliases
-
 go_project() {
     [ -z "$1" ] && { echo "Error: No project name provided."; return 1; }
     local project_name="$1"
@@ -223,8 +252,8 @@ go_project() {
     export PROJECT_NAME="$project_name"
     change_prompt
 }
-
-generate_project_aliases() {
+# -----------------------------------------------------------------------------
+gen_alias_projects() {
     echo "Generating project aliases..."
     for dir in "$WORK"/*/; do
         [ -d "$dir" ] || continue
@@ -233,41 +262,15 @@ generate_project_aliases() {
         echo "  go-$project_name: $WORK/$project_name"
     done
 }
-redefine_so_alias() {
-    if alias so &>/dev/null; then
-        if [ -n "$PROJECT_NAME" ]; then
-            alias so='source ~/.zshrc; echo "ZSH aliases sourced. Current project: $PROJECT_NAME"'
-            echo "Alias 'so' redefined to include current project: $PROJECT_NAME"
-        fi
-    else
-        echo "Alias 'so' is not defined."
-    fi
+con_alias_open() {
+    alias open &>/dev/null && unalias open
+    [[ "$TERM_PROGRAM" == "vscode" ]] && alias open="code"
+    #alias open &>/dev/null && echo "Alias for open: $(alias open)"
 }
-generate_project_aliases
-
 # -----------------------------------------------------------------------------
-# Jupyter Notebook
-
-jupyter_notebook() {
-    local notebook_dir="$JNBS"
-    if [ -z "$notebook_dir" ]; then
-        notebook_dir="."
-    fi
-    if [ ! -d "$notebook_dir" ]; then
-        echo "Directory $notebook_dir does not exist."
-        return 1
-    fi
-    cd "$notebook_dir" || return 1
-    echo "Launching Jupyter Notebook in directory: $notebook_dir"
-    jupyter notebook
-}
-
-# -----------------------------------------------------------------------------
-# Drexel Environment Setup
-
-setup_drexel_env() {
-    [[ ":$PATH:" != *":/usr/local/opt/graphviz/bin:"* ]] && export PATH="/usr/local/opt/graphviz/bin:$PATH"
-}
+# Adding functions to autogenerate aliases
+gen_alias_projects
+con_alias_open
 
 # -----------------------------------------------------------------------------
 # Final setup
