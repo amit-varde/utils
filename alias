@@ -148,7 +148,6 @@ export PYENV_ROOT="$HOME/.pyenv"
 eval "$(pyenv init - zsh)"
 # -----------------------------------------------------------------------------
 # Python-related aliases and functions
-
 init_venv() {
     if [ -d "venv" ]; then
         echo "Virtual environment already exists in the current directory."
@@ -226,7 +225,63 @@ mypy() {
         echo "Current virtual environment: $VIRTUAL_ENV"
     fi
 }
+brew_versions_report() {
+# Function: brew_versions_report
+# Description: Generates a report of installed Homebrew formula packages, their versions, and update status.
+# Dependencies: Homebrew, jq (install with `brew install jq`).
+# Output: A table with columns - Package, Installed Version, Latest Version, Status (UP_TO_DATE/NEEDS_UPGRADE).
+# Behavior: Checks for jq, iterates through installed packages, compares versions, and formats results into a table.
+# Check for jq dependency
+    if ! command -v jq &> /dev/null; then
+        echo "Error: jq is required. Install it using: brew install jq"
+        return 1
+    fi
 
+    echo "Package, Installed Version, Latest Version, Status"
+
+    # Get information for all installed formula packages
+    info=$(brew info --json=v2 --installed)
+    # Parse the JSON data to extract installed and latest versions
+    installed_versions=$(echo "$info" | jq -r '.formulae[] | .name + "," + (.installed[0].version // "Not Installed")')
+    latest_versions=$(echo "$info" | jq -r '.formulae[] | .name + "," + (.versions.stable // "Unknown")')
+    # Combine installed and latest versions, and determine the status
+    while IFS= read -r installed; do
+        package=$(echo "$installed" | cut -d',' -f1)
+        installed_version=$(echo "$installed" | cut -d',' -f2)
+        latest_version=$(echo "$latest_versions" | grep "^$package," | cut -d',' -f2)
+
+        if [ "$installed_version" == "$latest_version" ]; then
+            status="UP_TO_DATE"
+        else
+            status="NEEDS_UPGRADE"
+        fi
+
+        echo "$package, $installed_version, $latest_version, $status"
+    done <<< "$installed_versions" | column -t -s ','
+
+}
+pip_versions_report() {
+    # Function: pip_versions_report
+    # Description: Generates a report of installed pip packages, their versions, and update status.
+    # Output: A table with columns - Package, Installed Version, Latest Version, Status (UP_TO_DATE/NEEDS_UPGRADE).
+    # Behavior: Iterates through installed pip packages, fetches the latest versions from PyPI, and formats results into a table.
+    echo "Package, Installed Version, Latest Version, Status" | column -t -s ','
+    # Get the list of installed pip packages and their versions
+    installed_packages=$(pip list --format=freeze)
+
+    # Iterate through each installed package
+    while IFS= read -r package_info; do
+        package=$(echo "$package_info" | cut -d'=' -f1)
+        installed_version=$(echo "$package_info" | cut -d'=' -f3)
+        latest_version=$(pip index versions "$package" 2>&1 | grep -o 'Available versions:.*' | cut -d':' -f2 | awk '{print $1}')
+        if [ "$installed_version" == "$latest_version" ]; then
+            status="UP_TO_DATE"
+        else
+            status="NEEDS_UPGRADE"
+        fi
+        echo "$package, $installed_version, $latest_version, $status"
+    done <<< "$installed_packages" | column -t -s ','
+}
 change_prompt() {
     #local current_dir=$(basename "$PWD")
     prompt_prefix=${PROJECT_NAME:-"NONE"}
