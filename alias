@@ -85,14 +85,16 @@ clean_temp_files() {
 # -----------------------------------------------------------------------------
 # Related to running code
 run() {
+    clear
     local script="$1"
+    local output_file="run.out"
     shift
     [ -z "$script" ] && { echo "Error: No Python script specified."; return 1; }
     [ ! -f "$script" ] && { echo "Error: Python script '$script' does not exist."; return 1; }
     echo "Running Python script '$script' with arguments: $*"
-    python "$script" "$@" | tee pytest.out
-    [ $? -eq 0 ] && echo "Script executed successfully. Output redirected to 'pytest.out'." || echo "Script execution failed. Check 'pytest.out' for details."
-    code pytest.out
+    python "$script" "$@" | tee "$output_file"
+    [ $? -eq 0 ] && echo "Script executed successfully. Output redirected to '$output_file'." || echo "Script execution failed. Check '$output_file' for details."
+    open "$output_file"
 }
 # -----------------------------------------------------------------------------
 
@@ -304,6 +306,8 @@ go_project() {
     [ -f venv/bin/activate ] && source venv/bin/activate
     [ -f "${project_name}.env" ] && source "${project_name}.env"
     mypy
+    [ -f "$project_name".code-workspace ] && code "$project_name".code-workspace
+
     export PROJECT_NAME="$project_name"
     change_prompt
 }
