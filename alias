@@ -377,8 +377,9 @@ go_project() {
     [ -f venv/bin/activate ] && source venv/bin/activate
     [ -f "${project_name}.env" ] && source "${project_name}.env"
     mypy
-    [ -f "$project_name".code-workspace ] && code "$project_name".code-workspace
-
+    if [[ "$TERM_PROGRAM" != "vscode" ]]; then
+        [ -f "$project_name".code-workspace ] && code "$project_name".code-workspace
+    fi
     export PROJECT_NAME="$project_name"
     change_prompt
 }
