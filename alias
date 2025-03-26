@@ -23,7 +23,13 @@
 # Functions have _ : e.g., my_function
 # Aliases have - : e.g., my-alias
 # -----------------------------------------------------------------------------
-
+# Icon variables for status indicators
+export ICON_WARNING="⚠️"
+export ICON_GREEN_CHECK="✅"
+export ICON_RED_CROSS="❌"
+export ICON_THUMBS_DOWN="👎"
+export ICON_THUMBS_UP="👍"
+export ICON_RED_ALERT="🚨"
 # Directories
 export DOCS="$HOME/Documents"
 export DL="$HOME/Downloads"
@@ -65,8 +71,116 @@ alias g='grep -i'
 
 # -----------------------------------------------------------------------------
 # Env Check aliases
-alias check-path='echo "$PATH" | tr ":" "\n"'
-alias check-ld-library-path='echo "$LD_LIBRARY_PATH" | tr ":" "\n"'
+check_path() {
+    RED="\033[1;31m"
+    BLUE="\033[1;34m"
+    GREEN="\033[1;32m"
+    RESET="\033[0m"
+    
+    if [ -z "$1" ]; then
+        # No input - display all PATH entries
+        echo -e "${BLUE}All PATH entries:${RESET}"
+        echo "$PATH" | tr ":" "\n" | nl -w2 -s" : "
+
+        # Find and display duplicates
+        echo -e "${BLUE}Checking for duplicates:${RESET}"
+        duplicates=$(echo "$PATH" | tr ":" "\n" | sort | uniq -d)
+
+        if [ -z "$duplicates" ]; then
+            echo -e -n "${GREEN}No duplicates found in PATH${RESET}"
+        else
+            echo -e "${RED}Found duplicates:${RESET}"
+            # Process each duplicate path
+            echo "$duplicates" | while read -r dup; do
+                positions=""
+                index=1
+                
+                # Find all positions of this duplicate in PATH
+                while IFS= read -r entry; do
+                    if [ "$entry" = "$dup" ]; then
+                        if [ -z "$positions" ]; then
+                            positions="$index"
+                        else
+                            positions="$positions, $index"
+                        fi
+                    fi
+                    ((index++))
+                done < <(echo "$PATH" | tr ":" "\n")
+                
+                # Print with correct format
+                echo "  $dup: [$positions]"
+            done
+        fi
+    else
+        # Search input provided - only show matches
+        echo -e "\n${BLUE}Searching for \"$1\" in PATH:${RESET}"
+        while read -r line; do
+            if echo "$line" | grep -q "$1"; then
+                # Path contains search term - display in red
+                echo -e "${RED}$line${RESET}"
+            else
+                # Path doesn't contain search term - display in green
+                echo -e "${GREEN}$line${RESET}"
+            fi
+        done < <(echo "$PATH" | tr ":" "\n" | nl -w2 -s" : ")
+    fi
+}
+
+check_ld_library_path() {
+    RED="\033[1;31m"
+    BLUE="\033[1;34m"
+    GREEN="\033[1;32m"
+    RESET="\033[0m"
+    
+    if [ -z "$1" ]; then
+        # No input - display all LD_LIBRARY_PATH entries
+        echo -e "${BLUE}All LD_LIBRARY_PATH entries:${RESET}"
+        echo "$LD_LIBRARY_PATH" | tr ":" "\n" | nl -w2 -s" : "
+
+        # Find and display duplicates
+        echo -e "${BLUE}Checking for duplicates:${RESET}"
+        duplicates=$(echo "$LD_LIBRARY_PATH" | tr ":" "\n" | sort | uniq -d)
+
+        if [ -z "$duplicates" ]; then
+            echo -e -n "${GREEN}No duplicates found in LD_LIBRARY_PATH${RESET}"
+        else
+            echo -e "${RED}Found duplicates:${RESET}"
+            # Process each duplicate path
+            echo "$duplicates" | while read -r dup; do
+                positions=""
+                index=1
+                
+                # Find all positions of this duplicate in LD_LIBRARY_PATH
+                while IFS= read -r entry; do
+                    if [ "$entry" = "$dup" ]; then
+                        if [ -z "$positions" ]; then
+                            positions="$index"
+                        else
+                            positions="$positions, $index"
+                        fi
+                    fi
+                    ((index++))
+                done < <(echo "$LD_LIBRARY_PATH" | tr ":" "\n")
+                
+                # Print with correct format
+                echo "  $dup: [$positions]"
+            done
+        fi
+    else
+        # Search input provided - only show matches
+        echo -e "\n${BLUE}Searching for \"$1\" in LD_LIBRARY_PATH:${RESET}"
+        while read -r line; do
+            if echo "$line" | grep -q "$1"; then
+                # Path contains search term - display in red
+                echo -e "${RED}$line${RESET}"
+            else
+                # Path doesn't contain search term - display in green
+                echo -e "${GREEN}$line${RESET}"
+            fi
+        done < <(echo "$LD_LIBRARY_PATH" | tr ":" "\n" | nl -w2 -s" : ")
+    fi
+}
+
 # -----------------------------------------------------------------------------
 # Functions to specifically setup certain environment variables
 setup_graphviz_env() {
@@ -93,54 +207,11 @@ run() {
     [ ! -f "$script" ] && { echo "Error: Python script '$script' does not exist."; return 1; }
     echo "Running Python script '$script' with arguments: $*"
     python "$script" "$@" | tee "$output_file"
-    [ $? -eq 0 ] && echo "Script executed successfully. Output redirected to '$output_file'." || echo "Script execution failed. Check '$output_file' for details."
-    open "$output_file"
+    [ $? -eq 0 ] && echo "$ICON_GREEN_CHECK Script executed successfully. Output redirected to '$output_file'." || echo "Script execution failed. Check '$output_file' for details."
 }
 # -----------------------------------------------------------------------------
 
 
-
-# -----------------------------------------------------------------------------
-# Git alias and functions
-git_file_info() {
-    local file="$1"
-    [ -z "$file" ] && { echo "Error: No file specified."; return 1; }
-    [ ! -f "$file" ] && { echo "Error: File '$file' does not exist."; return 1; }
-    echo "File Version Info: $file"
-    echo "Version: $(git log -n 1 --pretty=format:"%h" -- "$file")"
-    echo "Last Updated: $(git log -n 1 --pretty=format:"%ad" --date=short -- "$file")"
-    echo "Last Update Message: $(git log -n 1 --pretty=format:"%s" -- "$file")"
-    local git_sha=$(git log -n 1 --pretty=format:"%h" -- "$file")
-    local local_sha=$(shasum -a 256 "$file" | awk '{print $1}')
-    local git_file_content=$(git show "$git_sha:$file" 2>/dev/null | shasum -a 256 | awk '{print $1}')
-
-    echo "Tags: $(git tag --contains $git_sha | tr '\n' ' ')"
-    echo "SHA (Git): $git_file_content"
-
-        if [ "$local_sha" != "$git_file_content" ]; then
-            echo "Status: MODIFIED"
-            echo "SHA (Local): $local_sha (modified)"
-        else
-            echo "Status: UNCHANGED"
-            echo "SHA (Local): $local_sha"
-        fi
-}
-
-git_file_history() {
-    local file="$1"
-    [ -z "$file" ] && { echo "Error: No file specified."; return 1; }
-    [ ! -f "$file" ] && { echo "Error: File '$file' does not exist."; return 1; }
-    echo "Git history for file: $file"
-    git log --follow --pretty=format:"%h | %ad | %s" --date=short -- "$file" | tee /dev/stdout
-}
-git_diff_with_latest() {
-    local file="$1"
-    [ -z "$file" ] && { echo "Error: No file specified."; return 1; }
-    [ ! -f "$file" ] && { echo "Error: File '$file' does not exist."; return 1; }
-    echo "Diffing '$file' with the latest version on this branch..."
-    git fetch origin
-    git diff --color-words --diff-algorithm=patience -- "$(git merge-base HEAD origin/$(git rev-parse --abbrev-ref HEAD))" -- "$file" | diff-so-fancy
-}
 # -----------------------------------------------------------------------------
 ## PYENV
 # Install PYENV and .env both

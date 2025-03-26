@@ -2,3 +2,4 @@
 summary.txt
 *.out
 .alias.swp
+out/
