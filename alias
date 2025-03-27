@@ -4,7 +4,7 @@
 # Email: tercel04@gmail.com; amit@bazinga-labs.com
 # -----------------------------------------------------------------------------
 # Description:
-# This file contains aliases and functions that are useful for everyday tasks.
+# This file contains aliases and functions useful for everyday tasks.
 # -----------------------------------------------------------------------------
 # Usage:
 # Add the following at the bottom of your ~/.zshrc
@@ -19,62 +19,6 @@
 # Naming conventions
 # Functions have _ : e.g., my_function
 # Aliases have - : e.g., my-alias
-# -----------------------------------------------------------------------------
-# FUNCTION/ALIAS DOCUMENTATION:
-#
-# DIRECTORY NAVIGATION
-#     w : Navigate to work directory
-#     docs : Navigate to documents directory
-#     dl : Navigate to downloads directory
-#     utils : Navigate to utilities directory
-#     idl : Navigate to iCloud downloads directory
-#     idoc : Navigate to iCloud documents directory
-#     up : Navigate up one directory
-# FILE PERMISSIONS
-#     lock : Set restrictive permissions (700) on files/directories
-#     unlock : Set standard permissions (755) on files/directories
-#     mkexe : Make files executable with permission 755
-# FILE OPERATIONS
-#     lr : List files in long format, sorted by modification time
-#     la : List all files including hidden files
-#     l1 : List files in single column
-#     rd : Remove files/directories recursively and forcefully
-#     rz : Remove backup files (*~)
-#     rx : Remove temporary files (#*#)
-# TERMINAL CONTROL
-#     x : Exit the terminal
-#     c/cls : Clear the terminal screen
-#     m : View file content page by page
-#     h : Show first 20 lines of a file
-#     t : Show last 20 lines of a file
-#     g : Case-insensitive text search with grep
-# ENVIRONMENT MANAGEMENT
-#     check_path : Display PATH entries and check for duplicates
-#     check_ld_library_path : Display LD_LIBRARY_PATH entries and check for duplicates
-#     setup_graphviz_env : Set up GraphViz environment variables
-# CLEANING OPERATIONS
-#     clean-temp-files : Remove common temporary files
-#     clean-pycache : Clean Python cache directories
-#     clean-pip-cache : Clear pip cache
-#     clean_temp_files : Function to clean temporary files with feedback
-# CODE EXECUTION
-#     run : Run a Python script with arguments and save output to a file
-# SHELL CUSTOMIZATION
-#     change_prompt : Change the shell prompt to show project name
-# PYTHON/VIRTUALENV
-#     init_venv : Initialize and activate a Python virtual environment
-#     mypy : Display Python environment information
-# PACKAGE MANAGEMENT
-#     pip-list : List installed pip packages in columns
-#     pip-list-outdated : List outdated pip packages
-#     pip_versions_report : Generate a report of installed pip packages and versions
-#     pip_diff_requirements : Compare requirements files
-#     pip_overwrite_requirements_file : Overwrite requirements file with a backup
-#     brew_versions_report : Generate a report of installed Homebrew packages and versions
-# PROJECT MANAGEMENT
-#     go_project : Navigate to a project directory and set up its environment
-#     gen_alias_projects : Automatically generate aliases for all projects
-#     con_alias_open : Configure the 'open' alias based on environment
 # -----------------------------------------------------------------------------
 # Icon variables for status indicators
 export ICON_WARNING="⚠️"
@@ -94,38 +38,36 @@ export UTILS="$WORK/utils"
 export JNBS="$WORK/jupyter-notebooks"
 
 # -----------------------------------------------------------------------------
-# alias 
-alias w='cd $WORK'
-alias docs='cd $DOCS'
-alias dl='cd $DL'
-alias utils='cd $UTILS'
-alias idl='cd $iDL'
-alias idoc='cd $iDOCS'
-# -----------------------------------------------------------------------------
-# Changing file permissions
-alias lock='chmod -R 700'
-alias unlock='chmod -R 755'
-alias mkexe='chmod -R 755'
-# -----------------------------------------------------------------------------
-# Navigate``
-alias lr='ls -lrt'
-alias la='ls -a'
-alias l1='ls -1'
-alias up='cd ..'
+# Organized Alias Definitions (one-line description)
+alias w='cd $WORK'               # Navigate to work directory
+alias docs='cd $DOCS'            # Navigate to documents directory
+alias dl='cd $DL'                # Navigate to downloads directory
+alias utils='cd $UTILS'          # Navigate to utilities directory
+alias idl='cd $iDL'              # Navigate to iCloud downloads directory
+alias idoc='cd $iDOCS'           # Navigate to iCloud documents directory
+alias up='cd ..'                 # Navigate up one directory
+alias lr='ls -lrt'               # List files in long format, sorted by modification time
+alias la='ls -a'                 # List all files including hidden files
+alias l1='ls -1'                 # List files in single column
+alias lock='chmod -R 700'        # Set restrictive permissions (700) on files/directories
+alias unlock='chmod -R 755'      # Set standard permissions (755) on files/directories
+alias mkexe='chmod -R 755'       # Make files executable with permission 755
+alias x='exit'                   # Exit the terminal
+alias c='clear'                  # Clear the terminal screen
+alias cls='clear'                # Clear the terminal screen
+alias m='more'                   # View file content page by page
+alias h='head -20'               # Show first 20 lines of a file
+alias t='tail -20'               # Show last 20 lines of a file
+alias g='grep -i'                # Case-insensitive text search with grep
+alias clean-temp-files='rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej'  # Remove backup and temporary files
+alias clean-pycache='find . -type d -name "__pycache__" -exec rm -rf {} +'       # Clean Python cache directories
+alias clean-pip-cache='pip cache purge'  # Clear pip cache
+alias fname='realpath'
+alias dname='dirname $(realpath)'
 
 # -----------------------------------------------------------------------------
-# Miscellaneous 
-alias x='exit'
-alias c='clear'
-alias cls='clear'
-# -----------------------------------------------------------------------------
-alias m='more'
-alias h='head -20'
-alias t='tail -20'
-alias g='grep -i'
-# -----------------------------------------------------------------------------
-# Env Check aliases
-check_path() {
+# Organized Function Definitions (one-line description)
+check_path() {   # Display PATH entries and check for duplicates
     RED="\033[1;31m"
     BLUE="\033[1;34m"
     GREEN="\033[1;32m"
@@ -180,7 +122,7 @@ check_path() {
     fi
 }
 # -----------------------------------------------------------------------------
-check_ld_library_path() {
+check_ld_library_path() {   # Display LD_LIBRARY_PATH entries and check for duplicates
     RED="\033[1;31m"
     BLUE="\033[1;34m"
     GREEN="\033[1;32m"
@@ -235,23 +177,17 @@ check_ld_library_path() {
     fi
 }
 # -----------------------------------------------------------------------------
-# Functions to specifically setup certain environment variables
-setup_graphviz_env() {
+setup_graphviz_env() {   # Set up Graphviz environment variables
     [[ ":$PATH:" != *":/usr/local/opt/graphviz/bin:"* ]] && export PATH="/usr/local/opt/graphviz/bin:$PATH"
 }
 # -----------------------------------------------------------------------------
-# Cleaning-related aliases and functions
-alias clean-temp-files='rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej'
-alias clean-pycache='find . -type d -name "__pycache__" -exec rm -rf {} +'
-alias clean-pip-cache='pip cache purge'
-clean_temp_files() {
+clean_temp_files() {   # Clean temporary files with feedback
     echo "Cleaning temporary files..."
     rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej
     echo "Temporary files cleaned."
 }
 # -----------------------------------------------------------------------------
-# Related to running code
-run() {
+run() {   # Run a Python script with arguments and save output to run.out
     clear
     local script="$1"
     local output_file="run.out"
@@ -263,7 +199,7 @@ run() {
     [ $? -eq 0 ] && echo "$ICON_GREEN_CHECK Script executed successfully. Output redirected to '$output_file'." || echo "Script execution failed. Check '$output_file' for details."
 }
 # -----------------------------------------------------------------------------
-change_prompt() {
+change_prompt() {   # Change the shell prompt to show project name
     #local current_dir=$(basename "$PWD")
     prompt_prefix=${PROJECT_NAME:-"NONE"}
     export PROMPT="($prompt_prefix) %~> "
@@ -276,86 +212,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init - zsh)"
 # -----------------------------------------------------------------------------
-# Python-related aliases and functions
-init_venv() {
-    if [ -d "venv" ]; then
-        echo "Virtual environment already exists in the current directory."
-        read -p "Do you want to recreate it? (y/n): " confirm
-        if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
-            echo "Operation canceled."
-            return 1
-        fi
-        rm -rf venv
-        echo "Existing virtual environment removed."
-    fi
-    python -m venv venv
-    if [ $? -eq 0 ]; then
-        echo "Virtual environment created successfully."
-        source venv/bin/activate
-        echo "Virtual environment activated."
-    else
-        echo "Failed to create virtual environment."
-        return 1
-    fi
-}
-# -----------------------------------------------------------------------------
-# pip-related aliases and functions
-alias pip-list='pip list --format=columns'
-alias pip-list-outdated='pip list --outdated --format=columns'
-pip_versions_report() {
-    # Function: pip_versions_report
-    # Description: Generates a report of installed pip packages, their versions, and update status.
-    # Output: A table with columns - Package, Installed Version, Latest Version, Status (UP_TO_DATE/NEEDS_UPGRADE).
-    # Behavior: Iterates through installed pip packages, fetches the latest versions from PyPI, and formats results into a table.
-    echo "Package, Installed Version, Latest Version, Status" | column -t -s ','
-    installed_packages=$(pip list --format=freeze)
-    while IFS= read -r package_info; do
-        package=$(echo "$package_info" | cut -d'=' -f1)
-        installed_version=$(echo "$package_info" | cut -d'=' -f3)
-        latest_version=$(pip index versions "$package" 2>&1 | grep -o 'Available versions:.*' | cut -d':' -f2 | awk '{print $1}')
-        if [ "$installed_version" == "$latest_version" ]; then
-            status="UP_TO_DATE"
-        else
-            status="NEEDS_UPGRADE"
-        fi
-        echo "$package, $installed_version, $latest_version, $status"
-    done <<< "$installed_packages" | column -t -s ','
-}
-# -----------------------------------------------------------------------------
-pip_diff_requirements() {
-    local req_file="requirements.txt"
-    local temp_req_file="tmp_requirements.txt"
-    if [ ! -f "$req_file" ]; then
-        echo "Error: Requirements file '$req_file' does not exist."
-        return 1
-    fi
-    if [ -f "$temp_req_file" ]; then
-        echo "Error: Temporary requirements file '$temp_req_file' already exists."
-        return 1
-    fi
-    echo "Comparing '$temp_req_file' with '$req_file'..."
-    code --diff "$temp_req_file" "$req_file"
-}
-# ------------------------------------------------------------------------------
-# Function to overwrite the requirements file with a backup
-pip_overwrite_requirements_file() {
-    local req_file="requirements.txt"
-    local tmp_req_file="tmp_requirements.txt"
-    local backup_dir=".backup_requirements.txt"
-    local date=$(date +"%Y%m%d_%H%M%S")
-
-    [ ! -f "$req_file" ] && { echo "Error: Requirements file '$req_file' does not exist."; return 1; }
-    [ ! -f "$tmp_req_file" ] && { echo "Error: Temporary requirements file '$tmp_req_file' does not exist."; return 1; }
-    mkdir -p "$backup_dir"
-    my "$req_file" "$backup_dir/requirements_$date.txt"
-    [ $? -eq 0 ] && echo "Backup created at '$backup_dir/requirements_$date.txt'." || { echo "Failed to create backup."; return 1; }
-    echo "Overwriting '$req_file'..."
-    mv "$tmp_req_file" "$req_file"
-    [ $? -eq 0 ] && echo "'$req_file' has been overwritten successfully." || { echo "Failed to overwrite '$req_file'."; return 1; }
-}
-# -----------------------------------------------------------------------------
-# Function to list outdated pip packages
-mypy() {
+mypy() {   # Display Python environment information
     echo "Python should be managed by pyenv"
     pyenv_version=$(pyenv --version 2>&1)
     echo "Pyenv version: $pyenv_version"
@@ -374,40 +231,53 @@ mypy() {
     fi
 }
 # -----------------------------------------------------------------------------
-# Homebrew-related aliases and functions
-brew_versions_report() {
-# Function: brew_versions_report
-# Description: Generates a report of installed Homebrew formula packages, their versions, and update status.
-# Dependencies: Homebrew, jq (install with `brew install jq`).
-# Output: A table with columns - Package, Installed Version, Latest Version, Status (UP_TO_DATE/NEEDS_UPGRADE).
-# Behavior: Checks for jq, iterates through installed packages, compares versions, and formats results into a table.
-# Check for jq dependency
-    if ! command -v jq &> /dev/null; then
-        echo "Error: jq is required. Install it using: brew install jq"
-        return 1
-    fi
-    echo "Package, Installed Version, Latest Version, Status"
-    # Get information for all installed formula packages
-    info=$(brew info --json=v2 --installed)
-    # Parse the JSON data to extract installed and latest versions
-    installed_versions=$(echo "$info" | jq -r '.formulae[] | .name + "," + (.installed[0].version // "Not Installed")')
-    latest_versions=$(echo "$info" | jq -r '.formulae[] | .name + "," + (.versions.stable // "Unknown")')
-    # Combine installed and latest versions, and determine the status
-    while IFS= read -r installed; do
-        package=$(echo "$installed" | cut -d',' -f1)
-        installed_version=$(echo "$installed" | cut -d',' -f2)
-        latest_version=$(echo "$latest_versions" | grep "^$package," | cut -d',' -f2)
-        if [ "$installed_version" == "$latest_version" ]; then
-            status="UP_TO_DATE"
-        else
-            status="NEEDS_UPGRADE"
+list_bash_functions_in_file() {   # List all bash functions in this file with descriptions
+    local script_path="$1"
+    echo "Functions defined in [$(basename "$script_path")]: "
+    # Use grep to find function definitions with inline comments
+    fs=$(grep -E '^[a-zA-Z0-9_]+\(\)\ *\{\ *#' "$script_path")
+    # Find the maximum length of function names
+    max_len=0
+    while IFS= read -r line; do
+        # Extract function name (before #) and remove (), {}
+        func_name=$(echo "$line" | sed 's/#.*$//' | tr -d '(){}' | xargs)
+        if [ ${#func_name} -gt $max_len ]; then
+            max_len=${#func_name}
         fi
-        echo "$package, $installed_version, $latest_version, $status"
-    done <<< "$installed_versions" | column -t -s ','
+    done <<< "$fs"
+    
+    # Print with aligned comments
+    while IFS= read -r line; do
+        func_name=$(echo "$line" | sed 's/#.*$//' | tr -d '(){}' | xargs)
+        description=$(echo "$line" | sed 's/^[^#]*#//')
+        printf " %-${max_len}s :%s\n" "$func_name" "$description"
+    done <<< "$fs"
+}
+
+list_alias_in_file() {   # List all alias definitions in this file with descriptions
+    local script_path="$1"
+    echo "Aliases defined in [$(basename "$script_path")]: "
+    # Use grep to find alias definitions that include an inline comment for description
+    as=$(grep -E '^alias [^=]+=.*#' "$script_path")
+    # Find the maximum length of alias names
+    max_len=0
+    while IFS= read -r line; do
+        # Extract alias name located between 'alias' and the '=' sign
+        alias_name=$(echo "$line" | sed -E 's/^alias[[:space:]]+([^=]+)=.*$/\1/' | xargs)
+        if [ ${#alias_name} -gt $max_len ]; then
+            max_len=${#alias_name}
+        fi
+    done <<< "$as"
+    
+    # Print alias names with aligned descriptions
+    while IFS= read -r line; do
+        alias_name=$(echo "$line" | sed -E 's/^alias[[:space:]]+([^=]+)=.*$/\1/' | xargs)
+        description=$(echo "$line" | sed 's/.*#//')
+        printf " %-${max_len}s :%s\n" "$alias_name" "$description"
+    done <<< "$as"
 }
 # -----------------------------------------------------------------------------
-# Project-related functions and aliases
-go_project() {
+go_project() {   # Navigate to a project directory and set up its environment
     [ -z "$1" ] && { echo "Error: No project name provided."; return 1; }
     local project_name="$1"
     [ ! -d "$WORK/$project_name" ] && { echo "Error: Project '$project_name' does not exist under $WORK."; return 1; }
@@ -427,8 +297,7 @@ go_project() {
     change_prompt
 }
 # -----------------------------------------------------------------------------
-# Function to generate aliases for all projects in the WORK directory
-gen_alias_projects() {
+gen_alias_projects() {   # Generate aliases for all projects in the WORK directory
     echo "Generating project aliases..."
     for dir in "$WORK"/*/; do
         [ -d "$dir" ] || continue
@@ -438,16 +307,12 @@ gen_alias_projects() {
     done
 }
 # -----------------------------------------------------------------------------
-# Function to configure the 'open' alias based on the environment
-con_alias_open() {
-    alias open &>/dev/null && unalias open
-    [[ "$TERM_PROGRAM" == "vscode" ]] && alias open="code"
-    #alias open &>/dev/null && echo "Alias for open: $(alias open)"
-}
+# Lets reconfigure alias to open file with Vscode when inside the vscode terminal
+alias open &>/dev/null && unalias open
+[[ "$TERM_PROGRAM" == "vscode" ]] && alias open="code"
 # -----------------------------------------------------------------------------
 # Adding functions to autogenerate aliases
 gen_alias_projects
-con_alias_open
 # -----------------------------------------------------------------------------
 # Final setup
 [ -d "$WORK" ] && cd "$WORK" || cd "$HOME"
