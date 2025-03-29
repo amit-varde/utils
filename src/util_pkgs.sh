@@ -1,21 +1,17 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------
-# File: pkg_mgt_utils.sh
+# File: util_pkgs.sh
 # Author: Amit
 # Email: tercel04@gmail.com; amit@bazinga-labs.com
 # -----------------------------------------------------------------------------
 # Description:
-# Utilities for package management:
-#   - init_venv                       : Initialize and activate a Python virtual environment
-#   - pip_versions_report             : Generate a report of installed pip packages and versions
-#   - pip_diff_requirements           : Compare temporary requirements file with requirements.txt using diff
-#   - pip_overwrite_requirements_file : Overwrite requirements file with a backup
-#   - brew_versions_report            : Generate a report of installed Homebrew packages and versions
-#
-# Also defines aliases related to pip, venv, brew, and pyenv.
+#  Utilities for managing Python environments and package installations.
+#  Provides tools for virtual environment setup, package version reporting.
+#  Includes helpers for pip, brew, and pyenv with update notifications.
 # -----------------------------------------------------------------------------
 
-init_venv() {   # Initialize and activate a Python virtual environment
+# -----------------------------------------------------------------------------
+init_venv() { # Initialize and activate a Python virtual environment
     if [ -d "venv" ]; then
         echo "Virtual environment already exists in the current directory."
         read -p "Do you want to recreate it? (y/n): " confirm
@@ -37,7 +33,8 @@ init_venv() {   # Initialize and activate a Python virtual environment
     fi
 }
 
-pip_versions_report() {   # Generate a report of installed pip packages and versions
+# -----------------------------------------------------------------------------
+pip_versions_report() { # Generate a report of installed pip packages and versions
     echo "Package, Installed Version, Latest Version, Status" | column -t -s ','
     installed_packages=$(pip list --format=freeze)
     while IFS= read -r package_info; do
@@ -53,7 +50,21 @@ pip_versions_report() {   # Generate a report of installed pip packages and vers
     done <<< "$installed_packages" | column -t -s ','
 }
 
-pip_diff_requirements() {   # Compare temporary requirements file with requirements.txt using diff
+# -----------------------------------------------------------------------------
+clean_brew_cache() { # Clear Homebrew cache
+    brew cleanup -s
+    echo "Homebrew cache cleared."
+}
+
+# -----------------------------------------------------------------------------
+clean_pip_cache() { # Clear pip cache
+    pip cache purge
+    echo "Pip cache cleared."
+}
+alias clean-pip-cache='pip cache purge'  # Clear pip cache
+
+# -----------------------------------------------------------------------------
+pip_diff_requirements() { # Compare temporary requirements file with requirements.txt using diff
     local req_file="requirements.txt"
     local temp_req_file="tmp_requirements.txt"
     if [ ! -f "$req_file" ]; then
@@ -68,7 +79,8 @@ pip_diff_requirements() {   # Compare temporary requirements file with requireme
     code --diff "$temp_req_file" "$req_file"
 }
 
-pip_overwrite_requirements_file() {   # Overwrite requirements file with a backup
+# -----------------------------------------------------------------------------
+pip_overwrite_requirements_file() { # Overwrite requirements file with a backup
     local req_file="requirements.txt"
     local tmp_req_file="tmp_requirements.txt"
     local backup_dir=".backup_requirements.txt"
@@ -84,7 +96,8 @@ pip_overwrite_requirements_file() {   # Overwrite requirements file with a backu
     [ $? -eq 0 ] && echo "'$req_file' has been overwritten successfully." || { echo "Failed to overwrite '$req_file'."; return 1; }
 }
 
-brew_versions_report() {   # Generate a report of installed Homebrew packages and versions
+# -----------------------------------------------------------------------------
+brew_versions_report() { # Generate a report of installed Homebrew packages and versions
     if ! command -v jq &> /dev/null; then
         echo "Error: jq is required. Install it using: brew install jq"
         return 1
@@ -114,4 +127,10 @@ alias pip-diff='pip_diff_requirements'
 alias pip-overwrite='pip_overwrite_requirements_file'
 alias brew-report='brew_versions_report'
 alias pyenv-info='pyenv versions'
+# -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# If loading is successful this will be executed
+# Always makes sure this is the last function call
+type list_bash_functions_in_file >/dev/null 2>&1 && list_bash_functions_in_file "$(realpath "$0")" || echo "Error: alias is not loaded"
 # -----------------------------------------------------------------------------

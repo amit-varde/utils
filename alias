@@ -37,6 +37,9 @@ export WORK="$HOME/work"
 export UTILS="$WORK/utils"
 export JNBS="$WORK/jupyter-notebooks"
 
+#BASH Utils
+export BASH_UTILS_SRC="$HOME/work/utils/src/"
+export BASH_UTILS_LOADED=""
 # -----------------------------------------------------------------------------
 # Organized Alias Definitions (one-line description)
 alias w='cd $WORK'               # Navigate to work directory
@@ -61,7 +64,6 @@ alias t='tail -20'               # Show last 20 lines of a file
 alias g='grep -i'                # Case-insensitive text search with grep
 alias clean-temp-files='rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej'  # Remove backup and temporary files
 alias clean-pycache='find . -type d -name "__pycache__" -exec rm -rf {} +'       # Clean Python cache directories
-alias clean-pip-cache='pip cache purge'  # Clear pip cache
 alias fname='realpath'
 alias dname='dirname $(realpath)'
 
@@ -277,6 +279,8 @@ list_alias_in_file() {   # List all alias definitions in this file with descript
     done <<< "$as"
 }
 # -----------------------------------------------------------------------------
+# Bash utilities loader functions have been moved to util_bash.sh
+# -----------------------------------------------------------------------------
 go_project() {   # Navigate to a project directory and set up its environment
     [ -z "$1" ] && { echo "Error: No project name provided."; return 1; }
     local project_name="$1"
@@ -317,5 +321,9 @@ gen_alias_projects
 # Final setup
 [ -d "$WORK" ] && cd "$WORK" || cd "$HOME"
 PROMPT="%n@%m:%~> "
+
+# Source the bash utilities file if it exists
+BASH_UTILS_FILE="$BASH_UTILS_SRC/util_bash.sh"
+[ -f "$BASH_UTILS_FILE" ] && source "$BASH_UTILS_FILE" || echo "$ICON_WARNING Bash utils file $BASH_UTILS_FILE not found"
 echo "Loaded amit's alias file"
 # -----------------------------------------------------------------------------

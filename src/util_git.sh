@@ -1,22 +1,21 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------
-# File: git_utils.sh
+# File: util_git.sh
 # Author: Amit Varde
 # Email: tercel04@gmail.com; tercel04@gmail.com
 # -----------------------------------------------------------------------------
-# DESCRIPTIONS:
-# A collection of utility functions for working with Git repositories.
-# This script provides helper functions for common Git operations,
-# file tracking, history management, and repository information.
+# Description:
+#  A collection of utility functions for working with Git repositories.
+#  Provides helper functions for common Git operations and file management.
+#  Includes tools for tracking changes, history management, and repository info.
 # -----------------------------------------------------------------------------
 # USAGE:
 # Source this file in your shell configuration or other scripts:
-# source /path/to/git_utils.sh
+# source /path/to/util_git.sh
 # This loads the git functions that can be used on the terminals
 
-
 # -----------------------------------------------------------------------------
-tkdiff_remote() { # Compares a local file to its counterpart on the remote origin for the current branch.
+tkdiff_remote() { # Compares a local file to its counterpart on the remote origin
   if [ -z "$1" ]; then
     echo "Usage: tkdiff_remote <file>"
     return 1
@@ -55,12 +54,12 @@ tkdiff_remote() { # Compares a local file to its counterpart on the remote origi
   fi
 
 command -v tkdiff >/dev/null 2>&1 \
-       && tkdiff "$file" <(git show "origin/$branch:$file") 
+       && tkdiff "$file" <(git show "origin/$branch:$file") \
        || { echo "Error: tkdiff is not installed. Please install tkdiff to use this function."; return 1; }
 }
 
 # -----------------------------------------------------------------------------
-is_git_repo() {   # Checks if the current directory is within a git repository
+is_git_repo() { # Checks if the current directory is within a git repository
     git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 0
     # It's a git repo, check if it's GitHub
     remote=$(git config --get remote.origin.url 2>/dev/null)
@@ -77,7 +76,7 @@ is_git_repo() {   # Checks if the current directory is within a git repository
 }
 
 # -----------------------------------------------------------------------------
-git_file_info() {   # Displays version information for a given file based on git history
+git_file_info() { # Displays version information for a given file based on git history
     local file="$1"
     [ -z "$file" ] && { echo "Error: No file specified."; return 1; }
     [ ! -f "$file" ] && { echo "Error: File '$file' does not exist."; return 1; }
@@ -100,7 +99,7 @@ git_file_info() {   # Displays version information for a given file based on git
 }
 
 # -----------------------------------------------------------------------------
-git_file_history() {   # Outputs the git commit history for the specified file, following renames
+git_file_history() { # Outputs the git commit history for the specified file, following renames
     local file="$1"
     [ -z "$file" ] && { echo "Error: No file specified."; return 1; }
     [ ! -f "$file" ] && { echo "Error: File '$file' does not exist."; return 1; }
@@ -136,7 +135,7 @@ git_file_history() {   # Outputs the git commit history for the specified file, 
 }
 
 # -----------------------------------------------------------------------------
-git_restore() {   # Restores the specified file(s) or directory to the version at HEAD
+git_restore() { # Restores the specified file(s) or directory to the version at HEAD
     [ "$#" -eq 0 ] && { echo "Usage: git_restore <file_or_directory> [additional targets...]"; return 1; }
     is_git_repo || return 1
     for target in "$@"; do 
@@ -146,7 +145,7 @@ git_restore() {   # Restores the specified file(s) or directory to the version a
 }
 
 # -----------------------------------------------------------------------------
-git_audit_trail() {   # Checks if the current directory is a git repository contained in a GitHub remote
+git_audit_trail() { # Checks if the current directory is a git repository contained in a GitHub remote
     is_git_repo || return 1
     # Check if remote origin URL contains github.com
     remote=$(git config --get remote.origin.url)
@@ -155,7 +154,7 @@ git_audit_trail() {   # Checks if the current directory is a git repository cont
 }
 
 # -----------------------------------------------------------------------------
-discard_changes() {   # Discards local modifications to a specified file
+discard_changes() { # Discards local modifications to a specified file
     is_git_repo || return 1
     remote=$(git config --get remote.origin.url)
     [[ ! $remote =~ github.com ]] && { echo "Not a GitHub repository"; return 1; }
@@ -168,7 +167,7 @@ discard_changes() {   # Discards local modifications to a specified file
 }
 
 # -----------------------------------------------------------------------------
-git_stash_named() {   # Creates a new git stash with the provided name/message
+git_stash_named() { # Creates a new git stash with the provided name/message
     is_git_repo || return 1
     # Validate input parameter
     [ -z "$1" ] && { echo "Usage: git_stash_named <stash_name>"; return 1; }
@@ -177,7 +176,7 @@ git_stash_named() {   # Creates a new git stash with the provided name/message
 }
 
 # -----------------------------------------------------------------------------
-git_stash_list() {   # Lists all git stashes in the repository
+git_stash_list() { # Lists all git stashes in the repository
     is_git_repo || return 1
     git stash list
 }
