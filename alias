@@ -26,7 +26,12 @@ export ICON_GREEN_CHECK="✅"
 export ICON_RED_CROSS="❌"
 export ICON_THUMBS_DOWN="👎"
 export ICON_THUMBS_UP="👍"
+# Color and icon definitions
 export ICON_RED_ALERT="🚨"
+export RED="\033[1;31m"
+export BLUE="\033[1;34m"
+export GREEN="\033[1;32m"
+export RESET="\033[0m"
 # -----------------------------------------------------------------------------
 # Directories
 export DOCS="$HOME/Documents"
@@ -36,10 +41,8 @@ export iDOCS="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Documents"
 export WORK="$HOME/work"
 export UTILS="$WORK/utils"
 export JNBS="$WORK/jupyter-notebooks"
+export BASH_UTILS_SRC="$UTILS/src"  # Source directory for bash utilitie
 
-#BASH Utils
-export BASH_UTILS_SRC="$HOME/work/utils/src/"
-export BASH_UTILS_LOADED=""
 # -----------------------------------------------------------------------------
 # Organized Alias Definitions (one-line description)
 alias w='cd $WORK'               # Navigate to work directory
@@ -64,17 +67,13 @@ alias t='tail -20'               # Show last 20 lines of a file
 alias g='grep -i'                # Case-insensitive text search with grep
 alias clean-temp-files='rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej'  # Remove backup and temporary files
 alias clean-pycache='find . -type d -name "__pycache__" -exec rm -rf {} +'       # Clean Python cache directories
+alias clean-pip-cache='pip cache purge'  # Clear pip cache
 alias fname='realpath'
 alias dname='dirname $(realpath)'
 
 # -----------------------------------------------------------------------------
 # Organized Function Definitions (one-line description)
-check_path() {   # Display PATH entries and check for duplicates
-    RED="\033[1;31m"
-    BLUE="\033[1;34m"
-    GREEN="\033[1;32m"
-    RESET="\033[0m"
-    
+check_path() {   # Display PATH entries and check for duplicates    
     if [ -z "$1" ]; then
         # No input - display all PATH entries
         echo -e "${BLUE}All PATH entries:${RESET}"
@@ -232,54 +231,7 @@ mypy() {   # Display Python environment information
         echo "Current virtual environment: $VIRTUAL_ENV"
     fi
 }
-# -----------------------------------------------------------------------------
-list_bash_functions_in_file() {   # List all bash functions in this file with descriptions
-    local script_path="$1"
-    echo "Functions defined in [$(basename "$script_path")]: "
-    # Use grep to find function definitions with inline comments
-    fs=$(grep -E '^[a-zA-Z0-9_]+\(\)\ *\{\ *#' "$script_path")
-    # Find the maximum length of function names
-    max_len=0
-    while IFS= read -r line; do
-        # Extract function name (before #) and remove (), {}
-        func_name=$(echo "$line" | sed 's/#.*$//' | tr -d '(){}' | xargs)
-        if [ ${#func_name} -gt $max_len ]; then
-            max_len=${#func_name}
-        fi
-    done <<< "$fs"
-    
-    # Print with aligned comments
-    while IFS= read -r line; do
-        func_name=$(echo "$line" | sed 's/#.*$//' | tr -d '(){}' | xargs)
-        description=$(echo "$line" | sed 's/^[^#]*#//')
-        printf " %-${max_len}s :%s\n" "$func_name" "$description"
-    done <<< "$fs"
-}
 
-list_alias_in_file() {   # List all alias definitions in this file with descriptions
-    local script_path="$1"
-    echo "Aliases defined in [$(basename "$script_path")]: "
-    # Use grep to find alias definitions that include an inline comment for description
-    as=$(grep -E '^alias [^=]+=.*#' "$script_path")
-    # Find the maximum length of alias names
-    max_len=0
-    while IFS= read -r line; do
-        # Extract alias name located between 'alias' and the '=' sign
-        alias_name=$(echo "$line" | sed -E 's/^alias[[:space:]]+([^=]+)=.*$/\1/' | xargs)
-        if [ ${#alias_name} -gt $max_len ]; then
-            max_len=${#alias_name}
-        fi
-    done <<< "$as"
-    
-    # Print alias names with aligned descriptions
-    while IFS= read -r line; do
-        alias_name=$(echo "$line" | sed -E 's/^alias[[:space:]]+([^=]+)=.*$/\1/' | xargs)
-        description=$(echo "$line" | sed 's/.*#//')
-        printf " %-${max_len}s :%s\n" "$alias_name" "$description"
-    done <<< "$as"
-}
-# -----------------------------------------------------------------------------
-# Bash utilities loader functions have been moved to util_bash.sh
 # -----------------------------------------------------------------------------
 go_project() {   # Navigate to a project directory and set up its environment
     [ -z "$1" ] && { echo "Error: No project name provided."; return 1; }
@@ -318,12 +270,16 @@ alias open &>/dev/null && unalias open
 # Adding functions to autogenerate aliases
 gen_alias_projects
 # -----------------------------------------------------------------------------
+# Source bash utility functions if available
+if [ -f "$BASH_UTILS_SRC/util_bash.sh" ]; then
+    source "$BASH_UTILS_SRC/util_bash.sh"
+    echo -e "${BLUE}Bash function management util loaded ${RESET}"
+else
+    echo -e "${RED}Bash function management util is not available${RESET}"
+fi
+# -----------------------------------------------------------------------------
 # Final setup
 [ -d "$WORK" ] && cd "$WORK" || cd "$HOME"
 PROMPT="%n@%m:%~> "
-
-# Source the bash utilities file if it exists
-BASH_UTILS_FILE="$BASH_UTILS_SRC/util_bash.sh"
-[ -f "$BASH_UTILS_FILE" ] && source "$BASH_UTILS_FILE" || echo "$ICON_WARNING Bash utils file $BASH_UTILS_FILE not found"
 echo "Loaded amit's alias file"
 # -----------------------------------------------------------------------------

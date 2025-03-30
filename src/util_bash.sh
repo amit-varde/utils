@@ -2,29 +2,84 @@
 # File: util_bash.sh
 # Author: Amit
 # -----------------------------------------------------------------------------
-# Description:
-# This file contains utility functions for loading and managing bash utilities.
+# Description: This file contains utility functions for loading and managing bash utilities.
 # -----------------------------------------------------------------------------
-list_bash_utils() {   # Display loaded bash utilities
-    # Check if -a parameter is provided to list all available utilities
-    if [ "$1" = "-a" ]; then
+
+# Check if BASH_UTILS_SRC is defined
+if [ -z "$BASH_UTILS_SRC" ]; then
+    echo "Error: BASH_UTILS_SRC is not defined. This variable must point to the directory containing utility scripts."
+    return 1 2>/dev/null || exit 1
+fi
+
+# -----------------------------------------------------------------------------
+list_bash_functions_in_file() {   # List all function definitions in a file with descriptions
+    local script_path="$1"
+    echo "Functions defined in [$(basename "$script_path")]: "
+    
+    # Use grep to find function definitions that include an inline comment for description
+    fs=$(grep -E '^[a-zA-Z0-9_]+\(\)\ *\{\ *#' "$script_path")
+    
+    # Find the maximum length of function names for proper alignment
+    max_len=0
+    while IFS= read -r line; do
+        # Extract function name (removing parentheses and braces)
+        func_name=$(echo "$line" | sed -E 's/^([a-zA-Z0-9_]+)\(\).*$/\1/' | xargs)
+        if [ ${#func_name} -gt $max_len ]; then
+            max_len=${#func_name}
+        fi
+    done <<< "$fs"
+    
+    # Print function names with aligned descriptions
+    while IFS= read -r line; do
+        func_name=$(echo "$line" | sed -E 's/^([a-zA-Z0-9_]+)\(\).*$/\1/' | xargs)
+        description=$(echo "$line" | sed 's/.*#//')
+        printf " %-${max_len}s :%s\n" "$func_name" "$description"
+    done <<< "$fs"
+}
+# -----------------------------------------------------------------------------
+list_alias_in_file() {   # List all alias definitions in this file with descriptions
+    local script_path="$1"
+    echo "Aliases defined in [$(basename "$script_path")]: "
+    # Use grep to find alias definitions that include an inline comment for description
+    as=$(grep -E '^alias [^=]+=.*#' "$script_path")
+    # Find the maximum length of alias names
+    max_len=0
+    while IFS= read -r line; do
+        # Extract alias name located between 'alias' and the '=' sign
+        alias_name=$(echo "$line" | sed -E 's/^alias[[:space:]]+([^=]+)=.*$/\1/' | xargs)
+        if [ ${#alias_name} -gt $max_len ]; then
+            max_len=${#alias_name}
+        fi
+    done <<< "$as"
+    
+    # Print alias names with aligned descriptions
+    while IFS= read -r line; do
+        alias_name=$(echo "$line" | sed -E 's/^alias[[:space:]]+([^=]+)=.*$/\1/' | xargs)
+        description=$(echo "$line" | sed 's/.*#//')
+        printf " %-${max_len}s :%s\n" "$alias_name" "$description"
+    done <<< "$as"
+}
+# -----------------------------------------------------------------------------
+bu_list() {   # Display loaded bash utilities
+    # If no arguments or -a parameter is provided, list all available utilities
+    if [ "$#" -eq 0 ] ; then
         echo "All available BASH utilities:"
-        # Shift the arguments to use $2 as the search term if provided
-        shift
         # Find all utility files in BASH_UTILS_SRC
-        find "$BASH_UTILS_SRC" -name "util_*.sh" 2>/dev/null | while read -r util_path; do
+        ls -1 "$BASH_UTILS_SRC"/util_*.sh 2>/dev/null | while read -r util_path; do
             # Extract util name by removing prefix and suffix
             util_name=$(basename "$util_path" | sed 's/^util_//;s/\.sh$//')
+            # Extract description from the utility file
+            util_description="NA"; [ -f "$util_path" ] && desc=$(grep -m 1 "# Description:" "$util_path" | sed 's/# Description://' | xargs) && [ -n "$desc" ] && util_description="$desc"
             # Filter by search term if provided
             if [ -z "$1" ] || echo "$util_name" | grep -q "$1" || echo "$util_path" | grep -q "$1"; then
-                echo "$util_name : $util_path"
+                #echo "$util_name : $util_description : $util_path"
+                echo "$util_name : $util_description"
             fi
         done
         return
     fi
-    
+    # If we get here, user provided a search term but not -a flag, so show loaded utilities
     echo "Loaded BASH utilities:"
-    
     [ -z "$BASH_UTILS_LOADED" ] && echo "$ICON_RED_CROSS No utilities currently loaded." && return
     # Process each utility
     echo "$BASH_UTILS_LOADED" | tr ":" "\n" | while read -r util; do
@@ -46,7 +101,7 @@ list_bash_utils() {   # Display loaded bash utilities
     done
 }
 # -----------------------------------------------------------------------------
-load_bash_util() {   # Load a specified bash utility
+bu_load() {   # Load a specified bash utility
     local util_name="$1"
     local util_path="$BASH_UTILS_SRC/util_${util_name}.sh"
     
@@ -75,7 +130,7 @@ load_bash_util() {   # Load a specified bash utility
     fi
 }
 # -----------------------------------------------------------------------------
-unload_bash_utils() {   # Unload a specified bash utility and remove its functions
+bu_unload() {   # Unload a specified bash utility and remove its functions
     local util_name="$1"
     local util_path="$BASH_UTILS_SRC/util_${util_name}.sh"
     
@@ -104,7 +159,6 @@ unload_bash_utils() {   # Unload a specified bash utility and remove its functio
         echo "$ICON_WARNING Cannot extract function names from missing file. Manual cleanup might be needed."
         return 1
     fi
-    
     # Calculate maximum function name length for formatting
     local max_len=0
     while IFS= read -r line; do
@@ -114,7 +168,6 @@ unload_bash_utils() {   # Unload a specified bash utility and remove its functio
             max_len=${#func_name}
         fi
     done <<< "$fs"
-    
     # Unset each function and print what was unset
     echo "Unsetting functions from utility '$util_name':"
     while IFS= read -r line; do
@@ -144,11 +197,14 @@ unload_bash_utils() {   # Unload a specified bash utility and remove its functio
             fi
         fi
     done
-    
     # Set the updated list of loaded utilities
     BASH_UTILS_LOADED="$new_loaded"
-    
     echo "$ICON_GREEN_CHECK Utility '$util_name' unloaded successfully."
     return 0
 }
+
+# Create aliases for backwards compatibility
+alias list_bash_utils='bu_list'
+alias load_bash_util='bu_load'
+alias unload_bash_utils='bu_unload'
 # -----------------------------------------------------------------------------

@@ -4,20 +4,13 @@
 # Author: Amit Varde
 # Email: tercel04@gmail.com; tercel04@gmail.com
 # -----------------------------------------------------------------------------
-# Description:
-#  A collection of utility functions for working with Git repositories.
-#  Provides helper functions for common Git operations and file management.
-#  Includes tools for tracking changes, history management, and repository info.
+# Description: A collection of utility functions for working with Git repositories.
 # -----------------------------------------------------------------------------
-# USAGE:
-# Source this file in your shell configuration or other scripts:
-# source /path/to/util_git.sh
-# This loads the git functions that can be used on the terminals
 
 # -----------------------------------------------------------------------------
-tkdiff_remote() { # Compares a local file to its counterpart on the remote origin
+git_tkdiff_remote() { # Compares a local file to its counterpart on the remote origin
   if [ -z "$1" ]; then
-    echo "Usage: tkdiff_remote <file>"
+    echo "Usage: git_tkdiff_remote <file>"
     return 1
   fi
 
@@ -59,7 +52,7 @@ command -v tkdiff >/dev/null 2>&1 \
 }
 
 # -----------------------------------------------------------------------------
-is_git_repo() { # Checks if the current directory is within a git repository
+git_is_repo() { # Checks if the current directory is within a git repository
     git rev-parse --is-inside-work-tree >/dev/null 2>&1 || return 0
     # It's a git repo, check if it's GitHub
     remote=$(git config --get remote.origin.url 2>/dev/null)
@@ -137,7 +130,7 @@ git_file_history() { # Outputs the git commit history for the specified file, fo
 # -----------------------------------------------------------------------------
 git_restore() { # Restores the specified file(s) or directory to the version at HEAD
     [ "$#" -eq 0 ] && { echo "Usage: git_restore <file_or_directory> [additional targets...]"; return 1; }
-    is_git_repo || return 1
+    git_is_repo || return 1
     for target in "$@"; do 
         echo "Restoring '$target' to HEAD..."; 
         git help restore >/dev/null 2>&1 && git restore "$target" || git checkout HEAD -- "$target"; 
@@ -146,7 +139,7 @@ git_restore() { # Restores the specified file(s) or directory to the version at 
 
 # -----------------------------------------------------------------------------
 git_audit_trail() { # Checks if the current directory is a git repository contained in a GitHub remote
-    is_git_repo || return 1
+    git_is_repo || return 1
     # Check if remote origin URL contains github.com
     remote=$(git config --get remote.origin.url)
     [[ ! $remote =~ github.com ]] && { echo "Not a GitHub repository"; return 1; }
@@ -154,12 +147,12 @@ git_audit_trail() { # Checks if the current directory is a git repository contai
 }
 
 # -----------------------------------------------------------------------------
-discard_changes() { # Discards local modifications to a specified file
-    is_git_repo || return 1
+git_discard_changes() { # Discards local modifications to a specified file
+    git_is_repo || return 1
     remote=$(git config --get remote.origin.url)
     [[ ! $remote =~ github.com ]] && { echo "Not a GitHub repository"; return 1; }
     # Validate input parameter
-    [ -z "$1" ] && { echo "Usage: discard_changes <file>"; return 1; }
+    [ -z "$1" ] && { echo "Usage: git_discard_changes <file>"; return 1; }
     [ ! -f "$1" ] && { echo "File not found: $1"; return 1; }
     # Discard local changes and replace the file with version from HEAD
     git checkout HEAD -- "$1"
@@ -168,7 +161,7 @@ discard_changes() { # Discards local modifications to a specified file
 
 # -----------------------------------------------------------------------------
 git_stash_named() { # Creates a new git stash with the provided name/message
-    is_git_repo || return 1
+    git_is_repo || return 1
     # Validate input parameter
     [ -z "$1" ] && { echo "Usage: git_stash_named <stash_name>"; return 1; }
     # Create a git stash with the provided name
@@ -177,10 +170,15 @@ git_stash_named() { # Creates a new git stash with the provided name/message
 
 # -----------------------------------------------------------------------------
 git_stash_list() { # Lists all git stashes in the repository
-    is_git_repo || return 1
+    git_is_repo || return 1
     git stash list
 }
 
+# -----------------------------------------------------------------------------
+# Create aliases for backwards compatibility
+alias tkdiff_remote='git_tkdiff_remote'
+alias is_git_repo='git_is_repo'
+alias discard_changes='git_discard_changes'
 # -----------------------------------------------------------------------------
 # If loading is successful this will be executed
 # Always makes sure this is the last function call

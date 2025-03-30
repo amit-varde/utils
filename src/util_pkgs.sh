@@ -4,10 +4,7 @@
 # Author: Amit
 # Email: tercel04@gmail.com; amit@bazinga-labs.com
 # -----------------------------------------------------------------------------
-# Description:
-#  Utilities for managing Python environments and package installations.
-#  Provides tools for virtual environment setup, package version reporting.
-#  Includes helpers for pip, brew, and pyenv with update notifications.
+# Description: Utilities for managing python, hombrew, and pip env 
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
