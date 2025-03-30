@@ -8,7 +8,7 @@
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-init_venv() { # Initialize and activate a Python virtual environment
+venv_init() { # Initialize and activate a Python virtual environment
     if [ -d "venv" ]; then
         echo "Virtual environment already exists in the current directory."
         read -p "Do you want to recreate it? (y/n): " confirm
@@ -48,19 +48,6 @@ pip_versions_report() { # Generate a report of installed pip packages and versio
 }
 
 # -----------------------------------------------------------------------------
-clean_brew_cache() { # Clear Homebrew cache
-    brew cleanup -s
-    echo "Homebrew cache cleared."
-}
-
-# -----------------------------------------------------------------------------
-clean_pip_cache() { # Clear pip cache
-    pip cache purge
-    echo "Pip cache cleared."
-}
-alias clean-pip-cache='pip cache purge'  # Clear pip cache
-
-# -----------------------------------------------------------------------------
 pip_diff_requirements() { # Compare temporary requirements file with requirements.txt using diff
     local req_file="requirements.txt"
     local temp_req_file="tmp_requirements.txt"
@@ -94,6 +81,12 @@ pip_overwrite_requirements_file() { # Overwrite requirements file with a backup
 }
 
 # -----------------------------------------------------------------------------
+pip_clean_cache() { # Clear pip cache
+    pip cache purge
+    echo "Pip cache cleared."
+}
+
+# -----------------------------------------------------------------------------
 brew_versions_report() { # Generate a report of installed Homebrew packages and versions
     if ! command -v jq &> /dev/null; then
         echo "Error: jq is required. Install it using: brew install jq"
@@ -117,14 +110,11 @@ brew_versions_report() { # Generate a report of installed Homebrew packages and 
 }
 
 # -----------------------------------------------------------------------------
-# Aliases related to pip, virtualenv, brew, and pyenv
-alias initvenv='init_venv'
-alias pip-report='pip_versions_report'
-alias pip-diff='pip_diff_requirements'
-alias pip-overwrite='pip_overwrite_requirements_file'
-alias brew-report='brew_versions_report'
-alias pyenv-info='pyenv versions'
-# -----------------------------------------------------------------------------
+brew_clean_cache() { # Clear Homebrew cache
+    brew cleanup -s
+    echo "Homebrew cache cleared."
+}
+
 
 # -----------------------------------------------------------------------------
 # If loading is successful this will be executed
