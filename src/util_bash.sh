@@ -325,9 +325,4 @@ bu_functions() {   # Show functions available in loaded bash utilities
         fi
     done
 }
-
-# Create aliases for backwards compatibility
-alias list_bash_utils='bu_list'
-alias load_bash_util='bu_load'
-alias unload_bash_utils='bu_unload'
 # -----------------------------------------------------------------------------
