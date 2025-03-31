@@ -197,7 +197,11 @@ run() {   # Run a Python script with arguments and save output to run.out
     [ ! -f "$script" ] && { echo "Error: Python script '$script' does not exist."; return 1; }
     echo "Running Python script '$script' with arguments: $*"
     python "$script" "$@" | tee "$output_file"
-    [ $? -eq 0 ] && echo "$ICON_GREEN_CHECK Script executed successfully. Output redirected to '$output_file'." || echo "Script execution failed. Check '$output_file' for details."
+    if [ $? -eq 0 ]; then
+        echo -e "${BLUE}Success:${RESET} Tests executed successfully. Output saved to '$output_file'."
+    else
+        echo -e "${RED}Failure:${RESET} Some tests failed. Check '$output_file' for details."
+    fi
 }
 # -----------------------------------------------------------------------------
 run_pytest() {   # Run pytest on specified test files and save output to pytest.out
@@ -208,19 +212,19 @@ run_pytest() {   # Run pytest on specified test files and save output to pytest.
     
     if [ -z "$test_path" ]; then
         echo "Running pytest on current directory with arguments: $*"
-        pytest "$@" -v | tee "$output_file"
+        pytest "$@" -v 2>&1 | tee "$output_file"
     elif [ -f "$test_path" ] || [ -d "$test_path" ]; then
         echo "Running pytest on '$test_path' with arguments: $*"
-        pytest "$test_path" "$@" -v | tee "$output_file"
+        pytest "$test_path" "$@" -v 2>&1 | tee "$output_file"
     else
         echo "Error: Test path '$test_path' does not exist."
         return 1
     fi
     
     if [ $? -eq 0 ]; then
-        echo "$ICON_GREEN_CHECK Tests executed successfully. Output saved to '$output_file'."
+        echo -e "${BLUE}Success:${RESET} Tests executed successfully. Output saved to '$output_file'."
     else
-        echo "$ICON_RED_CROSS Some tests failed. Check '$output_file' for details."
+        echo -e "${RED}Failure:${RESET} Some tests failed. Check '$output_file' for details."
     fi
 }
 # -----------------------------------------------------------------------------
@@ -278,12 +282,12 @@ go_project() {   # Navigate to a project directory and set up its environment
 }
 # -----------------------------------------------------------------------------
 gen_alias_projects() {   # Generate aliases for all projects in the WORK directory
-    echo "Generating project aliases..."
+    echo -e "${BLUE}Generating project aliases ${RESET}"
     for dir in "$WORK"/*/; do
         [ -d "$dir" ] || continue
         project_name=$(basename "$dir")
         alias "go-$project_name"="go_project $project_name"
-        echo "  go-$project_name: $WORK/$project_name"
+     #   echo "  go-$project_name: $WORK/$project_name"
     done
 }
 # -----------------------------------------------------------------------------
