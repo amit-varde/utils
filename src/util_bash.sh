@@ -11,6 +11,9 @@ if [ -z "$BASH_UTILS_SRC" ]; then
     return 1 2>/dev/null || exit 1
 fi
 
+# Export environment variable to track loaded utilities
+export BASH_UTILS_LOADED=${BASH_UTILS_LOADED:-""}
+
 # -----------------------------------------------------------------------------
 list_bash_functions_in_file() {   # List all function definitions in a file with descriptions
     local script_path="$1"
