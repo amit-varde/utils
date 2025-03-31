@@ -177,9 +177,6 @@ git_stash_list() { # Lists all git stashes in the repository
 
 # -----------------------------------------------------------------------------
 # Create aliases for backwards compatibility
-alias tkdiff_remote='git_tkdiff_remote'
-alias is_git_repo='git_is_repo'
-alias discard_changes='git_discard_changes'
 # -----------------------------------------------------------------------------
 # If loading is successful this will be executed
 # Always makes sure this is the last function call

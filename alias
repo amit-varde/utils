@@ -20,14 +20,7 @@
 # Functions have _ : e.g., my_function
 # Aliases have - : e.g., my-alias
 # -----------------------------------------------------------------------------
-# Icon variables for status indicators
-export ICON_WARNING="⚠️"
-export ICON_GREEN_CHECK="✅"
-export ICON_RED_CROSS="❌"
-export ICON_THUMBS_DOWN="👎"
-export ICON_THUMBS_UP="👍"
-# Color and icon definitions
-export ICON_RED_ALERT="🚨"
+# Color definitions
 export RED="\033[1;31m"
 export BLUE="\033[1;34m"
 export GREEN="\033[1;32m"
@@ -41,7 +34,7 @@ export iDOCS="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Documents"
 export WORK="$HOME/work"
 export UTILS="$WORK/utils"
 export JNBS="$WORK/jupyter-notebooks"
-export BASH_UTILS_SRC="$UTILS/src"  # Source directory for bash utilitie
+export BASH_UTILS_SRC="$UTILS/src"  # Source directory for bash utilities
 
 # -----------------------------------------------------------------------------
 # Organized Alias Definitions (one-line description)
@@ -124,11 +117,6 @@ check_path() {   # Display PATH entries and check for duplicates
 }
 # -----------------------------------------------------------------------------
 check_ld_library_path() {   # Display LD_LIBRARY_PATH entries and check for duplicates
-    RED="\033[1;31m"
-    BLUE="\033[1;34m"
-    GREEN="\033[1;32m"
-    RESET="\033[0m"
-    
     if [ -z "$1" ]; then
         # No input - display all LD_LIBRARY_PATH entries
         echo -e "${BLUE}All LD_LIBRARY_PATH entries:${RESET}"
@@ -183,9 +171,9 @@ setup_graphviz_env() {   # Set up Graphviz environment variables
 }
 # -----------------------------------------------------------------------------
 clean_temp_files() {   # Clean temporary files with feedback
-    echo "Cleaning temporary files..."
+    echo -e "${BLUE}Cleaning temporary files...${RESET}"
     rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej
-    echo "Temporary files cleaned."
+    echo -e "${GREEN}Temporary files cleaned.${RESET}"
 }
 # -----------------------------------------------------------------------------
 run() {   # Run a Python script with arguments and save output to run.out
@@ -193,14 +181,14 @@ run() {   # Run a Python script with arguments and save output to run.out
     local script="$1"
     local output_file="run.out"
     shift
-    [ -z "$script" ] && { echo "Error: No Python script specified."; return 1; }
-    [ ! -f "$script" ] && { echo "Error: Python script '$script' does not exist."; return 1; }
-    echo "Running Python script '$script' with arguments: $*"
+    [ -z "$script" ] && { echo -e "${RED}Error: No Python script specified.${RESET}"; return 1; }
+    [ ! -f "$script" ] && { echo -e "${RED}Error: Python script '$script' does not exist.${RESET}"; return 1; }
+    echo -e "${BLUE}Running Python script '$script' with arguments: $*${RESET}"
     python "$script" "$@" | tee "$output_file"
     if [ $? -eq 0 ]; then
-        echo -e "${BLUE}Success:${RESET} Tests executed successfully. Output saved to '$output_file'."
+        echo -e "${GREEN}Success: Tests executed successfully. Output saved to '$output_file'.${RESET}"
     else
-        echo -e "${RED}Failure:${RESET} Some tests failed. Check '$output_file' for details."
+        echo -e "${RED}Failure: Some tests failed. Check '$output_file' for details.${RESET}"
     fi
 }
 # -----------------------------------------------------------------------------
@@ -211,20 +199,20 @@ run_pytest() {   # Run pytest on specified test files and save output to pytest.
     shift
     
     if [ -z "$test_path" ]; then
-        echo "Running pytest on current directory with arguments: $*"
+        echo -e "${BLUE}Running pytest on current directory with arguments: $*${RESET}"
         pytest "$@" -v 2>&1 | tee "$output_file"
     elif [ -f "$test_path" ] || [ -d "$test_path" ]; then
-        echo "Running pytest on '$test_path' with arguments: $*"
+        echo -e "${BLUE}Running pytest on '$test_path' with arguments: $*${RESET}"
         pytest "$test_path" "$@" -v 2>&1 | tee "$output_file"
     else
-        echo "Error: Test path '$test_path' does not exist."
+        echo -e "${RED}Error: Test path '$test_path' does not exist.${RESET}"
         return 1
     fi
     
     if [ $? -eq 0 ]; then
-        echo -e "${BLUE}Success:${RESET} Tests executed successfully. Output saved to '$output_file'."
+        echo -e "${GREEN}Success: Tests executed successfully. Output saved to '$output_file'.${RESET}"
     else
-        echo -e "${RED}Failure:${RESET} Some tests failed. Check '$output_file' for details."
+        echo -e "${RED}Failure: Some tests failed. Check '$output_file' for details.${RESET}"
     fi
 }
 # -----------------------------------------------------------------------------
@@ -242,32 +230,32 @@ export PYENV_ROOT="$HOME/.pyenv"
 eval "$(pyenv init - zsh)"
 # -----------------------------------------------------------------------------
 mypy() {   # Display Python environment information
-    echo "Python should be managed by pyenv"
+    echo -e "${BLUE}Python should be managed by pyenv${RESET}"
     pyenv_version=$(pyenv --version 2>&1)
-    echo "Pyenv version: $pyenv_version"
+    echo -e "${BLUE}Pyenv version: $pyenv_version${RESET}"
     python_path=$(which python)
     python_version=$(python --version 2>&1)
-    echo "Python executable: $python_path"
-    echo "Python version: $python_version"
+    echo -e "${BLUE}Python executable: $python_path${RESET}"
+    echo -e "${BLUE}Python version: $python_version${RESET}"
     pip_path=$(which pip)
     pip_version=$(pip --version 2>&1)
-    echo "Pip executable: $pip_path"
-    echo "Pip version: $pip_version"
+    echo -e "${BLUE}Pip executable: $pip_path${RESET}"
+    echo -e "${BLUE}Pip version: $pip_version${RESET}"
     if [ -z "$VIRTUAL_ENV" ]; then
-        echo "No virtual environment is currently activated."
+        echo -e "${BLUE}No virtual environment is currently activated.${RESET}"
     else
-        echo "Current virtual environment: $VIRTUAL_ENV"
+        echo -e "${BLUE}Current virtual environment: $VIRTUAL_ENV${RESET}"
     fi
 }
 
 # -----------------------------------------------------------------------------
 go_project() {   # Navigate to a project directory and set up its environment
-    [ -z "$1" ] && { echo "Error: No project name provided."; return 1; }
+    [ -z "$1" ] && { echo -e "${RED}Error: No project name provided.${RESET}"; return 1; }
     local project_name="$1"
-    [ ! -d "$WORK/$project_name" ] && { echo "Error: Project '$project_name' does not exist under $WORK."; return 1; }
+    [ ! -d "$WORK/$project_name" ] && { echo -e "${RED}Error: Project '$project_name' does not exist under $WORK.${RESET}"; return 1; }
     if [ -n "$PROJECT_NAME" ]; then
-        echo "Deactivating current project: $PROJECT_NAME"
-        deactivate 2>/dev/null || echo "No virtual environment to deactivate."
+        echo -e "${BLUE}Deactivating current project: $PROJECT_NAME${RESET}"
+        deactivate 2>/dev/null || echo -e "${BLUE}No virtual environment to deactivate.${RESET}"
         unset PROJECT_NAME
     fi
     cd "$WORK/$project_name" || return 1
@@ -281,7 +269,7 @@ go_project() {   # Navigate to a project directory and set up its environment
     change_prompt
 }
 # -----------------------------------------------------------------------------
-gen_alias_projects() {   # Generate aliases for all projects in the WORK directory
+gen_project_aliases() {   # Generate aliases for all projects in the WORK directory
     echo -e "${BLUE}Generating project aliases ${RESET}"
     for dir in "$WORK"/*/; do
         [ -d "$dir" ] || continue
@@ -290,13 +278,21 @@ gen_alias_projects() {   # Generate aliases for all projects in the WORK directo
      #   echo "  go-$project_name: $WORK/$project_name"
     done
 }
+
+list_project_aliases() {   # List all available project aliases
+    echo -e "${BLUE}Available project aliases:${RESET}"
+    alias | grep "go-" | sed 's/^alias //; s/=.*$//' | sort | while read -r alias_name; do
+        project_name=${alias_name#go-}
+        echo "   ${BLUE} $alias_name ${RESET} → $WORK/$project_name"
+    done
+}
 # -----------------------------------------------------------------------------
 # Lets reconfigure alias to open file with Vscode when inside the vscode terminal
 alias open &>/dev/null && unalias open
 [[ "$TERM_PROGRAM" == "vscode" ]] && alias open="code"
 # -----------------------------------------------------------------------------
 # Adding functions to autogenerate aliases
-gen_alias_projects
+gen_project_aliases
 # -----------------------------------------------------------------------------
 # Source bash utility functions if available
 if [ -f "$BASH_UTILS_SRC/util_bash.sh" ]; then
@@ -309,5 +305,5 @@ fi
 # Final setup
 [ -d "$WORK" ] && cd "$WORK" || cd "$HOME"
 PROMPT="%n@%m:%~> "
-echo "Loaded amit's alias file"
+echo -e "${GREEN}Loaded amit's alias file${RESET}"
 # -----------------------------------------------------------------------------
