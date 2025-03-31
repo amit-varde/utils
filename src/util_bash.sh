@@ -4,8 +4,57 @@
 # -----------------------------------------------------------------------------
 # Description: This file contains utility functions for loading and managing bash utilities.
 # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# BASH UTILITY CREATION GUIDE
+# -----------------------------------------------------------------------------
+# This section documents how to create a bash utility file that works with this framework.
+# -----------------------------------------------------------------------------
 
-# Check if BASH_UTILS_SRC is defined
+# Structure of a BASH utility file:
+# 1. Each utility file should be named util_<name>.sh
+# 2. First line must check if util_bash.sh is loaded
+# 3. Each function should follow the format: function_name() { # Description
+# 4. Use err, warn, and info functions for consistent output
+# 5. Last line must call list_bash_functions_in_file to register functions
+
+# Example template for a new utility file:
+# -----------------------------------------------------------------------------
+# #!/bin/bash
+# [[ -z "${BASH_UTILS_LOADED}" ]] && { echo "ERROR: util_bash.sh is not loaded. Please source it before using this script."; exit 1; }
+# -----------------------------------------------------------------------------
+# my_function() { # Description of what this function does
+#   # Function implementation
+#   if [ -z "$1" ]; then
+#     info "Usage: my_function <parameter>"
+#     return 1
+#   fi
+#   
+#   # Logic with proper error handling
+#   if ! command_that_might_fail; then
+#     err "Something went wrong"
+#     return 1
+#   fi
+#   
+#   info "Operation completed successfully"
+#   return 0
+# }
+# -----------------------------------------------------------------------------
+# # Create aliases if needed
+# alias my_alias='my_function'
+# -----------------------------------------------------------------------------
+# list_bash_functions_in_file >/dev/null 2>&1 && list_bash_functions_in_file "$(realpath "$0")" || err "alias is not loaded"
+# -----------------------------------------------------------------------------
+
+# Best practices:
+# 1. Include header with file name, author, and description
+# 2. Add horizontal lines (-------------) between functions for readability
+# 3. Document function parameters in the function body
+# 4. Use return codes: 0 for success, non-zero for errors
+# 5. Create backward-compatible aliases when renaming functions
+# 6. Test for requirements before performing operations
+# 7. Keep functions focused on a single responsibility
+
+
 if [ -z "$BASH_UTILS_SRC" ]; then
     echo "Error: BASH_UTILS_SRC is not defined. This variable must point to the directory containing utility scripts."
     return 1 2>/dev/null || exit 1
@@ -14,10 +63,32 @@ fi
 # Export environment variable to track loaded utilities
 export BASH_UTILS_LOADED=${BASH_UTILS_LOADED:-""}
 
+# Color definitions for consistent output formatting
+export RED="\033[1;31m"
+export ORANGE="\033[1;33m"
+export BLUE="\033[1;34m"
+export GREEN="\033[1;32m"
+export RESET="\033[0m"
+
+# -----------------------------------------------------------------------------
+# Helper functions for formatted output
+# -----------------------------------------------------------------------------
+err() {
+    echo -e "${RED}Error: $*${RESET}" >&2
+}
+
+warn() {
+    echo -e "${ORANGE}Warning: $*${RESET}" >&2
+}
+
+info() {
+    echo -e "${BLUE}Info: $*${RESET}"
+}
+
 # -----------------------------------------------------------------------------
 list_bash_functions_in_file() {   # List all function definitions in a file with descriptions
     local script_path="$1"
-    echo "Functions defined in [$(basename "$script_path")]: "
+    info "Functions defined in [$(basename "$script_path")]: "
     
     # Use grep to find function definitions that include an inline comment for description
     fs=$(grep -E '^[a-zA-Z0-9_]+\(\)\ *\{\ *#' "$script_path")
@@ -42,7 +113,7 @@ list_bash_functions_in_file() {   # List all function definitions in a file with
 # -----------------------------------------------------------------------------
 list_alias_in_file() {   # List all alias definitions in this file with descriptions
     local script_path="$1"
-    echo "Aliases defined in [$(basename "$script_path")]: "
+    info "Aliases defined in [$(basename "$script_path")]: "
     # Use grep to find alias definitions that include an inline comment for description
     as=$(grep -E '^alias [^=]+=.*#' "$script_path")
     # Find the maximum length of alias names
@@ -63,42 +134,43 @@ list_alias_in_file() {   # List all alias definitions in this file with descript
     done <<< "$as"
 }
 # -----------------------------------------------------------------------------
-bu_list() {   # Display loaded bash utilities
-    # If no arguments or -a parameter is provided, list all available utilities
-    if [ "$#" -eq 0 ] ; then
-        echo "All available BASH utilities:"
-        # Find all utility files in BASH_UTILS_SRC
-        ls -1 "$BASH_UTILS_SRC"/util_*.sh 2>/dev/null | while read -r util_path; do
-            # Extract util name by removing prefix and suffix
-            util_name=$(basename "$util_path" | sed 's/^util_//;s/\.sh$//')
-            # Extract description from the utility file
-            util_description="NA"; [ -f "$util_path" ] && desc=$(grep -m 1 "# Description:" "$util_path" | sed 's/# Description://' | xargs) && [ -n "$desc" ] && util_description="$desc"
-            # Filter by search term if provided
-            if [ -z "$1" ] || echo "$util_name" | grep -q "$1" || echo "$util_path" | grep -q "$1"; then
-                #echo "$util_name : $util_description : $util_path"
-                echo "$util_name : $util_description"
-            fi
-        done
-        return
+bu_list() {   # Display all available bash utilities
+    info "All available BASH utilities:"
+    # Find all utility files in BASH_UTILS_SRC
+    ls -1 "$BASH_UTILS_SRC"/util_*.sh 2>/dev/null | while read -r util_path; do
+        # Extract util name by removing prefix and suffix
+        util_name=$(basename "$util_path" | sed 's/^util_//;s/\.sh$//')
+        # Extract description from the utility file
+        util_description="NA"; [ -f "$util_path" ] && desc=$(grep -m 1 "# Description:" "$util_path" | sed 's/# Description://' | xargs) && [ -n "$desc" ] && util_description="$desc"
+        # Filter by search term if provided
+        if [ -z "$1" ] || echo "$util_name" | grep -q "$1" || echo "$util_path" | grep -q "$1"; then
+            echo "$util_name : $util_description"
+        fi
+    done
+}
+# -----------------------------------------------------------------------------
+bu_list_loaded() {   # Display loaded bash utilities
+    info "Loaded BASH utilities:"
+    if [ -z "$BASH_UTILS_LOADED" ]; then
+        err "No utilities currently loaded."
+        return 1
     fi
-    # If we get here, user provided a search term but not -a flag, so show loaded utilities
-    echo "Loaded BASH utilities:"
-    [ -z "$BASH_UTILS_LOADED" ] && echo "$ICON_RED_CROSS No utilities currently loaded." && return
+    
     # Process each utility
-    echo "$BASH_UTILS_LOADED" | tr ":" "\n" | while read -r util; do
-        [ -z "$util" ] && continue  # Skip empty entries
-        util_path="$BASH_UTILS_SRC/util_${util}.sh"
+    echo "$BASH_UTILS_LOADED" | tr ":" "\n" | while read -r util_name; do
+        [ -z "$util_name" ] && continue  # Skip empty entries
+        util_path="$BASH_UTILS_SRC/util_${util_name}.sh"
         
         # Check if utility file still exists
         if [ -f "$util_path" ]; then
             # If search term provided, filter results
-            if [ -z "$1" ] || echo "$util" | grep -q "$1" || echo "$util_path" | grep -q "$1"; then
-                echo "$ICON_GREEN_CHECK $util: $util_path"
+            if [ -z "$1" ] || echo "$util_name" | grep -q "$1" || echo "$util_path" | grep -q "$1"; then
+                echo -e "${GREEN}[OK]${RESET} $util_name"
             fi
         else
             # If search term provided, filter results
-            if [ -z "$1" ] || echo "$util" | grep -q "$1" || echo "$util_path" | grep -q "$1"; then
-                echo "$ICON_RED_CROSS $util: $util_path (FILE MISSING)"
+            if [ -z "$1" ] || echo "$util_name" | grep -q "$1" || echo "$util_path" | grep -q "$1"; then
+                err "$util_name (FILE MISSING)"
             fi
         fi
     done
@@ -109,9 +181,16 @@ bu_load() {   # Load a specified bash utility
     local util_path="$BASH_UTILS_SRC/util_${util_name}.sh"
     
     # Check if utility name was provided
-    [ -z "$util_name" ] && { echo "$ICON_RED_CROSS Error: No utility name specified."; return 1; }
+    if [ -z "$util_name" ]; then 
+        err "No utility name specified."
+        return 1
+    fi
+    
     # Check if utility file exists
-    [ ! -f "$util_path" ] && { echo "$ICON_RED_CROSS Error: Utility '$util_name' not found at $util_path"; return 1; }
+    if [ ! -f "$util_path" ]; then
+        err "Utility '$util_name' not found at $util_path"
+        return 1
+    fi
     
     # Source the utility file
     source "$util_path"
@@ -125,10 +204,10 @@ bu_load() {   # Load a specified bash utility
                 BASH_UTILS_LOADED="$BASH_UTILS_LOADED:$util_name"
             fi
         fi
-        echo "$ICON_GREEN_CHECK Utility '$util_name' loaded successfully."
+        info "Utility '$util_name' loaded successfully."
         return 0
     else
-        echo "$ICON_RED_CROSS Error loading utility '$util_name'."
+        err "Error loading utility '$util_name'."
         return 1
     fi
 }
@@ -138,20 +217,23 @@ bu_unload() {   # Unload a specified bash utility and remove its functions
     local util_path="$BASH_UTILS_SRC/util_${util_name}.sh"
     
     # Check if utility name was provided
-    [ -z "$util_name" ] && { echo "$ICON_RED_CROSS Error: No utility name specified."; return 1; }
+    if [ -z "$util_name" ]; then
+        err "No utility name specified."
+        return 1
+    fi
     
     # Check if the utility is currently loaded
     if [[ "$BASH_UTILS_LOADED" != *"$util_name"* ]]; then
-        echo "$ICON_WARNING Utility '$util_name' is not currently loaded."
+        warn "Utility '$util_name' is not currently loaded."
         return 1
     fi
     
     # Check if utility file exists
     if [ ! -f "$util_path" ]; then
-        echo "$ICON_WARNING Utility file '$util_path' not found, but will attempt to unload from memory."
+        warn "Utility file '$util_path' not found, but will attempt to unload from memory."
     fi
     
-    echo "Unloading utility '$util_name'..."
+    info "Unloading utility '$util_name'..."
     
     # Get all function names from the utility file
     local fs=""
@@ -159,7 +241,7 @@ bu_unload() {   # Unload a specified bash utility and remove its functions
         # Extract functions with their descriptions
         fs=$(grep -E '^[a-zA-Z0-9_]+\(\)\ *\{\ *#' "$util_path")
     else
-        echo "$ICON_WARNING Cannot extract function names from missing file. Manual cleanup might be needed."
+        warn "Cannot extract function names from missing file. Manual cleanup might be needed."
         return 1
     fi
     # Calculate maximum function name length for formatting
@@ -172,7 +254,7 @@ bu_unload() {   # Unload a specified bash utility and remove its functions
         fi
     done <<< "$fs"
     # Unset each function and print what was unset
-    echo "Unsetting functions from utility '$util_name':"
+    info "Unsetting functions from utility '$util_name':"
     while IFS= read -r line; do
         local func_name=$(echo "$line" | sed 's/#.*$//' | tr -d '(){}' | xargs)
         local description=$(echo "$line" | sed 's/^[^#]*#//')
@@ -202,8 +284,46 @@ bu_unload() {   # Unload a specified bash utility and remove its functions
     done
     # Set the updated list of loaded utilities
     BASH_UTILS_LOADED="$new_loaded"
-    echo "$ICON_GREEN_CHECK Utility '$util_name' unloaded successfully."
+    info "Utility '$util_name' unloaded successfully."
     return 0
+}
+# -----------------------------------------------------------------------------
+bu_functions() {   # Show functions available in loaded bash utilities
+    local util_name="$1"
+    
+    # If no utilities are loaded, inform user and exit
+    if [ -z "$BASH_UTILS_LOADED" ]; then
+        warn "No utilities currently loaded."
+    fi
+    
+    # If utility name is provided, check if it's loaded and show its functions
+    if [ -n "$util_name" ]; then
+        if [[ "$BASH_UTILS_LOADED" != *"$util_name"* ]]; then
+            warn "Utility '$util_name' is not currently loaded."
+        fi
+        
+        local util_path="$BASH_UTILS_SRC/util_${util_name}.sh"
+        if [ -f "$util_path" ]; then
+            list_bash_functions_in_file "$util_path"
+        else
+            err "Utility file for '$util_name' not found at $util_path"
+            return 1
+        fi
+        return 0
+    fi
+    
+    # If no specific utility name is provided, show functions for all loaded utilities
+    info "Functions available in loaded utilities:"
+    echo "$BASH_UTILS_LOADED" | tr ":" "\n" | while read -r util; do
+        [ -z "$util" ] && continue  # Skip empty entries
+        util_path="$BASH_UTILS_SRC/util_${util}.sh"
+        
+        if [ -f "$util_path" ]; then
+            list_bash_functions_in_file "$util_path"
+        else
+            err "Functions for utility '$util' cannot be shown (file missing)"
+        fi
+    done
 }
 
 # Create aliases for backwards compatibility
