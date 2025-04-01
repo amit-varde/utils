@@ -1,0 +1,13 @@
+*.pyc
+__pycache__/
+.idea/
+venv/
+node_modules/
+run.out
+pytest.out
+run/
+.DS_Store
+summary.txt
+*.out
+.alias.swp
+out/
