@@ -186,7 +186,7 @@ run() {   # Run a Python script with arguments and save output to run.out
     echo -e "${BLUE}Running Python script '$script' with arguments: $*${RESET}"
     python "$script" "$@" | tee "$output_file"
     if [ $? -eq 0 ]; then
-        echo -e "${GREEN}Success: Tests executed successfully. Output saved to '$output_file'.${RESET}"
+        echo -e "${BLUE}Script executed successfully. Output saved to '$output_file'.${RESET}"
     else
         echo -e "${RED}Failure: Some tests failed. Check '$output_file' for details.${RESET}"
     fi
@@ -210,9 +210,33 @@ run_pytest() {   # Run pytest on specified test files and save output to pytest.
     fi
     
     if [ $? -eq 0 ]; then
-        echo -e "${GREEN}Success: Tests executed successfully. Output saved to '$output_file'.${RESET}"
+        echo -e "${BLUE}STests executed successfully. Output saved to '$output_file'.${RESET}"
     else
         echo -e "${RED}Failure: Some tests failed. Check '$output_file' for details.${RESET}"
+    fi
+}
+# -----------------------------------------------------------------------------
+run_py() {   # Run Python script and save output to run.out
+    clear
+    local script_path="$1"
+    local output_file="run.out"
+    shift
+    
+    if [ -z "$script_path" ]; then
+        echo -e "${RED}Error: No Python script specified.${RESET}"
+        return 1
+    elif [ -f "$script_path" ]; then
+        echo -e "${BLUE}Running Python script '$script_path' with arguments: $*${RESET}"
+        python "$script_path" "$@" 2>&1 | tee "$output_file"
+    else
+        echo -e "${RED}Error: Python script '$script_path' does not exist.${RESET}"
+        return 1
+    fi
+    
+    if [ $? -eq 0 ]; then
+        echo -e "${BLUE} Python Script executed successfully. Output saved to '$output_file'.${RESET}"
+    else
+        echo -e "${RED}Failure: Script failed. Check '$output_file' for details.${RESET}"
     fi
 }
 # -----------------------------------------------------------------------------
