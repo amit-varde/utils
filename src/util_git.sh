@@ -8,6 +8,7 @@
 # -----------------------------------------------------------------------------
 # Check if util_bash is loaded
 [[ -z "${BASH_UTILS_LOADED}" ]] && { echo "ERROR: util_bash.sh is not loaded. Please source it before using this script."; exit 1; }
+
 # -----------------------------------------------------------------------------
 git_tkdiff_remote() { # Compares a local file to its counterpart on the remote origin
   if [ -z "$1" ]; then
@@ -174,6 +175,7 @@ git_stash_list() { # Lists all git stashes in the repository
     git_is_repo || return 1
     git stash list
 }
+
 
 # -----------------------------------------------------------------------------
 # Create aliases for backwards compatibility

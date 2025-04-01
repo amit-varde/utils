@@ -86,6 +86,21 @@ info() {
 }
 
 # -----------------------------------------------------------------------------
+bu_util_name() { # Extracts utility name from full path
+    local full_path="$1"
+    local base="$(basename "$full_path")"
+    base="${base#util_}"
+    base="${base%.sh}"
+    echo "$base"
+}
+
+# -----------------------------------------------------------------------------
+bu_util_path() { # Constructs the full path for a given utility name
+    local name="$1"
+    echo "$BASH_UTILS_SRC/util_${name}.sh"
+}
+
+# -----------------------------------------------------------------------------
 list_bash_functions_in_file() {   # List all function definitions in a file with descriptions
     local script_path="$1"
     info "Functions defined in [$(basename "$script_path")]: "
@@ -138,8 +153,7 @@ bu_list() {   # Display all available bash utilities
     info "All available BASH utilities:"
     # Find all utility files in BASH_UTILS_SRC
     ls -1 "$BASH_UTILS_SRC"/util_*.sh 2>/dev/null | while read -r util_path; do
-        # Extract util name by removing prefix and suffix
-        util_name=$(basename "$util_path" | sed 's/^util_//;s/\.sh$//')
+        local util_name="$(bu_util_name "$util_path")"
         # Extract description from the utility file
         util_description="NA"; [ -f "$util_path" ] && desc=$(grep -m 1 "# Description:" "$util_path" | sed 's/# Description://' | xargs) && [ -n "$desc" ] && util_description="$desc"
         # Filter by search term if provided
@@ -159,7 +173,7 @@ bu_list_loaded() {   # Display loaded bash utilities
     # Process each utility
     echo "$BASH_UTILS_LOADED" | tr ":" "\n" | while read -r util_name; do
         [ -z "$util_name" ] && continue  # Skip empty entries
-        util_path="$BASH_UTILS_SRC/util_${util_name}.sh"
+        util_path="$(bu_util_path "$util_name")"
         
         # Check if utility file still exists
         if [ -f "$util_path" ]; then
@@ -178,7 +192,7 @@ bu_list_loaded() {   # Display loaded bash utilities
 # -----------------------------------------------------------------------------
 bu_load() {   # Load a specified bash utility
     local util_name="$1"
-    local util_path="$BASH_UTILS_SRC/util_${util_name}.sh"
+    local util_path="$(bu_util_path "$util_name")"
     
     # Check if utility name was provided
     if [ -z "$util_name" ]; then 
@@ -214,7 +228,7 @@ bu_load() {   # Load a specified bash utility
 # -----------------------------------------------------------------------------
 bu_unload() {   # Unload a specified bash utility and remove its functions
     local util_name="$1"
-    local util_path="$BASH_UTILS_SRC/util_${util_name}.sh"
+    local util_path="$(bu_util_path "$util_name")"
     
     # Check if utility name was provided
     if [ -z "$util_name" ]; then
@@ -302,7 +316,7 @@ bu_functions() {   # Show functions available in loaded bash utilities
             warn "Utility '$util_name' is not currently loaded."
         fi
         
-        local util_path="$BASH_UTILS_SRC/util_${util_name}.sh"
+        local util_path="$(bu_util_path "$util_name")"
         if [ -f "$util_path" ]; then
             list_bash_functions_in_file "$util_path"
         else
@@ -316,7 +330,7 @@ bu_functions() {   # Show functions available in loaded bash utilities
     info "Functions available in loaded utilities:"
     echo "$BASH_UTILS_LOADED" | tr ":" "\n" | while read -r util; do
         [ -z "$util" ] && continue  # Skip empty entries
-        util_path="$BASH_UTILS_SRC/util_${util}.sh"
+        util_path="$(bu_util_path "$util")"
         
         if [ -f "$util_path" ]; then
             list_bash_functions_in_file "$util_path"
@@ -326,3 +340,4 @@ bu_functions() {   # Show functions available in loaded bash utilities
     done
 }
 # -----------------------------------------------------------------------------
+ BASH_UTILS_LOADED="$BASH_UTILS_LOADED:$(bu_util_name "$(realpath "$0")")"
