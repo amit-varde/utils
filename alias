@@ -195,7 +195,7 @@ run() {   # Run a Python script with arguments and save output to run.out
 run_pytest() {   # Run pytest on specified test files and save output to pytest.out
     clear
     local test_path="$1"
-    local output_file="pytest.out"
+    local output_file="run.out"
     shift
     
     if [ -z "$test_path" ]; then
@@ -214,6 +214,24 @@ run_pytest() {   # Run pytest on specified test files and save output to pytest.
     else
         echo -e "${RED}Failure: Some tests failed. Check '$output_file' for details.${RESET}"
     fi
+}
+# -----------------------------------------------------------------------------
+run_cmd() {   # Run any shell command and save output to cmd.out
+    clear
+    local cmd="$1"
+    local output_file="run.out"
+    shift
+    [ -z "$cmd" ] && { echo -e "${RED}Error: No command specified.${RESET}"; return 1; }
+    echo -e "${BLUE}Running command: $cmd $*${RESET}"
+    # Run command and capture output
+    $cmd "$@" 2>&1 | tee "$output_file"
+    local exit_status=${PIPESTATUS[0]}
+    if [ $exit_status -eq 0 ]; then
+        echo -e "${GREEN}Success: Command executed successfully. Output saved to '$output_file'.${RESET}"
+    else
+        echo -e "${RED}Failure: Command failed with exit code $exit_status. Check '$output_file' for details.${RESET}"
+    fi
+    return $exit_status
 }
 # -----------------------------------------------------------------------------
 change_prompt() {   # Change the shell prompt to show project name
