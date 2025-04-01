@@ -1,0 +1,6 @@
+Remote repository: https://github.com/amit-varde/utils.git
+Current branch: main
+Comparing local 'src/my_git_functions.sh' with remote 'origin/main:src/my_git_functions.sh'
+Remote file saved to: /tmp/tkdiff_out/eb805d86.my_git_functions.sh
+Metadata saved to: /tmp/tkdiff_out/eb805d86.comments.my_git_functions.sh.txt
+Starting tkdiff in background...
