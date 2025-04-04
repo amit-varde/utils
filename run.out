@@ -1,6 +1,446 @@
-Remote repository: https://github.com/amit-varde/utils.git
-Current branch: main
-Comparing local 'src/my_git_functions.sh' with remote 'origin/main:src/my_git_functions.sh'
-Remote file saved to: /tmp/tkdiff_out/eb805d86.my_git_functions.sh
-Metadata saved to: /tmp/tkdiff_out/eb805d86.comments.my_git_functions.sh.txt
-Starting tkdiff in background...
+Executing: main
+Reading presentation from: /Users/amit/work/utils/docprocessors/test_cases/3-27-2025.pptx
+Executing: __init__
+Executing: load_presentation
+Attempting to process file: /Users/amit/work/utils/docprocessors/test_cases/3-27-2025.pptx
+File exists: True
+File size: 2278132 bytes
+Executing: _identify_section_header_slides
+Extracting metadata for slide 4
+Found section header slide at index 3: UMBC Collab
+Extracting metadata for slide 21
+Found section header slide at index 20: ARLResearch Update
+Extracting metadata for slide 28
+Found section header slide at index 27: EDA-schema
+Executing: _identify_summary_slides
+Executing: extract_summary_slides_table
+Executing: extract_table_from_slide for slide 2
+Extracting metadata for slide 2
+Executing: extract_table_from_slide for slide 3
+Extracting metadata for slide 3
+Executing: extract_section_summary_slides
+Extracted section info from slide 4: 'UMBC Collab'
+Extracted section info from slide 21: 'ARLResearch Update'
+Extracted section info from slide 28: 'EDA-schema'
+Executing: show_presentation_metadata
+
+Presentation contains 29 slides
+==================================================
+Extracting metadata for slide 1
+Slide #1:
+  Layout: Title Slide
+  Title: Alec Aversa
+  Total shapes: 3
+  Shape counts:
+    PLACEHOLDER (14): 3
+  Shapes:
+    Shape #1: Subtitle 2 (PLACEHOLDER (14)) - "Alec Aversa"
+    Shape #2: Title 1 (PLACEHOLDER (14)) - "3-27-2025 Weekly Update"
+    Shape #3: Slide Number Placeholder 4 (PLACEHOLDER (14)) - "1"
+--------------------------------------------------
+Extracting metadata for slide 2
+Slide #2:
+  Layout: Title Only
+  Title: Summary: Lab IT Status
+  Total shapes: 3
+  Shape counts:
+    PLACEHOLDER (14): 2
+    TABLE (19): 1
+  Shapes:
+    Shape #1: Title 2 (PLACEHOLDER (14)) - "Summary: Lab IT Status"
+    Shape #2: Slide Number Placeholder 3 (PLACEHOLDER (14)) - "2"
+    Shape #3: Table 5 (TABLE (19))
+  This is a summary slide with tables.
+Executing: show_summary_tables
+No table data found for slide with title: Summary: Lab IT Status
+--------------------------------------------------
+Extracting metadata for slide 3
+Slide #3:
+  Layout: Title Only
+  Title: Summary:  Alec Research Status
+  Total shapes: 4
+  Shape counts:
+    PLACEHOLDER (14): 3
+    TABLE (19): 1
+  Shapes:
+    Shape #1: Title 2 (PLACEHOLDER (14)) - "Summary:  Alec Research Status"
+    Shape #2: Slide Number Placeholder 3 (PLACEHOLDER (14)) - "3"
+    Shape #3: Content Placeholder 4 (PLACEHOLDER (14)) - "s"
+    Shape #4: Table 5 (TABLE (19))
+  This is a summary slide with tables.
+Executing: show_summary_tables
+No table data found for slide with title: Summary:  Alec Research Status
+--------------------------------------------------
+Extracting metadata for slide 4
+Slide #4:
+  Layout: Section Header
+  Title: UMBC Collab
+  Total shapes: 2
+  Shape counts:
+    PLACEHOLDER (14): 2
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "UMBC Collab"
+    Shape #2: Text Placeholder 2 (PLACEHOLDER (14))
+--------------------------------------------------
+Extracting metadata for slide 5
+Slide #5:
+  Layout: Title Only
+  Title: Untitled
+  Total shapes: 7
+  Shape counts:
+    PICTURE (13): 2
+    AUTO_SHAPE (1): 2
+    LINE (9): 2
+    PLACEHOLDER (14): 1
+  Shapes:
+    Shape #1: Picture 4 (PICTURE (13))
+    Shape #2: Picture 6 (PICTURE (13))
+    Shape #3: Rectangle 7 (AUTO_SHAPE (1))
+    Shape #4: Straight Arrow Connector 10 (LINE (9))
+    Shape #5: Rectangle 16 (AUTO_SHAPE (1))
+    Shape #6: Straight Arrow Connector 17 (LINE (9))
+    Shape #7: Title 3 (PLACEHOLDER (14))
+--------------------------------------------------
+Extracting metadata for slide 6
+Slide #6:
+  Layout: Title Only
+  Title: Untitled
+  Total shapes: 5
+  Shape counts:
+    PICTURE (13): 2
+    AUTO_SHAPE (1): 1
+    LINE (9): 1
+    PLACEHOLDER (14): 1
+  Shapes:
+    Shape #1: Picture 4 (PICTURE (13))
+    Shape #2: Rectangle 7 (AUTO_SHAPE (1))
+    Shape #3: Picture 2 (PICTURE (13))
+    Shape #4: Straight Arrow Connector 10 (LINE (9))
+    Shape #5: Title 5 (PLACEHOLDER (14))
+--------------------------------------------------
+Extracting metadata for slide 7
+Slide #7:
+  Layout: Title Only
+  Title: Untitled
+  Total shapes: 5
+  Shape counts:
+    PICTURE (13): 2
+    AUTO_SHAPE (1): 1
+    LINE (9): 1
+    PLACEHOLDER (14): 1
+  Shapes:
+    Shape #1: Picture 4 (PICTURE (13))
+    Shape #2: Rectangle 7 (AUTO_SHAPE (1))
+    Shape #3: Picture 2 (PICTURE (13))
+    Shape #4: Straight Arrow Connector 10 (LINE (9))
+    Shape #5: Title 5 (PLACEHOLDER (14))
+--------------------------------------------------
+Extracting metadata for slide 8
+Slide #8:
+  Layout: Title Only
+  Title: Untitled
+  Total shapes: 10
+  Shape counts:
+    PLACEHOLDER (14): 1
+    PICTURE (13): 1
+    AUTO_SHAPE (1): 8
+  Shapes:
+    Shape #1: Title 13 (PLACEHOLDER (14))
+    Shape #2: Picture 4 (PICTURE (13))
+    Shape #3: Rectangle 5 (AUTO_SHAPE (1))
+    Shape #4: Rectangle 6 (AUTO_SHAPE (1))
+    Shape #5: Rectangle 7 (AUTO_SHAPE (1))
+    Shape #6: Rectangle 8 (AUTO_SHAPE (1))
+    Shape #7: Rectangle 9 (AUTO_SHAPE (1))
+    Shape #8: Rectangle 10 (AUTO_SHAPE (1))
+    Shape #9: Rectangle 11 (AUTO_SHAPE (1))
+    Shape #10: Rectangle 12 (AUTO_SHAPE (1))
+--------------------------------------------------
+Extracting metadata for slide 9
+Slide #9:
+  Layout: Title Only
+  Title: Untitled
+  Total shapes: 8
+  Shape counts:
+    PLACEHOLDER (14): 1
+    PICTURE (13): 2
+    AUTO_SHAPE (1): 4
+    LINE (9): 1
+  Shapes:
+    Shape #1: Title 8 (PLACEHOLDER (14))
+    Shape #2: Picture 4 (PICTURE (13))
+    Shape #3: Rectangle 5 (AUTO_SHAPE (1))
+    Shape #4: Rectangle 7 (AUTO_SHAPE (1))
+    Shape #5: Rectangle 11 (AUTO_SHAPE (1))
+    Shape #6: Rectangle 12 (AUTO_SHAPE (1))
+    Shape #7: Picture 3 (PICTURE (13))
+    Shape #8: Straight Arrow Connector 14 (LINE (9))
+--------------------------------------------------
+Extracting metadata for slide 10
+Slide #10:
+  Layout: Title Only
+  Title: Untitled
+  Total shapes: 7
+  Shape counts:
+    PLACEHOLDER (14): 1
+    PICTURE (13): 2
+    AUTO_SHAPE (1): 2
+    LINE (9): 2
+  Shapes:
+    Shape #1: Title 8 (PLACEHOLDER (14))
+    Shape #2: Picture 4 (PICTURE (13))
+    Shape #3: Rectangle 7 (AUTO_SHAPE (1))
+    Shape #4: Rectangle 11 (AUTO_SHAPE (1))
+    Shape #5: Picture 3 (PICTURE (13))
+    Shape #6: Straight Arrow Connector 14 (LINE (9))
+    Shape #7: Straight Arrow Connector 6 (LINE (9))
+--------------------------------------------------
+Extracting metadata for slide 11
+Slide #11:
+  Layout: Title Only
+  Title: Untitled
+  Total shapes: 5
+  Shape counts:
+    PLACEHOLDER (14): 1
+    PICTURE (13): 2
+    AUTO_SHAPE (1): 1
+    LINE (9): 1
+  Shapes:
+    Shape #1: Title 6 (PLACEHOLDER (14))
+    Shape #2: Picture 4 (PICTURE (13))
+    Shape #3: Rectangle 7 (AUTO_SHAPE (1))
+    Shape #4: Straight Arrow Connector 14 (LINE (9))
+    Shape #5: Picture 5 (PICTURE (13))
+--------------------------------------------------
+Extracting metadata for slide 12
+Slide #12:
+  Layout: Title Only
+  Title: Untitled
+  Total shapes: 5
+  Shape counts:
+    PLACEHOLDER (14): 1
+    PICTURE (13): 2
+    AUTO_SHAPE (1): 1
+    LINE (9): 1
+  Shapes:
+    Shape #1: Title 6 (PLACEHOLDER (14))
+    Shape #2: Picture 4 (PICTURE (13))
+    Shape #3: Rectangle 7 (AUTO_SHAPE (1))
+    Shape #4: Straight Arrow Connector 14 (LINE (9))
+    Shape #5: Picture 3 (PICTURE (13))
+--------------------------------------------------
+Extracting metadata for slide 13
+Slide #13:
+  Layout: Title Only
+  Title: WA
+  Total shapes: 3
+  Shape counts:
+    PLACEHOLDER (14): 2
+    PICTURE (13): 1
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "WA"
+    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
+    Shape #3: Picture 6 (PICTURE (13))
+--------------------------------------------------
+Extracting metadata for slide 14
+Slide #14:
+  Layout: Title Only
+  Title: HPWL
+  Total shapes: 2
+  Shape counts:
+    PLACEHOLDER (14): 2
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "HPWL"
+    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
+--------------------------------------------------
+Extracting metadata for slide 15
+Slide #15:
+  Layout: Title Only
+  Title: Grad (Single Cell)
+  Total shapes: 2
+  Shape counts:
+    PLACEHOLDER (14): 2
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "Grad (Single Cell)"
+    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
+--------------------------------------------------
+Extracting metadata for slide 16
+Slide #16:
+  Layout: Title Only
+  Title: Grad (Total)
+  Total shapes: 2
+  Shape counts:
+    PLACEHOLDER (14): 2
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "Grad (Total)"
+    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
+--------------------------------------------------
+Extracting metadata for slide 17
+Slide #17:
+  Layout: Title Only
+  Title: Lambda (Density Penalty)
+  Total shapes: 2
+  Shape counts:
+    PLACEHOLDER (14): 2
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "Lambda (Density Penalty)"
+    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
+--------------------------------------------------
+Extracting metadata for slide 18
+Slide #18:
+  Layout: Title Only
+  Title: sumPhi (Density Constraint)
+  Total shapes: 3
+  Shape counts:
+    PLACEHOLDER (14): 2
+    PICTURE (13): 1
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "sumPhi (Density Constraint)"
+    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
+    Shape #3: Picture 3 (PICTURE (13))
+--------------------------------------------------
+Extracting metadata for slide 19
+Slide #19:
+  Layout: Title Only
+  Title: Cost (Objective Function)
+  Total shapes: 2
+  Shape counts:
+    PLACEHOLDER (14): 2
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "Cost (Objective Function)"
+    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
+--------------------------------------------------
+Extracting metadata for slide 20
+Slide #20:
+  Layout: Title Only
+  Title: Cost (Objective Function)
+  Total shapes: 8
+  Shape counts:
+    PLACEHOLDER (14): 2
+    PICTURE (13): 3
+    TEXT_BOX (17): 3
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "Cost (Objective Function)"
+    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
+    Shape #3: Picture 2 (PICTURE (13))
+    Shape #4: Content Placeholder 4 (PICTURE (13))
+    Shape #5: Picture 5 (PICTURE (13))
+    Shape #6: TextBox 6 (TEXT_BOX (17)) - "+"
+    Shape #7: TextBox 8 (TEXT_BOX (17)) - "x"
+    Shape #8: TextBox 9 (TEXT_BOX (17)) - "="
+--------------------------------------------------
+Extracting metadata for slide 21
+Slide #21:
+  Layout: Section Header
+  Title: ARLResearch Update
+  Total shapes: 3
+  Shape counts:
+    PLACEHOLDER (14): 3
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "ARLResearch Update"
+    Shape #2: Subtitle 2 (PLACEHOLDER (14)) - "03-27-2025"
+    Shape #3: Slide Number Placeholder 4 (PLACEHOLDER (14)) - "21"
+--------------------------------------------------
+Extracting metadata for slide 22
+Slide #22:
+  Layout: Title Only
+  Title: Research Objectives
+  Total shapes: 2
+  Shape counts:
+    PLACEHOLDER (14): 2
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "Research Objectives"
+    Shape #2: Content Placeholder 2 (PLACEHOLDER (14)) - "FP-ASIC obfuscation and par..."
+--------------------------------------------------
+Extracting metadata for slide 23
+Slide #23:
+  Layout: Title Only
+  Title: ePlace-3D
+  Total shapes: 3
+  Shape counts:
+    PLACEHOLDER (14): 1
+    PICTURE (13): 2
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "ePlace-3D"
+    Shape #2: Picture 4 (PICTURE (13))
+    Shape #3: Picture 6 (PICTURE (13))
+--------------------------------------------------
+Extracting metadata for slide 24
+Slide #24:
+  Layout: Title Only
+  Title: Logical Synth & Testbench Gen.
+  Total shapes: 2
+  Shape counts:
+    PLACEHOLDER (14): 1
+    PICTURE (13): 1
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "Logical Synth & Testbench Gen."
+    Shape #2: Picture 6 (PICTURE (13))
+--------------------------------------------------
+Extracting metadata for slide 25
+Slide #25:
+  Layout: Title Only
+  Title: Logical Synth & Testbench Gen.
+  Total shapes: 2
+  Shape counts:
+    PLACEHOLDER (14): 1
+    PICTURE (13): 1
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "Logical Synth & Testbench Gen."
+    Shape #2: Picture 4 (PICTURE (13))
+--------------------------------------------------
+Extracting metadata for slide 26
+Slide #26:
+  Layout: Title Only
+  Title: Untitled
+  Total shapes: 3
+  Shape counts:
+    PLACEHOLDER (14): 1
+    PICTURE (13): 2
+  Shapes:
+    Shape #1: Title 6 (PLACEHOLDER (14))
+    Shape #2: Picture 4 (PICTURE (13))
+    Shape #3: Picture 2 (PICTURE (13))
+--------------------------------------------------
+Extracting metadata for slide 27
+Slide #27:
+  Layout: Title Only
+  Title: Simulation
+  Total shapes: 3
+  Shape counts:
+    PLACEHOLDER (14): 1
+    PICTURE (13): 2
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "Simulation"
+    Shape #2: Picture 4 (PICTURE (13))
+    Shape #3: Picture 6 (PICTURE (13))
+--------------------------------------------------
+Extracting metadata for slide 28
+Slide #28:
+  Layout: Section Header
+  Title: EDA-schema
+  Total shapes: 2
+  Shape counts:
+    PLACEHOLDER (14): 2
+  Shapes:
+    Shape #1: Title 1 (PLACEHOLDER (14)) - "EDA-schema"
+    Shape #2: Text Placeholder 2 (PLACEHOLDER (14))
+--------------------------------------------------
+Extracting metadata for slide 29
+Slide #29:
+  Layout: Title Only
+  Title: Schema v1: eda-datagen
+  Total shapes: 4
+  Shape counts:
+    PLACEHOLDER (14): 4
+  Shapes:
+    Shape #1: Title 3 (PLACEHOLDER (14)) - "Schema v1: eda-datagen"
+    Shape #2: Slide Number Placeholder 1 (PLACEHOLDER (14)) - "29"
+    Shape #3: Content Placeholder 5 (PLACEHOLDER (14)) - "Moot slide"
+    Shape #4: Date Placeholder 4 (PLACEHOLDER (14)) - "9:18 AM"
+--------------------------------------------------
+Executing: set_presentation_title_slide for slide 1
+Executing: save_presentation
+Writing presentation to: /Users/amit/work/utils/docprocessors/test_cases/3-27-2025_update.pptx
+Successfully saved presentation to: /Users/amit/work/utils/docprocessors/test_cases/3-27-2025_update.pptx
+PPTX file updated successfully from /Users/amit/work/utils/docprocessors/test_cases/3-27-2025.pptx to /Users/amit/work/utils/docprocessors/test_cases/3-27-2025_update.pptx
