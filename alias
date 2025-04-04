@@ -64,6 +64,7 @@ alias clean-pycache='find . -type d -name "__pycache__" -exec rm -rf {} +'      
 alias clean-pip-cache='pip cache purge'  # Clear pip cache
 alias fname='realpath'
 alias dname='dirname $(realpath)'
+alias mde='/usr/bin/open -a "Markdown Editor"'
 
 # -----------------------------------------------------------------------------
 # Organized Function Definitions (one-line description)
