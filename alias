@@ -35,7 +35,7 @@ export iDOCS="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Documents"
 export WORK="$HOME/work"
 export UTILS="$WORK/utils"
 export JNBS="$WORK/jupyter-notebooks"
-export BASH_UTILS_SRC="$UTILS/src"  # Source directory for bash utilities
+export BASH_UTILS_SRC="$UTILS/bu"  # Source directory for bash utilities
 
 # -----------------------------------------------------------------------------
 # Organized Alias Definitions (one-line description)
