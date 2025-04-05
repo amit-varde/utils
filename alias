@@ -65,6 +65,16 @@ alias clean-pip-cache='pip cache purge'  # Clear pip cache
 alias fname='realpath'
 alias dname='dirname $(realpath)'
 alias mde='/usr/bin/open -a "Markdown Editor"'
+alias open &>/dev/null && unalias open
+[[ "$TERM_PROGRAM" == "vscode" ]] && alias open="code"
+# -----------------------------------------------------------------------------
+# Source bash utility functions if available
+if [ -f "$BASH_UTILS_SRC/util_bash.sh" ]; then
+    source "$BASH_UTILS_SRC/util_bash.sh"
+    echo -e "${BLUE}Bash function management util loaded ${RESET}"
+else
+    echo -e "${RED}Bash function management util is not available${RESET}"
+fi
 
 # -----------------------------------------------------------------------------
 # Organized Function Definitions (one-line description)
@@ -305,6 +315,7 @@ go_project() {   # Navigate to a project directory and set up its environment
     cd "$WORK/$project_name" || return 1
     [ -f venv/bin/activate ] && source venv/bin/activate
     [ -f "${project_name}.env" ] && source "${project_name}.env"
+    [ -d .git ] && bu_load git
     mypy
     if [[ "$TERM_PROGRAM" != "vscode" ]]; then
         [ -f "$project_name".code-workspace ] && code "$project_name".code-workspace
@@ -322,7 +333,6 @@ gen_project_aliases() {   # Generate aliases for all projects in the WORK direct
      #   echo "  go-$project_name: $WORK/$project_name"
     done
 }
-
 list_project_aliases() {   # List all available project aliases
     echo -e "${BLUE}Available project aliases:${RESET}"
     alias | grep "go-" | sed 's/^alias //; s/=.*$//' | sort | while read -r alias_name; do
@@ -331,20 +341,8 @@ list_project_aliases() {   # List all available project aliases
     done
 }
 # -----------------------------------------------------------------------------
-# Lets reconfigure alias to open file with Vscode when inside the vscode terminal
-alias open &>/dev/null && unalias open
-[[ "$TERM_PROGRAM" == "vscode" ]] && alias open="code"
-# -----------------------------------------------------------------------------
 # Adding functions to autogenerate aliases
 gen_project_aliases
-# -----------------------------------------------------------------------------
-# Source bash utility functions if available
-if [ -f "$BASH_UTILS_SRC/util_bash.sh" ]; then
-    source "$BASH_UTILS_SRC/util_bash.sh"
-    echo -e "${BLUE}Bash function management util loaded ${RESET}"
-else
-    echo -e "${RED}Bash function management util is not available${RESET}"
-fi
 # -----------------------------------------------------------------------------
 # Final setup
 [ -d "$WORK" ] && cd "$WORK" || cd "$HOME"
