@@ -219,8 +219,8 @@ run_pytest() {   # Run pytest on specified test files and save output to pytest.
     clear
     local test_path="$1"
     local ws=$(find_vscode_workspace_root)
-    [ "$ws" ] && output_file="$ws/run.out" || { echo -e "${RED}Error: Workspace directory not set. Exiting.${RESET}"; return 1; }    shift
-    
+    [ "$ws" ] && output_file="$ws/run.out" || { echo -e "${RED}Error: Workspace directory not set. Exiting.${RESET}"; return 1; }    
+    shift 
     if [ -z "$test_path" ]; then
         echo -e "${BLUE}Running pytest on current directory with arguments: $*${RESET}"
         pytest "$@" -v 2>&1 | tee "$output_file"
@@ -243,8 +243,8 @@ run_py() {   # Run Python script and save output to run.out
     clear
     local script_path="$1"
     local ws=$(find_vscode_workspace_root)
-    [ "$ws" ] && output_file="$ws/run.out" || { echo -e "${RED}Error: Workspace directory not set. Exiting.${RESET}"; return 1; }    shift
-    
+    [ "$ws" ] && output_file="$ws/run.out" || { echo -e "${RED}Error: Workspace directory not set. Exiting.${RESET}"; return 1; }    
+    shift
     if [ -z "$script_path" ]; then
         echo -e "${RED}Error: No Python script specified.${RESET}"
         return 1

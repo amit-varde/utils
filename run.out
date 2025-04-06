@@ -1,446 +1,699 @@
-Executing: main
-Reading presentation from: /Users/amit/work/utils/docprocessors/test_cases/3-27-2025.pptx
-Executing: __init__
-Executing: load_presentation
-Attempting to process file: /Users/amit/work/utils/docprocessors/test_cases/3-27-2025.pptx
-File exists: True
-File size: 2278132 bytes
-Executing: _identify_section_header_slides
-Extracting metadata for slide 4
-Found section header slide at index 3: UMBC Collab
-Extracting metadata for slide 21
-Found section header slide at index 20: ARLResearch Update
-Extracting metadata for slide 28
-Found section header slide at index 27: EDA-schema
-Executing: _identify_summary_slides
-Executing: extract_summary_slides_table
-Executing: extract_table_from_slide for slide 2
-Extracting metadata for slide 2
-Executing: extract_table_from_slide for slide 3
-Extracting metadata for slide 3
-Executing: extract_section_summary_slides
-Extracted section info from slide 4: 'UMBC Collab'
-Extracted section info from slide 21: 'ARLResearch Update'
-Extracted section info from slide 28: 'EDA-schema'
-Executing: show_presentation_metadata
-
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Executing: main
+[94mINFO[0m:__main__:main:Reading presentation from: /Users/amit/work/utils/fu/test_cases/3-27-2025.pptx
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Executing: __init__
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Executing: load_presentation
+[94mINFO[0m:__main__:load_presentation:Attempting to process file: /Users/amit/work/utils/fu/test_cases/3-27-2025.pptx
+[94mINFO[0m:__main__:load_presentation:File exists: True
+[94mINFO[0m:__main__:load_presentation:File size: 2278132 bytes
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Section Header
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Section Header
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Section Header
+[94mINFO[0m:__main__:extract_metadata_from_slide:Extracting metadata for slide
+[94mINFO[0m:__main__:extract_metadata_from_slide:layout: Title Only
+[94mINFO[0m:__main__:__init__:Total number of slides loaded: 29
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Loaded..
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Executing: _identify_slide_purpose
+[94mINFO[0m:__main__:identify_purpose_oriented_slides:Found summary slide at index 1: Summary: Lab IT Status
+[94mINFO[0m:__main__:identify_purpose_oriented_slides:Found summary slide at index 2: Summary:  Alec Research Status
+[94mINFO[0m:__main__:identify_purpose_oriented_slides:Found section header slide at index 3: UMBC Collab
+[94mINFO[0m:__main__:identify_purpose_oriented_slides:Found section header slide at index 20: ARLResearch Update
+[94mINFO[0m:__main__:identify_purpose_oriented_slides:Found section header slide at index 27: EDA-schema
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Executing: show_presentation_metadata
+[94mINFO[0m:__main__:show_presentation_metadata:
 Presentation contains 29 slides
-==================================================
-Extracting metadata for slide 1
-Slide #1:
-  Layout: Title Slide
-  Title: Alec Aversa
-  Total shapes: 3
-  Shape counts:
-    PLACEHOLDER (14): 3
-  Shapes:
-    Shape #1: Subtitle 2 (PLACEHOLDER (14)) - "Alec Aversa"
-    Shape #2: Title 1 (PLACEHOLDER (14)) - "3-27-2025 Weekly Update"
-    Shape #3: Slide Number Placeholder 4 (PLACEHOLDER (14)) - "1"
---------------------------------------------------
-Extracting metadata for slide 2
-Slide #2:
-  Layout: Title Only
-  Title: Summary: Lab IT Status
-  Total shapes: 3
-  Shape counts:
-    PLACEHOLDER (14): 2
-    TABLE (19): 1
-  Shapes:
-    Shape #1: Title 2 (PLACEHOLDER (14)) - "Summary: Lab IT Status"
-    Shape #2: Slide Number Placeholder 3 (PLACEHOLDER (14)) - "2"
-    Shape #3: Table 5 (TABLE (19))
-  This is a summary slide with tables.
-Executing: show_summary_tables
-No table data found for slide with title: Summary: Lab IT Status
---------------------------------------------------
-Extracting metadata for slide 3
-Slide #3:
-  Layout: Title Only
-  Title: Summary:  Alec Research Status
-  Total shapes: 4
-  Shape counts:
-    PLACEHOLDER (14): 3
-    TABLE (19): 1
-  Shapes:
-    Shape #1: Title 2 (PLACEHOLDER (14)) - "Summary:  Alec Research Status"
-    Shape #2: Slide Number Placeholder 3 (PLACEHOLDER (14)) - "3"
-    Shape #3: Content Placeholder 4 (PLACEHOLDER (14)) - "s"
-    Shape #4: Table 5 (TABLE (19))
-  This is a summary slide with tables.
-Executing: show_summary_tables
-No table data found for slide with title: Summary:  Alec Research Status
---------------------------------------------------
-Extracting metadata for slide 4
-Slide #4:
-  Layout: Section Header
-  Title: UMBC Collab
-  Total shapes: 2
-  Shape counts:
-    PLACEHOLDER (14): 2
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "UMBC Collab"
-    Shape #2: Text Placeholder 2 (PLACEHOLDER (14))
---------------------------------------------------
-Extracting metadata for slide 5
-Slide #5:
-  Layout: Title Only
-  Title: Untitled
-  Total shapes: 7
-  Shape counts:
-    PICTURE (13): 2
-    AUTO_SHAPE (1): 2
-    LINE (9): 2
-    PLACEHOLDER (14): 1
-  Shapes:
-    Shape #1: Picture 4 (PICTURE (13))
-    Shape #2: Picture 6 (PICTURE (13))
-    Shape #3: Rectangle 7 (AUTO_SHAPE (1))
-    Shape #4: Straight Arrow Connector 10 (LINE (9))
-    Shape #5: Rectangle 16 (AUTO_SHAPE (1))
-    Shape #6: Straight Arrow Connector 17 (LINE (9))
-    Shape #7: Title 3 (PLACEHOLDER (14))
---------------------------------------------------
-Extracting metadata for slide 6
-Slide #6:
-  Layout: Title Only
-  Title: Untitled
-  Total shapes: 5
-  Shape counts:
-    PICTURE (13): 2
-    AUTO_SHAPE (1): 1
-    LINE (9): 1
-    PLACEHOLDER (14): 1
-  Shapes:
-    Shape #1: Picture 4 (PICTURE (13))
-    Shape #2: Rectangle 7 (AUTO_SHAPE (1))
-    Shape #3: Picture 2 (PICTURE (13))
-    Shape #4: Straight Arrow Connector 10 (LINE (9))
-    Shape #5: Title 5 (PLACEHOLDER (14))
---------------------------------------------------
-Extracting metadata for slide 7
-Slide #7:
-  Layout: Title Only
-  Title: Untitled
-  Total shapes: 5
-  Shape counts:
-    PICTURE (13): 2
-    AUTO_SHAPE (1): 1
-    LINE (9): 1
-    PLACEHOLDER (14): 1
-  Shapes:
-    Shape #1: Picture 4 (PICTURE (13))
-    Shape #2: Rectangle 7 (AUTO_SHAPE (1))
-    Shape #3: Picture 2 (PICTURE (13))
-    Shape #4: Straight Arrow Connector 10 (LINE (9))
-    Shape #5: Title 5 (PLACEHOLDER (14))
---------------------------------------------------
-Extracting metadata for slide 8
-Slide #8:
-  Layout: Title Only
-  Title: Untitled
-  Total shapes: 10
-  Shape counts:
-    PLACEHOLDER (14): 1
-    PICTURE (13): 1
-    AUTO_SHAPE (1): 8
-  Shapes:
-    Shape #1: Title 13 (PLACEHOLDER (14))
-    Shape #2: Picture 4 (PICTURE (13))
-    Shape #3: Rectangle 5 (AUTO_SHAPE (1))
-    Shape #4: Rectangle 6 (AUTO_SHAPE (1))
-    Shape #5: Rectangle 7 (AUTO_SHAPE (1))
-    Shape #6: Rectangle 8 (AUTO_SHAPE (1))
-    Shape #7: Rectangle 9 (AUTO_SHAPE (1))
-    Shape #8: Rectangle 10 (AUTO_SHAPE (1))
-    Shape #9: Rectangle 11 (AUTO_SHAPE (1))
-    Shape #10: Rectangle 12 (AUTO_SHAPE (1))
---------------------------------------------------
-Extracting metadata for slide 9
-Slide #9:
-  Layout: Title Only
-  Title: Untitled
-  Total shapes: 8
-  Shape counts:
-    PLACEHOLDER (14): 1
-    PICTURE (13): 2
-    AUTO_SHAPE (1): 4
-    LINE (9): 1
-  Shapes:
-    Shape #1: Title 8 (PLACEHOLDER (14))
-    Shape #2: Picture 4 (PICTURE (13))
-    Shape #3: Rectangle 5 (AUTO_SHAPE (1))
-    Shape #4: Rectangle 7 (AUTO_SHAPE (1))
-    Shape #5: Rectangle 11 (AUTO_SHAPE (1))
-    Shape #6: Rectangle 12 (AUTO_SHAPE (1))
-    Shape #7: Picture 3 (PICTURE (13))
-    Shape #8: Straight Arrow Connector 14 (LINE (9))
---------------------------------------------------
-Extracting metadata for slide 10
-Slide #10:
-  Layout: Title Only
-  Title: Untitled
-  Total shapes: 7
-  Shape counts:
-    PLACEHOLDER (14): 1
-    PICTURE (13): 2
-    AUTO_SHAPE (1): 2
-    LINE (9): 2
-  Shapes:
-    Shape #1: Title 8 (PLACEHOLDER (14))
-    Shape #2: Picture 4 (PICTURE (13))
-    Shape #3: Rectangle 7 (AUTO_SHAPE (1))
-    Shape #4: Rectangle 11 (AUTO_SHAPE (1))
-    Shape #5: Picture 3 (PICTURE (13))
-    Shape #6: Straight Arrow Connector 14 (LINE (9))
-    Shape #7: Straight Arrow Connector 6 (LINE (9))
---------------------------------------------------
-Extracting metadata for slide 11
-Slide #11:
-  Layout: Title Only
-  Title: Untitled
-  Total shapes: 5
-  Shape counts:
-    PLACEHOLDER (14): 1
-    PICTURE (13): 2
-    AUTO_SHAPE (1): 1
-    LINE (9): 1
-  Shapes:
-    Shape #1: Title 6 (PLACEHOLDER (14))
-    Shape #2: Picture 4 (PICTURE (13))
-    Shape #3: Rectangle 7 (AUTO_SHAPE (1))
-    Shape #4: Straight Arrow Connector 14 (LINE (9))
-    Shape #5: Picture 5 (PICTURE (13))
---------------------------------------------------
-Extracting metadata for slide 12
-Slide #12:
-  Layout: Title Only
-  Title: Untitled
-  Total shapes: 5
-  Shape counts:
-    PLACEHOLDER (14): 1
-    PICTURE (13): 2
-    AUTO_SHAPE (1): 1
-    LINE (9): 1
-  Shapes:
-    Shape #1: Title 6 (PLACEHOLDER (14))
-    Shape #2: Picture 4 (PICTURE (13))
-    Shape #3: Rectangle 7 (AUTO_SHAPE (1))
-    Shape #4: Straight Arrow Connector 14 (LINE (9))
-    Shape #5: Picture 3 (PICTURE (13))
---------------------------------------------------
-Extracting metadata for slide 13
-Slide #13:
-  Layout: Title Only
-  Title: WA
-  Total shapes: 3
-  Shape counts:
-    PLACEHOLDER (14): 2
-    PICTURE (13): 1
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "WA"
-    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
-    Shape #3: Picture 6 (PICTURE (13))
---------------------------------------------------
-Extracting metadata for slide 14
-Slide #14:
-  Layout: Title Only
-  Title: HPWL
-  Total shapes: 2
-  Shape counts:
-    PLACEHOLDER (14): 2
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "HPWL"
-    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
---------------------------------------------------
-Extracting metadata for slide 15
-Slide #15:
-  Layout: Title Only
-  Title: Grad (Single Cell)
-  Total shapes: 2
-  Shape counts:
-    PLACEHOLDER (14): 2
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "Grad (Single Cell)"
-    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
---------------------------------------------------
-Extracting metadata for slide 16
-Slide #16:
-  Layout: Title Only
-  Title: Grad (Total)
-  Total shapes: 2
-  Shape counts:
-    PLACEHOLDER (14): 2
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "Grad (Total)"
-    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
---------------------------------------------------
-Extracting metadata for slide 17
-Slide #17:
-  Layout: Title Only
-  Title: Lambda (Density Penalty)
-  Total shapes: 2
-  Shape counts:
-    PLACEHOLDER (14): 2
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "Lambda (Density Penalty)"
-    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
---------------------------------------------------
-Extracting metadata for slide 18
-Slide #18:
-  Layout: Title Only
-  Title: sumPhi (Density Constraint)
-  Total shapes: 3
-  Shape counts:
-    PLACEHOLDER (14): 2
-    PICTURE (13): 1
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "sumPhi (Density Constraint)"
-    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
-    Shape #3: Picture 3 (PICTURE (13))
---------------------------------------------------
-Extracting metadata for slide 19
-Slide #19:
-  Layout: Title Only
-  Title: Cost (Objective Function)
-  Total shapes: 2
-  Shape counts:
-    PLACEHOLDER (14): 2
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "Cost (Objective Function)"
-    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
---------------------------------------------------
-Extracting metadata for slide 20
-Slide #20:
-  Layout: Title Only
-  Title: Cost (Objective Function)
-  Total shapes: 8
-  Shape counts:
-    PLACEHOLDER (14): 2
-    PICTURE (13): 3
-    TEXT_BOX (17): 3
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "Cost (Objective Function)"
-    Shape #2: Content Placeholder 4 (PLACEHOLDER (14))
-    Shape #3: Picture 2 (PICTURE (13))
-    Shape #4: Content Placeholder 4 (PICTURE (13))
-    Shape #5: Picture 5 (PICTURE (13))
-    Shape #6: TextBox 6 (TEXT_BOX (17)) - "+"
-    Shape #7: TextBox 8 (TEXT_BOX (17)) - "x"
-    Shape #8: TextBox 9 (TEXT_BOX (17)) - "="
---------------------------------------------------
-Extracting metadata for slide 21
-Slide #21:
-  Layout: Section Header
-  Title: ARLResearch Update
-  Total shapes: 3
-  Shape counts:
-    PLACEHOLDER (14): 3
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "ARLResearch Update"
-    Shape #2: Subtitle 2 (PLACEHOLDER (14)) - "03-27-2025"
-    Shape #3: Slide Number Placeholder 4 (PLACEHOLDER (14)) - "21"
---------------------------------------------------
-Extracting metadata for slide 22
-Slide #22:
-  Layout: Title Only
-  Title: Research Objectives
-  Total shapes: 2
-  Shape counts:
-    PLACEHOLDER (14): 2
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "Research Objectives"
-    Shape #2: Content Placeholder 2 (PLACEHOLDER (14)) - "FP-ASIC obfuscation and par..."
---------------------------------------------------
-Extracting metadata for slide 23
-Slide #23:
-  Layout: Title Only
-  Title: ePlace-3D
-  Total shapes: 3
-  Shape counts:
-    PLACEHOLDER (14): 1
-    PICTURE (13): 2
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "ePlace-3D"
-    Shape #2: Picture 4 (PICTURE (13))
-    Shape #3: Picture 6 (PICTURE (13))
---------------------------------------------------
-Extracting metadata for slide 24
-Slide #24:
-  Layout: Title Only
-  Title: Logical Synth & Testbench Gen.
-  Total shapes: 2
-  Shape counts:
-    PLACEHOLDER (14): 1
-    PICTURE (13): 1
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "Logical Synth & Testbench Gen."
-    Shape #2: Picture 6 (PICTURE (13))
---------------------------------------------------
-Extracting metadata for slide 25
-Slide #25:
-  Layout: Title Only
-  Title: Logical Synth & Testbench Gen.
-  Total shapes: 2
-  Shape counts:
-    PLACEHOLDER (14): 1
-    PICTURE (13): 1
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "Logical Synth & Testbench Gen."
-    Shape #2: Picture 4 (PICTURE (13))
---------------------------------------------------
-Extracting metadata for slide 26
-Slide #26:
-  Layout: Title Only
-  Title: Untitled
-  Total shapes: 3
-  Shape counts:
-    PLACEHOLDER (14): 1
-    PICTURE (13): 2
-  Shapes:
-    Shape #1: Title 6 (PLACEHOLDER (14))
-    Shape #2: Picture 4 (PICTURE (13))
-    Shape #3: Picture 2 (PICTURE (13))
---------------------------------------------------
-Extracting metadata for slide 27
-Slide #27:
-  Layout: Title Only
-  Title: Simulation
-  Total shapes: 3
-  Shape counts:
-    PLACEHOLDER (14): 1
-    PICTURE (13): 2
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "Simulation"
-    Shape #2: Picture 4 (PICTURE (13))
-    Shape #3: Picture 6 (PICTURE (13))
---------------------------------------------------
-Extracting metadata for slide 28
-Slide #28:
-  Layout: Section Header
-  Title: EDA-schema
-  Total shapes: 2
-  Shape counts:
-    PLACEHOLDER (14): 2
-  Shapes:
-    Shape #1: Title 1 (PLACEHOLDER (14)) - "EDA-schema"
-    Shape #2: Text Placeholder 2 (PLACEHOLDER (14))
---------------------------------------------------
-Extracting metadata for slide 29
-Slide #29:
-  Layout: Title Only
-  Title: Schema v1: eda-datagen
-  Total shapes: 4
-  Shape counts:
-    PLACEHOLDER (14): 4
-  Shapes:
-    Shape #1: Title 3 (PLACEHOLDER (14)) - "Schema v1: eda-datagen"
-    Shape #2: Slide Number Placeholder 1 (PLACEHOLDER (14)) - "29"
-    Shape #3: Content Placeholder 5 (PLACEHOLDER (14)) - "Moot slide"
-    Shape #4: Date Placeholder 4 (PLACEHOLDER (14)) - "9:18 AM"
---------------------------------------------------
-Executing: set_presentation_title_slide for slide 1
-Executing: save_presentation
-Writing presentation to: /Users/amit/work/utils/docprocessors/test_cases/3-27-2025_update.pptx
-Successfully saved presentation to: /Users/amit/work/utils/docprocessors/test_cases/3-27-2025_update.pptx
-PPTX file updated successfully from /Users/amit/work/utils/docprocessors/test_cases/3-27-2025.pptx to /Users/amit/work/utils/docprocessors/test_cases/3-27-2025_update.pptx
+[94mINFO[0m:__main__:show_presentation_metadata:==================================================
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 1:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 1 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Slide",
+    "title": "Alec Aversa",
+    "shapes": {
+        "PLACEHOLDER (14)": 3
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 3,
+    "total_tables": 0,
+    "total_images": 0,
+    "total_textboxes": 3,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 2:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 2 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Summary: Lab IT Status",
+    "shapes": {
+        "PLACEHOLDER (14)": 2,
+        "TABLE (19)": 1
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 3,
+    "total_tables": 1,
+    "total_images": 0,
+    "total_textboxes": 2,
+    "is_summary_slide": "yes",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:Purpose-built slide detected. Showing tables:
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Executing: show_table
+[94mINFO[0m:__main__:show_table:
+Table data from slide (Unknown):
+[94mINFO[0m:__main__:_display_tables:Table 1:
+[94mINFO[0m:__main__:_display_tables:  +--------------------------------+---------------+------------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  |  Main                          |  Progress     |  Details         | Last-Updated |
+[94mINFO[0m:__main__:_display_tables:  +--------------------------------+---------------+------------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | Hardware                       |               |                  |              |
+[94mINFO[0m:__main__:_display_tables:  +--------------------------------+---------------+------------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | Sav02 Fan                      | LESS PROGRESS | Waiting on fan   |              |
+[94mINFO[0m:__main__:_display_tables:  +--------------------------------+---------------+------------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | Software                       |               |                  |              |
+[94mINFO[0m:__main__:_display_tables:  +--------------------------------+---------------+------------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | Drexel credentials for servers | LESS PROGRESS | Waiting on Chris |              |
+[94mINFO[0m:__main__:_display_tables:  +--------------------------------+---------------+------------------+--------------+
+[94mINFO[0m:__main__:_display_tables:
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 3:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 3 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Summary:  Alec Research Status",
+    "shapes": {
+        "PLACEHOLDER (14)": 3,
+        "TABLE (19)": 1
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 4,
+    "total_tables": 1,
+    "total_images": 0,
+    "total_textboxes": 3,
+    "is_summary_slide": "yes",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:Purpose-built slide detected. Showing tables:
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Executing: show_table
+[94mINFO[0m:__main__:show_table:
+Table data from slide (Unknown):
+[94mINFO[0m:__main__:_display_tables:Table 1:
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  |  Main                  |  Progress     |  Details                                 |  Target Paper | Last-Updated |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | UMBC Collab            |               |                                          |               |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | Priority-based Routing | DONE          | Submitted                                |               |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | ARL                    |               |                                          |               |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | Security Partitioning  | PROGRESS      | Coding simulation framework              |               |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | ARL Test Chip          | LESS PROGRESS | Waiting on standard cells                |               |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | Writing/Review         |               |                                          |               |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | Book                   | LESS PROGRESS |                                          | Springer      |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | Candidacy              | PROGRESS      | Outlining papers                         | Candidacy     |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | EDA-schema             |               |                                          |               |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | Schema v1: eda-datagen | LESS PROGRESS | Helping where I can                      |               |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | Schema v2: image-gen   | NO PROGRESS   |                                          |               |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | Schema v3: 3D-datagen  | NO PROGRESS   | Compile SKL Papers                       |               |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:  | eda-learn              | PROGRESS      | OpenROAD GPL code and plotting variables |               |              |
+[94mINFO[0m:__main__:_display_tables:  +------------------------+---------------+------------------------------------------+---------------+--------------+
+[94mINFO[0m:__main__:_display_tables:
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 4:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 4 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Section Header",
+    "title": "UMBC Collab",
+    "shapes": {
+        "PLACEHOLDER (14)": 2
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 2,
+    "total_tables": 0,
+    "total_images": 0,
+    "total_textboxes": 2,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "yes"
+}
+[94mINFO[0m:__main__:show_slide_metadata:Purpose-built slide detected. Showing tables:
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Executing: show_table
+[93mWARNING[0m:__main__:show_table:No tables found in the provided slide
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 5:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 5 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Untitled",
+    "shapes": {
+        "PICTURE (13)": 2,
+        "AUTO_SHAPE (1)": 2,
+        "LINE (9)": 2,
+        "PLACEHOLDER (14)": 1
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 7,
+    "total_tables": 0,
+    "total_images": 2,
+    "total_textboxes": 3,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 6:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 6 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Untitled",
+    "shapes": {
+        "PICTURE (13)": 2,
+        "AUTO_SHAPE (1)": 1,
+        "LINE (9)": 1,
+        "PLACEHOLDER (14)": 1
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 5,
+    "total_tables": 0,
+    "total_images": 2,
+    "total_textboxes": 2,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 7:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 7 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Untitled",
+    "shapes": {
+        "PICTURE (13)": 2,
+        "AUTO_SHAPE (1)": 1,
+        "LINE (9)": 1,
+        "PLACEHOLDER (14)": 1
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 5,
+    "total_tables": 0,
+    "total_images": 2,
+    "total_textboxes": 2,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 8:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 8 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Untitled",
+    "shapes": {
+        "PLACEHOLDER (14)": 1,
+        "PICTURE (13)": 1,
+        "AUTO_SHAPE (1)": 8
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 10,
+    "total_tables": 0,
+    "total_images": 1,
+    "total_textboxes": 9,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 9:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 9 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Untitled",
+    "shapes": {
+        "PLACEHOLDER (14)": 1,
+        "PICTURE (13)": 2,
+        "AUTO_SHAPE (1)": 4,
+        "LINE (9)": 1
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 8,
+    "total_tables": 0,
+    "total_images": 2,
+    "total_textboxes": 5,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 10:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 10 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Untitled",
+    "shapes": {
+        "PLACEHOLDER (14)": 1,
+        "PICTURE (13)": 2,
+        "AUTO_SHAPE (1)": 2,
+        "LINE (9)": 2
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 7,
+    "total_tables": 0,
+    "total_images": 2,
+    "total_textboxes": 3,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 11:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 11 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Untitled",
+    "shapes": {
+        "PLACEHOLDER (14)": 1,
+        "PICTURE (13)": 2,
+        "AUTO_SHAPE (1)": 1,
+        "LINE (9)": 1
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 5,
+    "total_tables": 0,
+    "total_images": 2,
+    "total_textboxes": 2,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 12:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 12 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Untitled",
+    "shapes": {
+        "PLACEHOLDER (14)": 1,
+        "PICTURE (13)": 2,
+        "AUTO_SHAPE (1)": 1,
+        "LINE (9)": 1
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 5,
+    "total_tables": 0,
+    "total_images": 2,
+    "total_textboxes": 2,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 13:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 13 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "WA",
+    "shapes": {
+        "PLACEHOLDER (14)": 2,
+        "PICTURE (13)": 1
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 3,
+    "total_tables": 0,
+    "total_images": 1,
+    "total_textboxes": 1,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 14:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 14 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "HPWL",
+    "shapes": {
+        "PLACEHOLDER (14)": 2
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 2,
+    "total_tables": 0,
+    "total_images": 0,
+    "total_textboxes": 1,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 15:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 15 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Grad (Single Cell)",
+    "shapes": {
+        "PLACEHOLDER (14)": 2
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 2,
+    "total_tables": 0,
+    "total_images": 0,
+    "total_textboxes": 1,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 16:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 16 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Grad (Total)",
+    "shapes": {
+        "PLACEHOLDER (14)": 2
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 2,
+    "total_tables": 0,
+    "total_images": 0,
+    "total_textboxes": 1,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 17:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 17 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Lambda (Density Penalty)",
+    "shapes": {
+        "PLACEHOLDER (14)": 2
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 2,
+    "total_tables": 0,
+    "total_images": 0,
+    "total_textboxes": 1,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 18:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 18 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "sumPhi (Density Constraint)",
+    "shapes": {
+        "PLACEHOLDER (14)": 2,
+        "PICTURE (13)": 1
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 3,
+    "total_tables": 0,
+    "total_images": 1,
+    "total_textboxes": 1,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 19:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 19 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Cost (Objective Function)",
+    "shapes": {
+        "PLACEHOLDER (14)": 2
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 2,
+    "total_tables": 0,
+    "total_images": 0,
+    "total_textboxes": 1,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 20:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 20 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Cost (Objective Function)",
+    "shapes": {
+        "PLACEHOLDER (14)": 2,
+        "PICTURE (13)": 3,
+        "TEXT_BOX (17)": 3
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 8,
+    "total_tables": 0,
+    "total_images": 3,
+    "total_textboxes": 4,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 21:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 21 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Section Header",
+    "title": "ARL\u000bResearch Update",
+    "shapes": {
+        "PLACEHOLDER (14)": 3
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 3,
+    "total_tables": 0,
+    "total_images": 0,
+    "total_textboxes": 3,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "yes"
+}
+[94mINFO[0m:__main__:show_slide_metadata:Purpose-built slide detected. Showing tables:
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Executing: show_table
+[93mWARNING[0m:__main__:show_table:No tables found in the provided slide
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 22:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 22 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Research Objectives",
+    "shapes": {
+        "PLACEHOLDER (14)": 2
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 2,
+    "total_tables": 0,
+    "total_images": 0,
+    "total_textboxes": 2,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 23:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 23 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "ePlace-3D",
+    "shapes": {
+        "PLACEHOLDER (14)": 1,
+        "PICTURE (13)": 2
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 3,
+    "total_tables": 0,
+    "total_images": 2,
+    "total_textboxes": 1,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 24:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 24 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Logical Synth & Testbench Gen.",
+    "shapes": {
+        "PLACEHOLDER (14)": 1,
+        "PICTURE (13)": 1
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 2,
+    "total_tables": 0,
+    "total_images": 1,
+    "total_textboxes": 1,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 25:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 25 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Logical Synth & Testbench Gen.",
+    "shapes": {
+        "PLACEHOLDER (14)": 1,
+        "PICTURE (13)": 1
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 2,
+    "total_tables": 0,
+    "total_images": 1,
+    "total_textboxes": 1,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 26:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 26 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Untitled",
+    "shapes": {
+        "PLACEHOLDER (14)": 1,
+        "PICTURE (13)": 2
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 3,
+    "total_tables": 0,
+    "total_images": 2,
+    "total_textboxes": 1,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 27:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 27 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Simulation",
+    "shapes": {
+        "PLACEHOLDER (14)": 1,
+        "PICTURE (13)": 2
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 3,
+    "total_tables": 0,
+    "total_images": 2,
+    "total_textboxes": 1,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 28:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 28 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Section Header",
+    "title": "EDA-schema",
+    "shapes": {
+        "PLACEHOLDER (14)": 2
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 2,
+    "total_tables": 0,
+    "total_images": 0,
+    "total_textboxes": 2,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "yes"
+}
+[94mINFO[0m:__main__:show_slide_metadata:Purpose-built slide detected. Showing tables:
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Executing: show_table
+[93mWARNING[0m:__main__:show_table:No tables found in the provided slide
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[94mINFO[0m:__main__:show_presentation_metadata:Slide 29:
+[94mINFO[0m:__main__:show_slide_metadata:Slide 29 Metadata:
+[94mINFO[0m:__main__:show_slide_metadata:{
+    "layout_name": "Title Only",
+    "title": "Schema v1: eda-datagen",
+    "shapes": {
+        "PLACEHOLDER (14)": 4
+    },
+    "tables": {},
+    "images": {},
+    "total_shapes": 4,
+    "total_tables": 0,
+    "total_images": 0,
+    "total_textboxes": 4,
+    "is_summary_slide": "no",
+    "is_section_summary_slide": "no"
+}
+[94mINFO[0m:__main__:show_slide_metadata:---------------------------------------------------------------------------
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Executing: set_presentation_title_slide for slide 1
+[38;5;208mDEBUG_INFO[0m:__main__:debug_info:Executing: save_presentation
+[94mINFO[0m:__main__:save_presentation:Writing presentation to: /Users/amit/work/utils/fu/test_cases/3-27-2025_update.pptx
+[94mINFO[0m:__main__:save_presentation:Successfully saved presentation to: /Users/amit/work/utils/fu/test_cases/3-27-2025_update.pptx
+[94mINFO[0m:__main__:main:PPTX file updated successfully from /Users/amit/work/utils/fu/test_cases/3-27-2025.pptx to /Users/amit/work/utils/fu/test_cases/3-27-2025_update.pptx
