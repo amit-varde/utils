@@ -181,15 +181,6 @@ check_ld_library_path() {   # Display LD_LIBRARY_PATH entries and check for dupl
 setup_graphviz_env() {   # Set up Graphviz environment variables
     [[ ":$PATH:" != *":/usr/local/opt/graphviz/bin:"* ]] && export PATH="/usr/local/opt/graphviz/bin:$PATH"
 }
-
-# -----------------------------------------------------------------------------
-find_vscode_workspace_root() { # Find vscode workspace root directory
-    local dir=$(pwd)
-    while [ "$dir" != "/" ]; do
-        [ -f "$dir/$(basename "$dir").code-workspace" ] && { realpath "$dir"; return; }
-        dir=$(dirname "$dir")
-    done
-}
 # -----------------------------------------------------------------------------
 clean_temp_files() {   # Clean temporary files with feedback
     echo -e "${BLUE}Cleaning temporary files...${RESET}"
@@ -200,8 +191,6 @@ clean_temp_files() {   # Clean temporary files with feedback
 run() {   # Run a Python script with arguments and save output to run.out
     clear
     local script="$1"
-    local ws=$(find_vscode_workspace_root)
-    [ "$ws" ] && output_file="$ws/run.out" || { echo -e "${RED}Error: Workspace directory not set. Exiting.${RESET}"; return 1; }
     local output_file="run.out"
     shift
     [ -z "$script" ] && { echo -e "${RED}Error: No Python script specified.${RESET}"; return 1; }
@@ -218,9 +207,9 @@ run() {   # Run a Python script with arguments and save output to run.out
 run_pytest() {   # Run pytest on specified test files and save output to pytest.out
     clear
     local test_path="$1"
-    local ws=$(find_vscode_workspace_root)
-    [ "$ws" ] && output_file="$ws/run.out" || { echo -e "${RED}Error: Workspace directory not set. Exiting.${RESET}"; return 1; }    
-    shift 
+    local output_file="run.out"
+    shift
+    
     if [ -z "$test_path" ]; then
         echo -e "${BLUE}Running pytest on current directory with arguments: $*${RESET}"
         pytest "$@" -v 2>&1 | tee "$output_file"
@@ -242,9 +231,9 @@ run_pytest() {   # Run pytest on specified test files and save output to pytest.
 run_py() {   # Run Python script and save output to run.out
     clear
     local script_path="$1"
-    local ws=$(find_vscode_workspace_root)
-    [ "$ws" ] && output_file="$ws/run.out" || { echo -e "${RED}Error: Workspace directory not set. Exiting.${RESET}"; return 1; }    
+    local output_file="run.out"
     shift
+    
     if [ -z "$script_path" ]; then
         echo -e "${RED}Error: No Python script specified.${RESET}"
         return 1
@@ -266,8 +255,7 @@ run_py() {   # Run Python script and save output to run.out
 run_cmd() {   # Run any shell command and save output to cmd.out
     clear
     local cmd="$1"
-    local ws=$(find_vscode_workspace_root)
-    [ "$ws" ] && output_file="$ws/run.out" ||  output_file="./run.out"
+    local output_file="run.out"
     shift
     [ -z "$cmd" ] && { echo -e "${RED}Error: No command specified.${RESET}"; return 1; }
     echo -e "${BLUE}Running command: $cmd $*${RESET}"
