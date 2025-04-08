@@ -340,4 +340,90 @@ bu_functions() {   # Show functions available in loaded bash utilities
     done
 }
 # -----------------------------------------------------------------------------
+bu_reload() {   # Reload a specified bash utility (unload and load again) or all if none specified
+    local util_name="$1"
+    
+    # If no utility name was provided, reload all loaded utilities
+    if [ -z "$util_name" ]; then
+        # Check if any utilities are loaded
+        if [ -z "$BASH_UTILS_LOADED" ]; then
+            warn "No utilities currently loaded."
+            return 0
+        fi
+        
+        info "Reloading all loaded utilities..."
+        local all_success=true
+        local reloaded_count=0
+        local failed_count=0
+        
+        # Create a temporary copy of the loaded utilities list
+        local utils_to_reload=$(echo "$BASH_UTILS_LOADED" | tr ":" " ")
+        
+        for util in $utils_to_reload; do
+            [ -z "$util" ] && continue  # Skip empty entries
+            
+            info "Reloading utility '$util'..."
+            
+            # Unload the utility
+            bu_unload "$util"
+            local unload_status=$?
+            
+            if [ $unload_status -ne 0 ]; then
+                err "Failed to unload utility '$util'. Continuing with next utility."
+                all_success=false
+                failed_count=$((failed_count + 1))
+                continue
+            fi
+            
+            # Load the utility again
+            bu_load "$util"
+            local load_status=$?
+            
+            if [ $load_status -eq 0 ]; then
+                info "Utility '$util' successfully reloaded."
+                reloaded_count=$((reloaded_count + 1))
+            else
+                err "Failed to reload utility '$util'."
+                all_success=false
+                failed_count=$((failed_count + 1))
+            fi
+        done
+        
+        # Summarize reload operation
+        info "Reload complete: $reloaded_count utilities reloaded successfully, $failed_count failed."
+        [ "$all_success" = true ] && return 0 || return 1
+    fi
+    
+    # Otherwise reload a specific utility (existing functionality)
+    # Check if the utility is currently loaded
+    if [[ "$BASH_UTILS_LOADED" != *"$util_name"* ]]; then
+        warn "Utility '$util_name' is not currently loaded. Will attempt to load it."
+        bu_load "$util_name"
+        return $?
+    fi
+    
+    info "Reloading utility '$util_name'..."
+    
+    # Unload the utility first
+    bu_unload "$util_name"
+    local unload_status=$?
+    
+    if [ $unload_status -ne 0 ]; then
+        err "Failed to unload utility '$util_name'. Reload aborted."
+        return 1
+    fi
+    
+    # Then load it again
+    bu_load "$util_name"
+    local load_status=$?
+    
+    if [ $load_status -eq 0 ]; then
+        info "Utility '$util_name' successfully reloaded."
+        return 0
+    else
+        err "Failed to reload utility '$util_name'."
+        return 1
+    fi
+}
+# -----------------------------------------------------------------------------
  BASH_UTILS_LOADED="$BASH_UTILS_LOADED:$(bu_util_name "$(realpath "$0")")"
