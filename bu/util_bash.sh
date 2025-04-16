@@ -61,7 +61,7 @@ if [ -z "$BASH_UTILS_SRC" ]; then
 fi
 
 # Export environment variable to track loaded utilities
-export BASH_UTILS_LOADED=${BASH_UTILS_LOADED:-""}
+export BASH_UTILS_LOADED=""
 
 # Color definitions for consistent output formatting
 export RED="\033[1;31m"
