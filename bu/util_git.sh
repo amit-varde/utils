@@ -35,14 +35,6 @@ git_is_repo() { # Checks if the current directory is within a git repository
     fi
 }
 
-# -----------------------------------------------------------------------------
-git_audit_trail() { # Checks if the current directory is a git repository contained in a GitHub remote
-    # Assuming we're in a GitHub repository
-    local repo_url=$(git config --get remote.origin.url)
-    info "GitHub repository: $repo_url"
-    return 0
-}
-
 #==============================================================================
 # INFORMATION/STATUS FUNCTIONS
 #==============================================================================
@@ -188,17 +180,6 @@ git_checkout_head() {   # Replace local file with HEAD version from git
 }
 
 # -----------------------------------------------------------------------------
-git_restore() { # Restores the specified file(s) or directory to the version at HEAD
-    [ "$#" -eq 0 ] && { info "Usage: git_restore <file_or_directory> [additional targets...]"; return 1; }
-    
-    # Assuming we're in a git repository
-    for target in "$@"; do 
-        info "Restoring '$target' to HEAD..."; 
-        git help restore >/dev/null 2>&1 && git restore "$target" || git checkout HEAD -- "$target"; 
-    done
-}
-
-# -----------------------------------------------------------------------------
 git_discard_changes() { # Discards local modifications to a specified file
     # Assuming we're in a remote git repository
     # Validate input parameter
@@ -211,37 +192,30 @@ git_discard_changes() { # Discards local modifications to a specified file
 }
 
 # -----------------------------------------------------------------------------
-git_checkin() { # Commit multiple files to GitHub repo with message from commit_message.txt
+git_checkin() { # Commit multiple files to GitHub repo using a commit message provided via --m option and push flag -p
     local push_flag=""
+    local commit_msg=""
     local files=()
     
     # Process arguments
     while [ "$#" -gt 0 ]; do
         case "$1" in
-            -p|--push) push_flag="push" ;;
-            *) files+=("$1") ;;
+            -p|--push)
+                push_flag="push"
+                ;;
+            -m|--m)
+                shift
+                commit_msg="$1"
+                ;;
+            *)
+                files+=("$1")
+                ;;
         esac
         shift
     done
     
-    # Check if any files were specified
-    if [ ${#files[@]} -eq 0 ]; then
-        err "No files specified. Usage: git_checkin [-p|--push] file1 [file2 ...]"
-        return 1
-    fi
-    
-    # Check if commit message file exists
-    if [ ! -f "commit_message.txt" ]; then
-        err "Commit message file 'commit_message.txt' not found."
-        return 1
-    fi
-    
-    # Read commit message from file
-    local commit_msg=$(cat commit_message.txt)
-    if [ -z "$commit_msg" ]; then
-        err "Commit message file 'commit_message.txt' is empty."
-        return 1
-    fi
+    [ -z "$commit_msg" ] && { err "No commit message provided. Usage: git_checkin --m \"message\" [-p|--push] <file1> [file2 ...]"; return 1; }
+    [ ${#files[@]} -eq 0 ] && { err "No files specified. Usage: git_checkin --m \"message\" [-p|--push] <file1> [file2 ...]"; return 1; }
     
     # Add each file to staging area
     for file in "${files[@]}"; do
@@ -253,8 +227,8 @@ git_checkin() { # Commit multiple files to GitHub repo with message from commit_
         git add "$file"
     done
     
-    # Commit the files
-    info "Committing files with message from commit_message.txt:"
+    # Commit the files using the provided commit message
+    info "Committing files with message:"
     info "$commit_msg"
     git commit -m "$commit_msg"
     local commit_status=$?
@@ -268,11 +242,11 @@ git_checkin() { # Commit multiple files to GitHub repo with message from commit_
     if [ "$push_flag" = "push" ]; then
         local current_branch
         current_branch=$(git rev-parse --abbrev-ref HEAD)
-        local repo_url=$(git config --get remote.origin.url)
+        local repo_url
+        repo_url=$(git config --get remote.origin.url)
         info "Pushing changes to remote: $repo_url"
         git push origin "$current_branch"
         local push_status=$?
-        
         if [ $push_status -ne 0 ]; then
             err "Failed to push to remote repository."
             return 1
