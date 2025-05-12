@@ -20,6 +20,7 @@
 # Functions have _ : e.g., my_function
 # Aliases have - : e.g., my-alias
 # -----------------------------------------------------------------------------
+PROMPT="%n@%m:%~> "
 # Color definitions
 export RED="\033[1;31m"
 export BLUE="\033[1;34m"
@@ -33,16 +34,13 @@ export DL="$HOME/Downloads"
 export iDL="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Downloads"
 export iDOCS="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Documents"
 export WORK="$HOME/work"
-export UTILS="$WORK/utils"
-export JNBS="$WORK/jupyter-notebooks"
-export BASH_UTILS_SRC="$UTILS/bu"  # Source directory for bash utilities
+export BASH_UTILS_SRC="$WORK/utils/bu"  # Source directory for bash utilities
 
 # -----------------------------------------------------------------------------
 # Organized Alias Definitions (one-line description)
 alias w='cd $WORK'               # Navigate to work directory
 alias docs='cd $DOCS'            # Navigate to documents directory
 alias dl='cd $DL'                # Navigate to downloads directory
-alias utils='cd $UTILS'          # Navigate to utilities directory
 alias idl='cd $iDL'              # Navigate to iCloud downloads directory
 alias idoc='cd $iDOCS'           # Navigate to iCloud documents directory
 alias up='cd ..'                 # Navigate up one directory
@@ -60,8 +58,7 @@ alias h='head -20'               # Show first 20 lines of a file
 alias t='tail -20'               # Show last 20 lines of a file
 alias g='grep -i'                # Case-insensitive text search with grep
 alias clean-temp-files='rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej'  # Remove backup and temporary files
-alias clean-pycache='find . -type d -name "__pycache__" -exec rm -rf {} +'       # Clean Python cache directories
-alias clean-pip-cache='pip cache purge'  # Clear pip cache
+
 alias fname='realpath'
 alias dname='dirname $(realpath)'
 alias mde='/usr/bin/open -a "Markdown Editor"'
@@ -69,129 +66,16 @@ alias open &>/dev/null && unalias open
 [[ "$TERM_PROGRAM" == "vscode" ]] && alias open="code"
 # -----------------------------------------------------------------------------
 # Source bash utility functions if available
-if [ -f "$BASH_UTILS_SRC/util_bash.sh" ]; then
-    source "$BASH_UTILS_SRC/util_bash.sh"
-    echo -e "${BLUE}Bash function management util loaded ${RESET}"
-else
-    echo -e "${RED}Bash function management util is not available${RESET}"
-fi
-# -----------------------------------------------------------------------------
-# Organized Function Definitions (one-line description)
-check_path() {   # Display PATH entries and check for duplicates    
-    if [ -z "$1" ]; then
-        # No input - display all PATH entries
-        echo -e "${BLUE}All PATH entries:${RESET}"
-        echo "$PATH" | tr ":" "\n" | nl -w2 -s" : "
+# Load BashUtils if available
+[[ -f "$BASH_UTILS_SRC/util_bash.sh" ]] && { 
+    source "$BASH_UTILS_SRC/util_bash.sh"; 
+} || echo -e "${RED}BashUtils not available (BASH_UTILS_SRC=$BASH_UTILS_SRC)${RESET}"
 
-        # Find and display duplicates
-        echo -e "${BLUE}Checking for duplicates:${RESET}"
-        duplicates=$(echo "$PATH" | tr ":" "\n" | sort | uniq -d)
-
-        if [ -z "$duplicates" ]; then
-            echo -e -n "${GREEN}No duplicates found in PATH${RESET}"
-        else
-            echo -e "${RED}Found duplicates:${RESET}"
-            # Process each duplicate path
-            echo "$duplicates" | while read -r dup; do
-                positions=""
-                index=1
-                
-                # Find all positions of this duplicate in PATH
-                while IFS= read -r entry; do
-                    if [ "$entry" = "$dup" ]; then
-                        if [ -z "$positions" ]; then
-                            positions="$index"
-                        else
-                            positions="$positions, $index"
-                        fi
-                    fi
-                    ((index++))
-                done < <(echo "$PATH" | tr ":" "\n")
-                
-                # Print with correct format
-                echo "  $dup: [$positions]"
-            done
-        fi
-    else
-        # Search input provided - only show matches
-        echo -e "\n${BLUE}Searching for \"$1\" in PATH:${RESET}"
-        while read -r line; do
-            if echo "$line" | grep -q "$1"; then
-                # Path contains search term - display in red
-                echo -e "${RED}$line${RESET}"
-            else
-                # Path doesn't contain search term - display in green
-                echo -e "${GREEN}$line${RESET}"
-            fi
-        done < <(echo "$PATH" | tr ":" "\n" | nl -w2 -s" : ")
-    fi
-}
-# -----------------------------------------------------------------------------
-check_ld_library_path() {   # Display LD_LIBRARY_PATH entries and check for duplicates
-    if [ -z "$1" ]; then
-        # No input - display all LD_LIBRARY_PATH entries
-        echo -e "${BLUE}All LD_LIBRARY_PATH entries:${RESET}"
-        echo "$LD_LIBRARY_PATH" | tr ":" "\n" | nl -w2 -s" : "
-
-        # Find and display duplicates
-        echo -e "${BLUE}Checking for duplicates:${RESET}"
-        duplicates=$(echo "$LD_LIBRARY_PATH" | tr ":" "\n" | sort | uniq -d)
-
-        if [ -z "$duplicates" ]; then
-            echo -e -n "${GREEN}No duplicates found in LD_LIBRARY_PATH${RESET}"
-        else
-            echo -e "${RED}Found duplicates:${RESET}"
-            # Process each duplicate path
-            echo "$duplicates" | while read -r dup; do
-                positions=""
-                index=1
-                
-                # Find all positions of this duplicate in LD_LIBRARY_PATH
-                while IFS= read -r entry; do
-                    if [ "$entry" = "$dup" ]; then
-                        if [ -z "$positions" ]; then
-                            positions="$index"
-                        else
-                            positions="$positions, $index"
-                        fi
-                    fi
-                    ((index++))
-                done < <(echo "$LD_LIBRARY_PATH" | tr ":" "\n")
-                
-                # Print with correct format
-                echo "  $dup: [$positions]"
-            done
-        fi
-    else
-        # Search input provided - only show matches
-        echo -e "\n${BLUE}Searching for \"$1\" in LD_LIBRARY_PATH:${RESET}"
-        while read -r line; do
-            if echo "$line" | grep -q "$1"; then
-                # Path contains search term - display in red
-                echo -e "${RED}$line${RESET}"
-            else
-                # Path doesn't contain search term - display in green
-                echo -e "${GREEN}$line${RESET}"
-            fi
-        done < <(echo "$LD_LIBRARY_PATH" | tr ":" "\n" | nl -w2 -s" : ")
-    fi
-}
 # -----------------------------------------------------------------------------
 setup_graphviz_env() {   # Set up Graphviz environment variables
     [[ ":$PATH:" != *":/usr/local/opt/graphviz/bin:"* ]] && export PATH="/usr/local/opt/graphviz/bin:$PATH"
 }
-# -----------------------------------------------------------------------------
-clean_temp_files() {   # Clean temporary files with feedback
-    echo -e "${BLUE}Cleaning temporary files...${RESET}"
-    rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej
-    echo -e "${GREEN}Temporary files cleaned.${RESET}"
-}
-# -----------------------------------------------------------------------------
-change_prompt() {   # Change the shell prompt to show project name
-    #local current_dir=$(basename "$PWD")
-    prompt_prefix=${PROJECT_NAME:-"NONE"}
-    export PROMPT="($prompt_prefix) %~> "
-}
+
 # -----------------------------------------------------------------------------
 ## PYENV
 # Install PYENV and .env both
@@ -200,71 +84,7 @@ export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init - zsh)"
 # -----------------------------------------------------------------------------
-mypy() {   # Display Python environment information
-    echo -e "${BLUE}Python should be managed by pyenv${RESET}"
-    pyenv_version=$(pyenv --version 2>&1)
-    echo -e "${BLUE}Pyenv version: $pyenv_version${RESET}"
-    python_path=$(which python)
-    python_version=$(python --version 2>&1)
-    echo -e "${BLUE}Python executable: $python_path${RESET}"
-    echo -e "${BLUE}Python version: $python_version${RESET}"
-    pip_path=$(which pip)
-    pip_version=$(pip --version 2>&1)
-    echo -e "${BLUE}Pip executable: $pip_path${RESET}"
-    echo -e "${BLUE}Pip version: $pip_version${RESET}"
-    if [ -z "$VIRTUAL_ENV" ]; then
-        echo -e "${BLUE}No virtual environment is currently activated.${RESET}"
-    else
-        echo -e "${BLUE}Current virtual environment: $VIRTUAL_ENV${RESET}"
-    fi
-}
-
-# -----------------------------------------------------------------------------
-go_project() {   # Navigate to a project directory and set up its environment
-    [ -z "$1" ] && { echo -e "${RED}Error: No project name provided.${RESET}"; return 1; }
-    local project_name="$1"
-    [ ! -d "$WORK/$project_name" ] && { echo -e "${RED}Error: Project '$project_name' does not exist under $WORK.${RESET}"; return 1; }
-    if [ -n "$PROJECT_NAME" ]; then
-        echo -e "${BLUE}Deactivating current project: $PROJECT_NAME${RESET}"
-        deactivate 2>/dev/null || echo -e "${BLUE}No virtual environment to deactivate.${RESET}"
-        unset PROJECT_NAME
-    fi
-    cd "$WORK/$project_name" || return 1
-    [ -f venv/bin/activate ] && source venv/bin/activate
-    [ -f "${project_name}.env" ] && source "${project_name}.env"
-     # Load bash utility required for code-development
-    [ -d .git ] && bu_load git
-    [ -f "$project_name".code-workspace ] && bu_load run
-    mypy
-    if [[ "$TERM_PROGRAM" != "vscode" ]]; then
-        [ -f "$project_name".code-workspace ] && code "$project_name".code-workspace
-    fi
-    export PROJECT_NAME="$project_name"
-    change_prompt
-}
-# -----------------------------------------------------------------------------
-gen_project_aliases() {   # Generate aliases for all projects in the WORK directory
-    echo -e "${BLUE}Generating project aliases ${RESET}"
-    for dir in "$WORK"/*/; do
-        [ -d "$dir" ] || continue
-        project_name=$(basename "$dir")
-        alias "go-$project_name"="go_project $project_name"
-     #   echo "  go-$project_name: $WORK/$project_name"
-    done
-}
-list_project_aliases() {   # List all available project aliases
-    echo -e "${BLUE}Available project aliases:${RESET}"
-    alias | grep "go-" | sed 's/^alias //; s/=.*$//' | sort | while read -r alias_name; do
-        project_name=${alias_name#go-}
-        echo "   ${BLUE} $alias_name ${RESET} → $WORK/$project_name"
-    done
-}
-# -----------------------------------------------------------------------------
-# Adding functions to autogenerate aliases
-gen_project_aliases
-# -----------------------------------------------------------------------------
 # Final setup
-[ -d "$WORK" ] && cd "$WORK" || cd "$HOME"
-PROMPT="%n@%m:%~> "
+bu_load projectaliases
 echo -e "${GREEN}Loaded amit's alias file${RESET}"
 # -----------------------------------------------------------------------------

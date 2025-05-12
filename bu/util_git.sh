@@ -1,17 +1,18 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------
 # File: bu/util_git.sh
-# Author: Amit Varde
-# Email: tercel04@gmail.com; tercel04@gmail.com
+# Author: Bazinga Labs LLC
+# Email:  support@bazinga-labs.com
+# ==============================================================================
+# DO NOT MODIFY THIS FILE WITHOUT PRIOR AUTHORIZATION
+#
+# This file is managed by Bazinga Labs LLC and changes may be overwritten.
+# Unauthorized edits may result in system malfunction or integration failure.
+# Contact support@bazinga-labs.com for changes or exceptions.
+# ==============================================================================
+# Description: Utilities for checking linux environment variables (PATH, LD_LIBRARY_PATH)
 # -----------------------------------------------------------------------------
-# Description: A collection of utility functions for working with Git repositories.
-# -----------------------------------------------------------------------------
-# Check if util_bash is loaded
 [[ -z "${BASH_UTILS_LOADED}" ]] && { echo "ERROR: util_bash.sh is not loaded. Please source it before using this script."; exit 1; }
-
-#==============================================================================
-# CORE/UTILITY FUNCTIONS
-#==============================================================================
 
 # -----------------------------------------------------------------------------
 git_is_repo() { # Checks if the current directory is within a git repository

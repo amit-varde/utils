@@ -1,15 +1,32 @@
 #!/bin/bash
 # -----------------------------------------------------------------------------
 # File: bu/util_pkgs.sh
-# Author: Amit
-# Email: tercel04@gmail.com; amit@bazinga-labs.com
+# Author: Bazinga Labs LLC
+# Email:  support@bazinga-labs.com
 # -----------------------------------------------------------------------------
 # Description: Utilities for managing python, hombrew, and pip env 
 # -----------------------------------------------------------------------------
 
 # Check if util_bash is loaded
 [[ -z "${BASH_UTILS_LOADED}" ]] && { echo "ERROR: util_bash.sh is not loaded. Please source it before using this script."; exit 1; }
-
+# -----------------------------------------------------------------------------
+mypy() {   # Display Python environment information
+    pyenv_version=$(pyenv --version 2>&1)
+    echo -e "${BLUE}Pyenv version: $pyenv_version${RESET}"
+    python_path=$(which python)
+    python_version=$(python --version 2>&1)
+    echo -e "${BLUE}Python executable: $python_path${RESET}"
+    echo -e "${BLUE}Python version: $python_version${RESET}"
+    pip_path=$(which pip)
+    pip_version=$(pip --version 2>&1)
+    echo -e "${BLUE}Pip executable: $pip_path${RESET}"
+    echo -e "${BLUE}Pip version: $pip_version${RESET}"
+    if [ -z "$VIRTUAL_ENV" ]; then
+        echo -e "${BLUE}No virtual environment is currently activated.${RESET}"
+    else
+        echo -e "${BLUE}Current virtual environment: $VIRTUAL_ENV${RESET}"
+    fi
+}
 # -----------------------------------------------------------------------------
 venv_init() { # Initialize and activate a Python virtual environment
     if [ -d "venv" ]; then
@@ -117,7 +134,8 @@ brew_clean_cache() { # Clear Homebrew cache
     brew cleanup -s
     info "Homebrew cache cleared."
 }
-
+alias clean-pycache='find . -type d -name "__pycache__" -exec rm -rf {} +'       # Clean Python cache directories
+alias clean-pip-cache='pip cache purge'  # Clear pip cache
 
 # -----------------------------------------------------------------------------
 # If loading is successful this will be executed

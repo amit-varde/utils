@@ -1,59 +1,19 @@
+#!/bin/bash
 # -----------------------------------------------------------------------------
 # File: bu/util_bash.sh
-# Author: Amit
+# Author: Bazinga Labs LLC
+# Email:  support@bazinga-labs.com
+# ==============================================================================
+# DO NOT MODIFY THIS FILE WITHOUT PRIOR AUTHORIZATION
+#
+# This file is managed by Bazinga Labs LLC and changes may be overwritten.
+# Unauthorized edits may result in system malfunction or integration failure.
+# Contact support@bazinga-labs.com for changes or exceptions.
+# ==============================================================================
+# Description: Utilities for checking linux environment variables (PATH, LD_LIBRARY_PATH)
 # -----------------------------------------------------------------------------
-# Description: This file contains utility functions for loading and managing bash utilities.
+# WARNING: This is the main utility file and should be loaded first.
 # -----------------------------------------------------------------------------
-# -----------------------------------------------------------------------------
-# BASH UTILITY CREATION GUIDE
-# -----------------------------------------------------------------------------
-# This section documents how to create a bash utility file that works with this framework.
-# -----------------------------------------------------------------------------
-
-# Structure of a BASH utility file:
-# 1. Each utility file should be named util_<name>.sh
-# 2. First line must check if util_bash.sh is loaded
-# 3. Each function should follow the format: function_name() { # Description
-# 4. Use err, warn, and info functions for consistent output
-# 5. Last line must call list_bash_functions_in_file to register functions
-
-# Example template for a new utility file:
-# -----------------------------------------------------------------------------
-# #!/bin/bash
-# [[ -z "${BASH_UTILS_LOADED}" ]] && { echo "ERROR: util_bash.sh is not loaded. Please source it before using this script."; exit 1; }
-# -----------------------------------------------------------------------------
-# my_function() { # Description of what this function does
-#   # Function implementation
-#   if [ -z "$1" ]; then
-#     info "Usage: my_function <parameter>"
-#     return 1
-#   fi
-#   
-#   # Logic with proper error handling
-#   if ! command_that_might_fail; then
-#     err "Something went wrong"
-#     return 1
-#   fi
-#   
-#   info "Operation completed successfully"
-#   return 0
-# }
-# -----------------------------------------------------------------------------
-# # Create aliases if needed
-# alias my_alias='my_function'
-# -----------------------------------------------------------------------------
-# list_bash_functions_in_file >/dev/null 2>&1 && list_bash_functions_in_file "$(realpath "$0")" || err "alias is not loaded"
-# -----------------------------------------------------------------------------
-
-# Best practices:
-# 1. Include header with file name, author, and description
-# 2. Add horizontal lines (-------------) between functions for readability
-# 3. Document function parameters in the function body
-# 4. Use return codes: 0 for success, non-zero for errors
-# 5. Create backward-compatible aliases when renaming functions
-# 6. Test for requirements before performing operations
-# 7. Keep functions focused on a single responsibility
-
 
 if [ -z "$BASH_UTILS_SRC" ]; then
     echo "Error: BASH_UTILS_SRC is not defined. This variable must point to the directory containing utility scripts."
@@ -74,17 +34,16 @@ export RESET="\033[0m"
 # Helper functions for formatted output
 # -----------------------------------------------------------------------------
 err() {
-    echo -e "${RED}Error: $*${RESET}" >&2
+    echo -e "${RED}[$(date '+%Y-%m-%d %H:%M:%S')] Error: $*${RESET}" >&2
 }
 
 warn() {
-    echo -e "${ORANGE}Warning: $*${RESET}" >&2
+    echo -e "${ORANGE}[$(date '+%Y-%m-%d %H:%M:%S')] Warning: $*${RESET}" >&2
 }
 
 info() {
-    echo -e "${BLUE}Info: $*${RESET}"
+    echo -e "${BLUE}[$(date '+%Y-%m-%d %H:%M:%S')] Info: $*${RESET}"
 }
-
 # -----------------------------------------------------------------------------
 bu_util_name() { # Extracts utility name from full path
     local full_path="$1"
@@ -93,18 +52,15 @@ bu_util_name() { # Extracts utility name from full path
     base="${base%.sh}"
     echo "$base"
 }
-
 # -----------------------------------------------------------------------------
 bu_util_path() { # Constructs the full path for a given utility name
     local name="$1"
     echo "$BASH_UTILS_SRC/util_${name}.sh"
 }
-
 # -----------------------------------------------------------------------------
 list_bash_functions_in_file() {   # List all function definitions in a file with descriptions
     local script_path="$1"
     info "Functions defined in [$(basename "$script_path")]: "
-    
     # Use grep to find function definitions that include an inline comment for description
     fs=$(grep -E '^[a-zA-Z0-9_]+\(\)\ *\{\ *#' "$script_path")
     
@@ -426,4 +382,5 @@ bu_reload() {   # Reload a specified bash utility (unload and load again) or all
     fi
 }
 # -----------------------------------------------------------------------------
- BASH_UTILS_LOADED="$BASH_UTILS_LOADED:$(bu_util_name "$(realpath "$0")")"
+info "BashUtils loaded from $(realpath "$BASH_UTILS_SRC")"; 
+BASH_UTILS_LOADED="$BASH_UTILS_LOADED:$(bu_util_name "$(realpath "$0")")"
