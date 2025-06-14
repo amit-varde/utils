@@ -76,6 +76,27 @@ setup_graphviz_env() {   # Set up Graphviz environment variables
     [[ ":$PATH:" != *":/usr/local/opt/graphviz/bin:"* ]] && export PATH="/usr/local/opt/graphviz/bin:$PATH"
 }
 
+setup_my_git() {
+  # Git identity
+  git config --global user.name  "Amit Varde"
+  git config --global user.email "amit@bazinga-labs.com"
+  git config --global github.user  "amit-varde"
+  git config --global core.excludesfile ~/.gitignore
+  # Editor and UI
+  git config --global core.editor     vim
+  git config --global color.ui        auto
+  git config --global push.default    simple
+
+  # Cache credentials for 1 hour
+  git config --global credential.helper "cache --timeout=3600"
+
+  # Generate SSH key if missing
+  if [ ! -f ~/.ssh/id_ed25519 ]; then
+    HOSTNAME=$(hostname -f 2>/dev/null || hostname)
+    ssh-keygen -t ed25519 -C "amit@bazinga-labs.com-${HOSTNAME}" -f ~/.ssh/id_ed25519 -N ""
+  fi
+}
+
 # -----------------------------------------------------------------------------
 ## PYENV
 # Install PYENV and .env both
