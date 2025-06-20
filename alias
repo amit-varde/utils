@@ -55,36 +55,7 @@ setup_graphviz_env() {   # Set up Graphviz environment variables
     [[ ":$PATH:" != *":/usr/local/opt/graphviz/bin:"* ]] && export PATH="/usr/local/opt/graphviz/bin:$PATH"
 }
 
- install_gitignore() {
-    local force=0
-    if [ "$1" = "-f" ]; then
-        force=1
-        shift
-    fi
-    local dest="${1:-$HOME/.gitignore}"
-    local GITIGNORE_URL="https://raw.githubusercontent.com/bazinga-labs/bu/main/.gitignore"
-    
-    if [ $force -eq 1 ] || [ ! -f "$dest" ]; then
-      if command -v wget >/dev/null 2>&1; then
-        wget -q "$GITIGNORE_URL" -O "$dest" && echo "Downloaded gitignore file with wget" || {
-          echo "Failed to download with wget, trying curl..."
-          if command -v curl >/dev/null 2>&1; then
-            curl -s "$GITIGNORE_URL" -o "$dest" && echo "Downloaded gitignore file with curl" || 
-            echo "Failed to download gitignore file with curl"
-          else
-            echo "curl not available. Skipping gitignore setup."
-          fi
-        }
-      elif command -v curl >/dev/null 2>&1; then
-        curl -s "$GITIGNORE_URL" -o "$dest" && echo "Downloaded gitignore file with curl" || 
-        echo "Failed to download gitignore file with curl"
-      else
-        echo "Neither wget nor curl available. Skipping gitignore setup."
-      fi
-    else
-      echo "$dest already exists. Skipping download. Use -f to force overwrite."
-    fi
-  }
+ 
 
 
 setup_my_git() { # Git identity
@@ -94,8 +65,8 @@ setup_my_git() { # Git identity
 
   # Download gitignore file from GitHub
   echo "Setting up global gitignore..."
-  install_gitignore
   git config --global core.excludesfile ~/.gitignore
+
   # Editor and UI
   git config --global core.editor     vim
   git config --global color.ui        auto
@@ -125,8 +96,36 @@ setup_my_git() { # Git identity
     HOSTNAME=$(hostname -f 2>/dev/null || hostname)
     ssh-keygen -t ed25519 -C "amit@bazinga-labs.com-${HOSTNAME}" -f ~/.ssh/id_ed25519 -N ""
   fi
-
 }
+install_utils() {
+    local workdir="$HOME/work"
+    local utildir="$workdir/utils"
+    # Clone the utils repo if not already present
+    if [ -d "$utildir" ]; then
+        echo "[utils] Directory $utildir already exists. Skipping clone."
+    else
+        git clone https://github.com/amit-varde/utils "$utildir"
+    fi
+    echo
+    echo "# To source your utils aliases, add this line to your ~/.zshrc or ~/.bashrc:"
+    echo "[ -f \"$utildir/alias\" ] && source \"$utildir/alias\""
+    # Merge global.gitignore into ~/.gitignore
+    local global_gitignore="$utildir/global.gitignore"
+    local user_gitignore="$HOME/.gitignore"
+    if [ -f "$global_gitignore" ]; then
+        if [ -f "$user_gitignore" ]; then
+            echo "Merging $global_gitignore into $user_gitignore ..."
+            cat "$global_gitignore" >> "$user_gitignore"
+        else
+            echo "Copying $global_gitignore to $user_gitignore ..."
+            cp "$global_gitignore" "$user_gitignore"
+        fi
+    else
+        echo "$global_gitignore not found. Skipping .gitignore merge."
+    fi
+}
+
+
 
 install_bu() {  # Clone Bazinga Labs bu repo into ~/work if not already present
     local workdir="$HOME/work"
@@ -145,6 +144,29 @@ install_bu() {  # Clone Bazinga Labs bu repo into ~/work if not already present
     echo "export BU=\${WORK}/bu && source $BU/bu.sh"
     echo "bu loadall"
     echo "# Let this always be the last line"
+}
+update_global_gitignore() {
+    local utildir="$HOME/work/utils"
+    local global_gitignore="$utildir/global.gitignore"
+    local user_gitignore="$HOME/.gitignore"
+    local hostname=$(hostname -f 2>/dev/null || hostname)
+    if [ ! -f "$user_gitignore" ]; then
+        echo "$user_gitignore not found. Nothing to merge."
+        return 1
+    fi
+    if [ ! -f "$global_gitignore" ]; then
+        echo "$global_gitignore not found. Creating new global.gitignore."
+        cp "$user_gitignore" "$global_gitignore"
+    else
+        echo "Merging $user_gitignore into $global_gitignore ..."
+        cat "$user_gitignore" >> "$global_gitignore"
+        # Remove duplicate lines
+        sort "$global_gitignore" | uniq > "$global_gitignore.tmp" && mv "$global_gitignore.tmp" "$global_gitignore"
+    fi
+    cd "$utildir" || { echo "Cannot cd to $utildir"; return 1; }
+    git add global.gitignore
+    git commit -m "Updated from $hostname"
+    git push
 }
 
 # -----------------------------------------------------------------------------
@@ -175,12 +197,12 @@ alias h='head -20'               # Show first 20 lines of a file
 alias t='tail -20'               # Show last 20 lines of a file
 alias g='grep -i'                # Case-insensitive text search with grep
 alias clean-temp-files='rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej'  # Remove backup and temporary files
+alias so='source ~/.zshrc; echo "ZSH aliases sourced."'  # Source the zsh configuration file
 
 alias fname='realpath'
 alias dname='dirname $(realpath)'
 alias mde='/usr/bin/open -a "Markdown Editor"'
 alias open &>/dev/null && unalias open
-alias reinstall_gitignore='install_gitignore -f'
 
 # Final setup
 setup_pyenv
