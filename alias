@@ -55,11 +55,16 @@ setup_graphviz_env() {   # Set up Graphviz environment variables
     [[ ":$PATH:" != *":/usr/local/opt/graphviz/bin:"* ]] && export PATH="/usr/local/opt/graphviz/bin:$PATH"
 }
 
- download_gitignore() {
+ install_gitignore() {
+    local force=0
+    if [ "$1" = "-f" ]; then
+        force=1
+        shift
+    fi
     local dest="${1:-$HOME/.gitignore}"
     local GITIGNORE_URL="https://raw.githubusercontent.com/bazinga-labs/bu/main/.gitignore"
     
-    if [ ! -f "$dest" ]; then
+    if [ $force -eq 1 ] || [ ! -f "$dest" ]; then
       if command -v wget >/dev/null 2>&1; then
         wget -q "$GITIGNORE_URL" -O "$dest" && echo "Downloaded gitignore file with wget" || {
           echo "Failed to download with wget, trying curl..."
@@ -77,7 +82,7 @@ setup_graphviz_env() {   # Set up Graphviz environment variables
         echo "Neither wget nor curl available. Skipping gitignore setup."
       fi
     else
-      echo "$dest already exists. Skipping download."
+      echo "$dest already exists. Skipping download. Use -f to force overwrite."
     fi
   }
 
@@ -89,7 +94,7 @@ setup_my_git() { # Git identity
 
   # Download gitignore file from GitHub
   echo "Setting up global gitignore..."
-  download_gitignore
+  install_gitignore
   git config --global core.excludesfile ~/.gitignore
   # Editor and UI
   git config --global core.editor     vim
@@ -142,38 +147,6 @@ install_bu() {  # Clone Bazinga Labs bu repo into ~/work if not already present
     echo "# Let this always be the last line"
 }
 
-copy_global_gitignore_to_utils() {
-    # Copies the file set by git config --global core.excludesfile to $WORK/utils/global.gitignore
-    local src
-    src=$(git config --global core.excludesfile)
-    if [ -z "$src" ]; then
-        echo "[copy_global_gitignore_to_utils] No global gitignore set in git config."
-        return 1
-    fi
-    if [ ! -f "$src" ]; then
-        echo "[copy_global_gitignore_to_utils] Source file $src does not exist."
-        return 1
-    fi
-    local dest="$WORK/utils/global.gitignore"
-    cp "$src" "$dest" && echo "Copied $src to $dest" || echo "Failed to copy $src to $dest"
-}
-
-copy_utils_gitignore_to_global() {
-    # Copies $WORK/utils/global.gitignore to the file set by git config --global core.excludesfile
-    local dest
-    dest=$(git config --global core.excludesfile)
-    if [ -z "$dest" ]; then
-        echo "[copy_utils_gitignore_to_global] No global gitignore set in git config."
-        return 1
-    fi
-    local src="$WORK/utils/global.gitignore"
-    if [ ! -f "$src" ]; then
-        echo "[copy_utils_gitignore_to_global] Source file $src does not exist."
-        return 1
-    fi
-    cp "$src" "$dest" && echo "Copied $src to $dest" || echo "Failed to copy $src to $dest"
-}
-
 # -----------------------------------------------------------------------------
 # Aliases
 # -----------------------------------------------------------------------------
@@ -207,6 +180,7 @@ alias fname='realpath'
 alias dname='dirname $(realpath)'
 alias mde='/usr/bin/open -a "Markdown Editor"'
 alias open &>/dev/null && unalias open
+alias reinstall_gitignore='install_gitignore -f'
 
 # Final setup
 setup_pyenv
