@@ -4,9 +4,10 @@ This workspace contains a collection of utility scripts and configuration files 
 
 ---
 
-## HDF5 Utilities: [`dxl_hd5.py`](./dxl_hd5.md)
+## HDF5 Utilities: [`dxl_hd5.py`](./dxl_hd5.md) -- WORK IN PROGRESS
 
-**Powerful command-line tool for inspecting, extracting, and exporting groups and datasets from HDF5 files.**
+### This is for my fellow students at Drexel ICE Lab only and will not mean anything to anyone else
+**Command-line tool for inspecting, extracting, and exporting groups and datasets from HDF5 files.**
 
 - [Full Documentation & Usage →](./dxl_hd5.md)
 - Features: structure exploration, group/dataset export, 2D dataset to CSV, robust CLI, and more.
@@ -68,22 +69,12 @@ git config --global core.excludesfile ~/work/utils/global.gitignore
 ```
 
 ---
+## install_bu Function
 
-### Git Setup Function: `setup_my_git()`
-
-This function configures your global Git environment with preferred settings and identity. It is included in the `alias` file and can be run in your shell:
-
-- Sets your name, email, and GitHub user for all repositories
-- Points your global gitignore to `~/.gitignore`
-- Sets Vim as the default editor and enables colored UI
-- Sets push default to `simple`
-- Caches credentials for 1 hour
-- Automatically generates an SSH key (`~/.ssh/id_ed25519`) if missing, using your email and hostname for the comment
-
-To use, simply run:
-
-```sh
-setup_my_git
-```
-
-This will ensure your Git environment is ready for use with your identity and best practices.
+### Purpose
+Installs the Bazinga Labs utility framework (bu) by cloning the repository into the user's work directory.
+The [Bazinga Labs' Bash Utility framework](https://github.com/bazinga-labs/bu) provides a collection of productivity tools and scripts for development environments.
+### Functionality
+- Creates the `~/work` directory if it doesn't exist
+- Clones the Bazinga Labs 'bu' repository into `~/work/bu` if not already present
+- Provides instructions for configuring shell environment to use the bu utilities
