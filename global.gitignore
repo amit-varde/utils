@@ -15,3 +15,6 @@ out/
 .ionide/
 .vs/
 *.vsix
+data/
+output/
+input/

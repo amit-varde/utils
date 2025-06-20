@@ -1,4 +1,25 @@
-## Alias File (`alias`)
+# Utils Workspace
+
+This workspace contains a collection of utility scripts and configuration files for shell productivity, HDF5 data handling, and environment setup.
+
+---
+
+## HDF5 Utilities: [`dxl_hd5.py`](./dxl_hd5.md)
+
+**Powerful command-line tool for inspecting, extracting, and exporting groups and datasets from HDF5 files.**
+
+- [Full Documentation & Usage →](./dxl_hd5.md)
+- Features: structure exploration, group/dataset export, 2D dataset to CSV, robust CLI, and more.
+- Quick start:
+  ```sh
+  python src/dxl_hd5.py -i data/03.h5 --show STRUCTURE
+  python src/dxl_hd5.py -i data/03.h5 --dump_all_groups
+  ```
+- See [`dxl_hd5.md`](./dxl_hd5.md) for setup, arguments, and detailed examples.
+
+---
+
+## Alias File ([`alias`](./alias))
 
 This file contains a collection of useful shell aliases and functions for everyday tasks. To use these aliases, add the following to the end of your `~/.zshrc`:
 
@@ -26,11 +47,11 @@ fi
 - Functions for setting up Graphviz and Git environments
 - Pyenv initialization
 
-See the `alias` file for full details and descriptions.
+See the [`alias`](./alias) file for full details and descriptions.
 
 ---
 
-## Global Gitignore (`global.gitignore`)
+## Global Gitignore ([`global.gitignore`](./global.gitignore))
 
 This file is intended to be used as your global gitignore. It excludes common files and directories that should not be tracked by git, such as:
 

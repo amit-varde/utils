@@ -20,8 +20,12 @@
 # Functions have _ : e.g., my_function
 # Aliases have - : e.g., my-alias
 # -----------------------------------------------------------------------------
+
+# -----------------------------------------------------------------------------
+# Exports (Variables)
+# -----------------------------------------------------------------------------
+# prompt and colors
 PROMPT="%n@%m:%~> "
-# Color definitions
 export RED="\033[1;31m"
 export BLUE="\033[1;34m"
 export GREEN="\033[1;32m"
@@ -34,8 +38,144 @@ export DL="$HOME/Downloads"
 export iDL="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Downloads"
 export iDOCS="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Documents"
 export WORK="$HOME/work"
-export BASH_UTILS_SRC="$WORK/utils/bu"  # Source directory for bash utilities
 
+# -----------------------------------------------------------------------------
+# Load pyenv if available
+setup_pyenv() {
+  export PYENV_ROOT="$HOME/.pyenv"
+  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+  eval "$(pyenv init - zsh)"
+}
+
+
+# -----------------------------------------------------------------------------
+# Functions
+# -----------------------------------------------------------------------------
+setup_graphviz_env() {   # Set up Graphviz environment variables
+    [[ ":$PATH:" != *":/usr/local/opt/graphviz/bin:"* ]] && export PATH="/usr/local/opt/graphviz/bin:$PATH"
+}
+
+ download_gitignore() {
+    local dest="${1:-$HOME/.gitignore}"
+    local GITIGNORE_URL="https://raw.githubusercontent.com/bazinga-labs/bu/main/.gitignore"
+    
+    if [ ! -f "$dest" ]; then
+      if command -v wget >/dev/null 2>&1; then
+        wget -q "$GITIGNORE_URL" -O "$dest" && echo "Downloaded gitignore file with wget" || {
+          echo "Failed to download with wget, trying curl..."
+          if command -v curl >/dev/null 2>&1; then
+            curl -s "$GITIGNORE_URL" -o "$dest" && echo "Downloaded gitignore file with curl" || 
+            echo "Failed to download gitignore file with curl"
+          else
+            echo "curl not available. Skipping gitignore setup."
+          fi
+        }
+      elif command -v curl >/dev/null 2>&1; then
+        curl -s "$GITIGNORE_URL" -o "$dest" && echo "Downloaded gitignore file with curl" || 
+        echo "Failed to download gitignore file with curl"
+      else
+        echo "Neither wget nor curl available. Skipping gitignore setup."
+      fi
+    else
+      echo "$dest already exists. Skipping download."
+    fi
+  }
+
+
+setup_my_git() { # Git identity
+  git config --global user.name  "Amit Varde"
+  git config --global user.email "amit@bazinga-labs.com"
+  git config --global github.user  "amit-varde"
+
+  # Download gitignore file from GitHub
+  echo "Setting up global gitignore..."
+  download_gitignore
+  git config --global core.excludesfile ~/.gitignore
+  # Editor and UI
+  git config --global core.editor     vim
+  git config --global color.ui        auto
+  git config --global push.default    simple
+
+  # Cache credentials for 1 hour
+  git config --global credential.helper "cache --timeout=3600"
+
+  # Pull behavior - rebase by default
+  git config --global pull.rebase true
+
+  # Auto-prune when fetching
+  git config --global fetch.prune true
+
+  # Better diff visualization
+  git config --global diff.colorMoved zebra
+
+  # Useful aliases
+  git config --global alias.st "status"
+  git config --global alias.co "checkout"
+  git config --global alias.ci "commit"
+  git config --global alias.br "branch"
+  git config --global alias.lg "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
+
+  # Generate SSH key if missing
+  if [ ! -f ~/.ssh/id_ed25519 ]; then
+    HOSTNAME=$(hostname -f 2>/dev/null || hostname)
+    ssh-keygen -t ed25519 -C "amit@bazinga-labs.com-${HOSTNAME}" -f ~/.ssh/id_ed25519 -N ""
+  fi
+
+}
+
+install_bu() {  # Clone Bazinga Labs bu repo into ~/work if not already present
+    local workdir="$HOME/work"
+    local budir="$workdir/bu"
+    if [ ! -d "$workdir" ]; then
+        mkdir -p "$workdir"
+    fi
+    if [ -d "$budir" ]; then
+        echo "[bu] Directory $budir already exists. Skipping clone."
+    else
+        git clone https://github.com/bazinga-labs/bu "$budir"
+    fi
+    echo
+    echo "# Add the following lines to your ~/.zshrc or ~/.bashrc (at the end):"
+    echo "export WORK=\${HOME}/work"
+    echo "export BU=\${WORK}/bu && source $BU/bu.sh"
+    echo "bu loadall"
+    echo "# Let this always be the last line"
+}
+
+copy_global_gitignore_to_utils() {
+    # Copies the file set by git config --global core.excludesfile to $WORK/utils/global.gitignore
+    local src
+    src=$(git config --global core.excludesfile)
+    if [ -z "$src" ]; then
+        echo "[copy_global_gitignore_to_utils] No global gitignore set in git config."
+        return 1
+    fi
+    if [ ! -f "$src" ]; then
+        echo "[copy_global_gitignore_to_utils] Source file $src does not exist."
+        return 1
+    fi
+    local dest="$WORK/utils/global.gitignore"
+    cp "$src" "$dest" && echo "Copied $src to $dest" || echo "Failed to copy $src to $dest"
+}
+
+copy_utils_gitignore_to_global() {
+    # Copies $WORK/utils/global.gitignore to the file set by git config --global core.excludesfile
+    local dest
+    dest=$(git config --global core.excludesfile)
+    if [ -z "$dest" ]; then
+        echo "[copy_utils_gitignore_to_global] No global gitignore set in git config."
+        return 1
+    fi
+    local src="$WORK/utils/global.gitignore"
+    if [ ! -f "$src" ]; then
+        echo "[copy_utils_gitignore_to_global] Source file $src does not exist."
+        return 1
+    fi
+    cp "$src" "$dest" && echo "Copied $src to $dest" || echo "Failed to copy $src to $dest"
+}
+
+# -----------------------------------------------------------------------------
+# Aliases
 # -----------------------------------------------------------------------------
 # Organized Alias Definitions (one-line description)
 alias w='cd $WORK'               # Navigate to work directory
@@ -44,12 +184,16 @@ alias dl='cd $DL'                # Navigate to downloads directory
 alias idl='cd $iDL'              # Navigate to iCloud downloads directory
 alias idoc='cd $iDOCS'           # Navigate to iCloud documents directory
 alias up='cd ..'                 # Navigate up one directory
+
+# File and Directory Operations
 alias lr='ls -lrt'               # List files in long format, sorted by modification time
 alias la='ls -a'                 # List all files including hidden files
 alias l1='ls -1'                 # List files in single column
 alias lock='chmod -R 700'        # Set restrictive permissions (700) on files/directories
 alias unlock='chmod -R 755'      # Set standard permissions (755) on files/directories
 alias mkexe='chmod -R 755'       # Make files executable with permission 755
+
+# System and Environment
 alias x='exit'                   # Exit the terminal
 alias c='clear'                  # Clear the terminal screen
 alias cls='clear'                # Clear the terminal screen
@@ -63,49 +207,8 @@ alias fname='realpath'
 alias dname='dirname $(realpath)'
 alias mde='/usr/bin/open -a "Markdown Editor"'
 alias open &>/dev/null && unalias open
-[[ "$TERM_PROGRAM" == "vscode" ]] && alias open="code"
-# -----------------------------------------------------------------------------
-# Source bash utility functions if available
-# Load BashUtils if available
-[[ -f "$BASH_UTILS_SRC/util_bash.sh" ]] && { 
-    source "$BASH_UTILS_SRC/util_bash.sh"; 
-} || echo -e "${RED}BashUtils not available (BASH_UTILS_SRC=$BASH_UTILS_SRC)${RESET}"
 
-# -----------------------------------------------------------------------------
-setup_graphviz_env() {   # Set up Graphviz environment variables
-    [[ ":$PATH:" != *":/usr/local/opt/graphviz/bin:"* ]] && export PATH="/usr/local/opt/graphviz/bin:$PATH"
-}
-
-setup_my_git() {
-  # Git identity
-  git config --global user.name  "Amit Varde"
-  git config --global user.email "amit@bazinga-labs.com"
-  git config --global github.user  "amit-varde"
-  git config --global core.excludesfile ~/.gitignore
-  # Editor and UI
-  git config --global core.editor     vim
-  git config --global color.ui        auto
-  git config --global push.default    simple
-
-  # Cache credentials for 1 hour
-  git config --global credential.helper "cache --timeout=3600"
-
-  # Generate SSH key if missing
-  if [ ! -f ~/.ssh/id_ed25519 ]; then
-    HOSTNAME=$(hostname -f 2>/dev/null || hostname)
-    ssh-keygen -t ed25519 -C "amit@bazinga-labs.com-${HOSTNAME}" -f ~/.ssh/id_ed25519 -N ""
-  fi
-}
-
-# -----------------------------------------------------------------------------
-## PYENV
-# Install PYENV and .env both
-# brew install pyenv
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init - zsh)"
-# -----------------------------------------------------------------------------
 # Final setup
-bu_load projectaliases
+setup_pyenv
 echo -e "${GREEN}Loaded amit's alias file${RESET}"
 # -----------------------------------------------------------------------------
