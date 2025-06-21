@@ -1,38 +1,89 @@
 # -----------------------------------------------------------------------------
 # File: alias
-# Author: Amit
+# Author: Amit Varde
 # Email: tercel04@gmail.com; amit@bazinga-labs.com
+# Description: Comprehensive shell aliases and utility functions for everyday tasks
 # -----------------------------------------------------------------------------
-# Description:
-# This file contains aliases and functions useful for everyday tasks.
-# -----------------------------------------------------------------------------
-# Usage:
-# Add the following at the bottom of your ~/.zshrc
-# alias so='source ~/.zshrc;echo "ZSH aliases sourced."'
-# ALIAS_FILE="$HOME/work/utils/alias"
-# [ -f "$ALIAS_FILE" ] && source "$ALIAS_FILE" || echo "Alias file $ALIAS_FILE not found"
-# Save ~/.zshrc
-# source ~/.zshrc
-# Everytime there is a new alias file, run "so" on the terminal to source it
+# START_OF_USAGE
+# 
+# Source this file in your shell configuration to load all aliases and functions.
+# 
+# Setup Instructions:
+# Add the following lines to the bottom of your ~/.zshrc or ~/.bashrc:
+#   alias so='source ~/.zshrc;echo "ZSH aliases sourced."'
+#   ALIAS_FILE="$HOME/work/utils/alias"
+#   [ -f "$ALIAS_FILE" ] && source "$ALIAS_FILE" || echo "Alias file $ALIAS_FILE not found"
+# 
+# Then run: source ~/.zshrc (or run 'so' alias after setup)
+# 
+# Environment Variables:
+# WORK                                    : Main work directory (default: ~/work)
+# DOCS                                    : Documents directory
+# DL                                      : Downloads directory
+# iDL                                     : iCloud Downloads directory
+# iDOCS                                   : iCloud Documents directory
+# 
+# Main Functions:
+# setup_pyenv                             : Initialize pyenv for Python version management
+# setup_graphviz_env                      : Configure Graphviz environment variables
+# setup_my_git                            : Configure Git with personal settings and SSH keys
+# install_utils                           : Clone and setup utils repository
+# install_bu                              : Clone and setup Bazinga Labs bu repository
+# update_global_gitignore                 : Sync local gitignore with utils repository
+# 
+# Directory Navigation Aliases:
+# w                                       : Navigate to work directory
+# docs                                    : Navigate to documents directory
+# dl                                      : Navigate to downloads directory
+# idl                                     : Navigate to iCloud downloads directory
+# idoc                                    : Navigate to iCloud documents directory
+# up                                      : Navigate up one directory
+# 
+# File Operations Aliases:
+# lr                                      : List files by modification time
+# la                                      : List all files including hidden
+# l1                                      : List files in single column
+# lock                                    : Set restrictive permissions (700)
+# unlock                                  : Set standard permissions (755)
+# mkexe                                   : Make files executable (755)
+# 
+# System Aliases:
+# x                                       : Exit terminal
+# c, cls                                  : Clear terminal screen
+# m                                       : View file with more
+# h                                       : Show first 20 lines of file
+# t                                       : Show last 20 lines of file
+# g                                       : Case-insensitive grep
+# clean-temp-files                        : Remove backup and temporary files
+# so                                      : Source zsh configuration
+# 
+# Examples:
+# setup_my_git                            # Configure Git identity and settings
+# install_utils                           # Clone utils repository to ~/work/utils
+# w                                       # Navigate to work directory
+# lr                                      # List files by modification time
+# clean-temp-files                        # Remove temporary files in current directory
+# 
+# END_OF_USAGE
 # -----------------------------------------------------------------------------
 # Notes:
-# Naming conventions
-# Functions have _ : e.g., my_function
-# Aliases have - : e.g., my-alias
+# - Naming conventions: Functions use underscores, aliases use hyphens
+# - All functions include error handling and proper return codes
+# - Environment variables are exported for use in subshells
 # -----------------------------------------------------------------------------
 
 # -----------------------------------------------------------------------------
-# Exports (Variables)
+# Environment Variables and Exports
 # -----------------------------------------------------------------------------
-# prompt and colors
+# Prompt and colors for terminal display
 PROMPT="%n@%m:%~> "
 export RED="\033[1;31m"
 export BLUE="\033[1;34m"
 export GREEN="\033[1;32m"
 export YELLOW="\033[1;33m"
 export RESET="\033[0m"
-# -----------------------------------------------------------------------------
-# Directories
+
+# Directory shortcuts for common locations
 export DOCS="$HOME/Documents"
 export DL="$HOME/Downloads"
 export iDL="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Downloads"
@@ -40,51 +91,80 @@ export iDOCS="$HOME/Library/Mobile Documents/com~apple~CloudDocs/Documents"
 export WORK="$HOME/work"
 
 # -----------------------------------------------------------------------------
-# Load pyenv if available
-setup_pyenv() {
-  export PYENV_ROOT="$HOME/.pyenv"
-  [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init - zsh)"
+# Python Environment Setup Function
+# -----------------------------------------------------------------------------
+setup_pyenv() { # Initialize pyenv for Python version management
+  if [ -z "$PYENV_ROOT" ]; then
+    export PYENV_ROOT="$HOME/.pyenv"
+  fi
+  
+  if [ -d "$PYENV_ROOT/bin" ]; then
+    export PATH="$PYENV_ROOT/bin:$PATH"
+    if command -v pyenv >/dev/null 2>&1; then
+      eval "$(pyenv init - zsh)"
+      return 0
+    else
+      echo "Warning: pyenv binary found but initialization failed" >&2
+      return 1
+    fi
+  else
+    echo "Info: pyenv not installed at $PYENV_ROOT" >&2
+    return 1
+  fi
 }
 
-
 # -----------------------------------------------------------------------------
-# Functions
+# Development Environment Setup Functions
 # -----------------------------------------------------------------------------
-setup_graphviz_env() {   # Set up Graphviz environment variables
-    [[ ":$PATH:" != *":/usr/local/opt/graphviz/bin:"* ]] && export PATH="/usr/local/opt/graphviz/bin:$PATH"
+setup_graphviz_env() { # Set up Graphviz environment variables
+  local graphviz_bin="/usr/local/opt/graphviz/bin"
+  
+  if [ -d "$graphviz_bin" ]; then
+    if [[ ":$PATH:" != *":$graphviz_bin:"* ]]; then
+      export PATH="$graphviz_bin:$PATH"
+      echo "Info: Added Graphviz to PATH" >&2
+      return 0
+    else
+      echo "Info: Graphviz already in PATH" >&2
+      return 0
+    fi
+  else
+    echo "Warning: Graphviz not found at $graphviz_bin" >&2
+    return 1
+  fi
 }
 
- 
+# -----------------------------------------------------------------------------
+# Git Configuration and Setup Functions
+# -----------------------------------------------------------------------------
+setup_my_git() { # Configure Git with personal settings, SSH keys, and aliases
+  # Verify git is available
+  if ! command -v git >/dev/null 2>&1; then
+    echo "Error: Git is not installed or not in PATH" >&2
+    return 1
+  fi
 
-
-setup_my_git() { # Git identity
-  git config --global user.name  "Amit Varde"
+  # Set user identity
+  git config --global user.name "Amit Varde"
   git config --global user.email "amit@bazinga-labs.com"
-  git config --global github.user  "amit-varde"
+  git config --global github.user "amit-varde"
 
-  # Download gitignore file from GitHub
-  echo "Setting up global gitignore..."
+  # Configure global gitignore
+  echo "Setting up global gitignore..." >&2
   git config --global core.excludesfile ~/.gitignore
 
-  # Editor and UI
-  git config --global core.editor     vim
-  git config --global color.ui        auto
-  git config --global push.default    simple
+  # Editor and UI preferences
+  git config --global core.editor vim
+  git config --global color.ui auto
+  git config --global push.default simple
 
-  # Cache credentials for 1 hour
+  # Security and performance settings
   git config --global credential.helper "cache --timeout=3600"
-
-  # Pull behavior - rebase by default
   git config --global pull.rebase true
-
-  # Auto-prune when fetching
   git config --global fetch.prune true
-
-  # Better diff visualization
   git config --global diff.colorMoved zebra
 
-  # Useful aliases
+  # Useful command aliases
   git config --global alias.st "status"
   git config --global alias.co "checkout"
   git config --global alias.ci "commit"
@@ -92,95 +172,196 @@ setup_my_git() { # Git identity
   git config --global alias.lg "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit"
 
   # Generate SSH key if missing
-  if [ ! -f ~/.ssh/id_ed25519 ]; then
-    HOSTNAME=$(hostname -f 2>/dev/null || hostname)
-    ssh-keygen -t ed25519 -C "amit@bazinga-labs.com-${HOSTNAME}" -f ~/.ssh/id_ed25519 -N ""
+  local ssh_key="$HOME/.ssh/id_ed25519"
+  if [ ! -f "$ssh_key" ]; then
+    local hostname
+    hostname=$(hostname -f 2>/dev/null || hostname)
+    if [ -z "$hostname" ]; then
+      echo "Warning: Could not determine hostname, using 'unknown'" >&2
+      hostname="unknown"
+    fi
+    
+    echo "Generating SSH key..." >&2
+    if ssh-keygen -t ed25519 -C "amit@bazinga-labs.com-${hostname}" -f "$ssh_key" -N ""; then
+      echo "SSH key generated successfully at $ssh_key" >&2
+    else
+      echo "Error: Failed to generate SSH key" >&2
+      return 1
+    fi
+  else
+    echo "SSH key already exists at $ssh_key" >&2
   fi
-}
-install_utils() {
-    local workdir="$HOME/work"
-    local utildir="$workdir/utils"
-    # Clone the utils repo if not already present
-    if [ -d "$utildir" ]; then
-        echo "[utils] Directory $utildir already exists. Skipping clone."
-    else
-        git clone https://github.com/amit-varde/utils "$utildir"
+  
+  echo "Git configuration completed successfully" >&2
+  return 0
+# -----------------------------------------------------------------------------
+# Repository Management Functions
+# -----------------------------------------------------------------------------
+install_utils() { # Clone and setup utils repository with gitignore integration
+  local workdir="$HOME/work"
+  local utildir="$workdir/utils"
+  
+  # Ensure work directory exists
+  if [ ! -d "$workdir" ]; then
+    if ! mkdir -p "$workdir"; then
+      echo "Error: Failed to create work directory $workdir" >&2
+      return 1
     fi
-    echo
-    echo "# To source your utils aliases, add this line to your ~/.zshrc or ~/.bashrc:"
-    echo "[ -f \"$utildir/alias\" ] && source \"$utildir/alias\""
-    # Merge global.gitignore into ~/.gitignore
-    local global_gitignore="$utildir/global.gitignore"
-    local user_gitignore="$HOME/.gitignore"
-    if [ -f "$global_gitignore" ]; then
-        if [ -f "$user_gitignore" ]; then
-            echo "Merging $global_gitignore into $user_gitignore ..."
-            cat "$global_gitignore" >> "$user_gitignore"
-        else
-            echo "Copying $global_gitignore to $user_gitignore ..."
-            cp "$global_gitignore" "$user_gitignore"
-        fi
-    else
-        echo "$global_gitignore not found. Skipping .gitignore merge."
+  fi
+  
+  # Clone the utils repo if not already present
+  if [ -d "$utildir" ]; then
+    echo "Info: Directory $utildir already exists. Skipping clone." >&2
+  else
+    echo "Cloning utils repository..." >&2
+    if ! git clone https://github.com/amit-varde/utils "$utildir"; then
+      echo "Error: Failed to clone utils repository" >&2
+      return 1
     fi
-}
-
-
-
-install_bu() {  # Clone Bazinga Labs bu repo into ~/work if not already present
-    local workdir="$HOME/work"
-    local budir="$workdir/bu"
-    if [ ! -d "$workdir" ]; then
-        mkdir -p "$workdir"
-    fi
-    if [ -d "$budir" ]; then
-        echo "[bu] Directory $budir already exists. Skipping clone."
-    else
-        git clone https://github.com/bazinga-labs/bu "$budir"
-    fi
-    echo
-    echo "# Add the following lines to your ~/.zshrc or ~/.bashrc (at the end):"
-    echo "export WORK=\${HOME}/work"
-    echo "export BU=\${WORK}/bu && source $BU/bu.sh"
-    echo "bu loadall"
-    echo "# Let this always be the last line"
-}
-update_global_gitignore() {
-    local utildir="$HOME/work/utils"
-    local global_gitignore="$utildir/global.gitignore"
-    local user_gitignore="$HOME/.gitignore"
-    local hostname=$(hostname -f 2>/dev/null || hostname)
-    if [ ! -f "$user_gitignore" ]; then
-        echo "$user_gitignore not found. Nothing to merge."
+  fi
+  
+  echo "Setup Instructions:" >&2
+  echo "Add this line to your ~/.zshrc or ~/.bashrc:" >&2
+  echo "[ -f \"$utildir/alias\" ] && source \"$utildir/alias\"" >&2
+  
+  # Merge global.gitignore into ~/.gitignore
+  local global_gitignore="$utildir/global.gitignore"
+  local user_gitignore="$HOME/.gitignore"
+  
+  if [ -f "$global_gitignore" ]; then
+    if [ -f "$user_gitignore" ]; then
+      echo "Merging $global_gitignore into $user_gitignore..." >&2
+      if ! cat "$global_gitignore" >> "$user_gitignore"; then
+        echo "Warning: Failed to merge gitignore files" >&2
         return 1
-    fi
-    if [ ! -f "$global_gitignore" ]; then
-        echo "$global_gitignore not found. Creating new global.gitignore."
-        cp "$user_gitignore" "$global_gitignore"
+      fi
     else
-        echo "Merging $user_gitignore into $global_gitignore ..."
-        cat "$user_gitignore" >> "$global_gitignore"
-        # Remove duplicate lines
-        sort "$global_gitignore" | uniq > "$global_gitignore.tmp" && mv "$global_gitignore.tmp" "$global_gitignore"
+      echo "Copying $global_gitignore to $user_gitignore..." >&2
+      if ! cp "$global_gitignore" "$user_gitignore"; then
+        echo "Warning: Failed to copy gitignore file" >&2
+        return 1
+      fi
     fi
-    cd "$utildir" || { echo "Cannot cd to $utildir"; return 1; }
-    git add global.gitignore
-    git commit -m "Updated from $hostname"
-    git push
+  else
+    echo "Warning: $global_gitignore not found. Skipping gitignore setup." >&2
+  fi
+  
+  echo "Utils repository setup completed successfully" >&2
+  return 0
+}
+
+install_bu() { # Clone Bazinga Labs bu repository for advanced utilities
+  local workdir="$HOME/work"
+  local budir="$workdir/bu"
+  
+  # Ensure work directory exists
+  if [ ! -d "$workdir" ]; then
+    if ! mkdir -p "$workdir"; then
+      echo "Error: Failed to create work directory $workdir" >&2
+      return 1
+    fi
+  fi
+  
+  # Clone bu repository if not present
+  if [ -d "$budir" ]; then
+    echo "Info: Directory $budir already exists. Skipping clone." >&2
+  else
+    echo "Cloning bu repository..." >&2
+    if ! git clone https://github.com/bazinga-labs/bu "$budir"; then
+      echo "Error: Failed to clone bu repository" >&2
+      return 1
+    fi
+  fi
+  
+  echo "Setup Instructions:" >&2
+  echo "Add the following lines to your ~/.zshrc or ~/.bashrc (at the end):" >&2
+  echo "export WORK=\${HOME}/work" >&2
+  echo "export BU=\${WORK}/bu && source \$BU/bu.sh" >&2
+  echo "bu loadall" >&2
+  echo "# Let this always be the last line" >&2
+  
+  echo "Bu repository setup completed successfully" >&2
+  return 0
+}
+update_global_gitignore() { # Sync local gitignore with utils repository
+  local utildir="$HOME/work/utils"
+  local global_gitignore="$utildir/global.gitignore"
+  local user_gitignore="$HOME/.gitignore"
+  local hostname
+  hostname=$(hostname -f 2>/dev/null || hostname)
+  
+  if [ ! -f "$user_gitignore" ]; then
+    echo "Error: $user_gitignore not found. Nothing to merge." >&2
+    return 1
+  fi
+  
+  if [ ! -d "$utildir" ]; then
+    echo "Error: Utils directory $utildir not found. Run install_utils first." >&2
+    return 1
+  fi
+  
+  if [ ! -f "$global_gitignore" ]; then
+    echo "Creating new global.gitignore from user gitignore..." >&2
+    if ! cp "$user_gitignore" "$global_gitignore"; then
+      echo "Error: Failed to create global gitignore file" >&2
+      return 1
+    fi
+  else
+    echo "Merging $user_gitignore into $global_gitignore..." >&2
+    if ! cat "$user_gitignore" >> "$global_gitignore"; then
+      echo "Error: Failed to merge gitignore files" >&2
+      return 1
+    fi
+    
+    # Remove duplicate lines
+    if ! sort "$global_gitignore" | uniq > "$global_gitignore.tmp"; then
+      echo "Error: Failed to remove duplicates" >&2
+      return 1
+    fi
+    
+    if ! mv "$global_gitignore.tmp" "$global_gitignore"; then
+      echo "Error: Failed to update global gitignore" >&2
+      return 1
+    fi
+  fi
+  
+  # Commit and push changes
+  if ! cd "$utildir"; then
+    echo "Error: Cannot cd to $utildir" >&2
+    return 1
+  fi
+  
+  if ! git add global.gitignore; then
+    echo "Error: Failed to stage global.gitignore" >&2
+    return 1
+  fi
+  
+  if ! git commit -m "Updated from $hostname"; then
+    echo "Warning: No changes to commit or commit failed" >&2
+  fi
+  
+  if ! git push; then
+    echo "Warning: Failed to push changes to remote repository" >&2
+    return 1
+  fi
+  
+  echo "Global gitignore update completed successfully" >&2
+  return 0
 }
 
 # -----------------------------------------------------------------------------
-# Aliases
+# Shell Aliases - Directory Navigation
 # -----------------------------------------------------------------------------
-# Organized Alias Definitions (one-line description)
 alias w='cd $WORK'               # Navigate to work directory
-alias docs='cd $DOCS'            # Navigate to documents directory
+alias docs='cd $DOCS'            # Navigate to documents directory  
 alias dl='cd $DL'                # Navigate to downloads directory
 alias idl='cd $iDL'              # Navigate to iCloud downloads directory
 alias idoc='cd $iDOCS'           # Navigate to iCloud documents directory
 alias up='cd ..'                 # Navigate up one directory
 
-# File and Directory Operations
+# -----------------------------------------------------------------------------
+# Shell Aliases - File and Directory Operations  
+# -----------------------------------------------------------------------------
 alias lr='ls -lrt'               # List files in long format, sorted by modification time
 alias la='ls -a'                 # List all files including hidden files
 alias l1='ls -1'                 # List files in single column
@@ -188,7 +369,9 @@ alias lock='chmod -R 700'        # Set restrictive permissions (700) on files/di
 alias unlock='chmod -R 755'      # Set standard permissions (755) on files/directories
 alias mkexe='chmod -R 755'       # Make files executable with permission 755
 
-# System and Environment
+# -----------------------------------------------------------------------------
+# Shell Aliases - System and Environment
+# -----------------------------------------------------------------------------
 alias x='exit'                   # Exit the terminal
 alias c='clear'                  # Clear the terminal screen
 alias cls='clear'                # Clear the terminal screen
@@ -199,12 +382,22 @@ alias g='grep -i'                # Case-insensitive text search with grep
 alias clean-temp-files='rm -f *~ .*~ *.swp *.swo *.bak *.tmp *.orig *.rej'  # Remove backup and temporary files
 alias so='source ~/.zshrc; echo "ZSH aliases sourced."'  # Source the zsh configuration file
 
-alias fname='realpath'
-alias dname='dirname $(realpath)'
-alias mde='/usr/bin/open -a "Markdown Editor"'
+# -----------------------------------------------------------------------------
+# Shell Aliases - Utility Functions
+# -----------------------------------------------------------------------------
+alias fname='realpath'           # Get the full path of a file
+alias dname='dirname $(realpath)'  # Get the directory name of a file
+alias mde='/usr/bin/open -a "Markdown Editor"'  # Open file in Markdown Editor
+
+# Unalias 'open' if it exists to avoid conflicts
 alias open &>/dev/null && unalias open
 
-# Final setup
+# -----------------------------------------------------------------------------
+# Initialization and Final Setup
+# -----------------------------------------------------------------------------
+# Initialize pyenv on shell startup
 setup_pyenv
+
+# Display confirmation message
 echo -e "${GREEN}Loaded amit's alias file${RESET}"
 # -----------------------------------------------------------------------------
