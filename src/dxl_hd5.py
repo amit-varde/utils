@@ -44,6 +44,33 @@ Requirements:
 """
 import sys
 import os
+
+# --- Python version and venv check ---
+REQUIRED_PYTHON = (3, 7)
+REQUIRED_PACKAGES = ["h5py", "pandas"]
+
+if sys.version_info < REQUIRED_PYTHON:
+    print(f"[dxl_hd5.py] ERROR: Python {REQUIRED_PYTHON[0]}.{REQUIRED_PYTHON[1]} required. You are using {sys.version_info.major}.{sys.version_info.minor}.", file=sys.stderr)
+    sys.exit(1)
+
+if sys.prefix == sys.base_prefix:
+    print("[dxl_hd5.py] WARNING: You are not running inside a Python virtual environment (venv).", file=sys.stderr)
+    print("To create and activate a venv:", file=sys.stderr)
+    print("  python3 -m venv .venv && source .venv/bin/activate", file=sys.stderr)
+
+missing = []
+for pkg in REQUIRED_PACKAGES:
+    try:
+        __import__(pkg)
+    except ImportError:
+        missing.append(pkg)
+
+if missing:
+    print(f"[dxl_hd5.py] ERROR: Required packages not installed: {', '.join(missing)}", file=sys.stderr)
+    print("To install, run:", file=sys.stderr)
+    print(f"  pip install {' '.join(missing)}", file=sys.stderr)
+    sys.exit(1)
+
 import pandas as pd
 import h5py
 import argparse
